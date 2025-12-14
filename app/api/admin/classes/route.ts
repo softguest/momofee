@@ -1,15 +1,13 @@
 import { NextResponse } from "next/server";
 import { db } from "@/config/db";
-import { students } from "@/config/schema";
+import { classes } from "@/config/schema";
 
 export async function POST(req: Request) {
   const body = await req.json();
 
-  await db.insert(students).values({
-    firstName: body.firstName,
-    lastName: body.lastName,
-    studentCode: body.studentCode,
-    classId: body.classId,
+  await db.insert(classes).values({
+    name: body.name,
+    description: body.description,
   });
 
   return NextResponse.json({ success: true });

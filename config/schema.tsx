@@ -20,12 +20,22 @@ export const users = pgTable("users", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+export const classes = pgTable("classes", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  name: text("name").notNull().unique(), // e.g. "Form 3A"
+  description: text("description"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+
 export const students = pgTable("students", {
   id: uuid("id").defaultRandom().primaryKey(),
   studentCode: varchar("student_code", { length: 32 }).notNull().unique(), // unique code for parent linking
   firstName: text("first_name").notNull(),
   lastName: text("last_name").notNull(),
-  className: text("class_name").notNull(), // e.g. "Form 3A"
+  classId: uuid("class_id").notNull().references(() => classes.id),
+  dateOfBirth: timestamp("date_of_birth"),
+  address: text("address"),
   createdByAdminId: uuid("created_by_admin_id"),
   createdAt: timestamp("created_at").defaultNow(),
 });
