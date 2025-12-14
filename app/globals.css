@@ -1,26 +1,168 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@tailwind base;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
+/* Tailwind Theme Mapping */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+
+  --color-destructive: var(--destructive);
+
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* ✅ LIGHT THEME — FinTech Premium */
+:root {
+  --radius: 0.625rem;
+
+  /* Core Backgrounds */
+  --background: #F7F9FC;
+  --foreground: #0A1F44;
+
+  /* Surfaces */
+  --card: #FFFFFF;
+  --card-foreground: #0A1F44;
+
+  --popover: #FFFFFF;
+  --popover-foreground: #0A1F44;
+
+  /* Brand Colors */
+  --primary: #0A1F44;              /* Deep navy */
+  --primary-foreground: #FFFFFF;
+
+  --secondary: #E6ECF5;            /* Light slate */
+  --secondary-foreground: #0A1F44;
+
+  --accent: #C9A200;               /* Muted gold */
+  --accent-foreground: #FFFFFF;
+
+  --muted: #E2E8F0;
+  --muted-foreground: #4A5568;
+
+  --destructive: #DC2626;
+
+  /* Inputs + Borders */
+  --border: #E2E8F0;
+  --input: #CBD5E0;
+  --ring: #0A1F44;
+
+  /* Charts (light variants) */
+  --chart-1: #0A1F44;
+  --chart-2: #C9A200;
+  --chart-3: #4A5568;
+  --chart-4: #22C55E;
+  --chart-5: #2563EB;
+
+  /* Sidebar */
+  --sidebar: #FFFFFF;
+  --sidebar-foreground: #0A1F44;
+  --sidebar-primary: #0A1F44;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #C9A200;
+  --sidebar-accent-foreground: #FFFFFF;
+  --sidebar-border: #E2E8F0;
+  --sidebar-ring: #0A1F44;
+}
+
+/* ✅ DARK THEME — Deep Navy + Gold */
+.dark {
+  --background: #0A1F44;
+  --foreground: #FFFFFF;
+
+  --card: #112A57;
+  --card-foreground: #FFFFFF;
+
+  --popover: #112A57;
+  --popover-foreground: #FFFFFF;
+
+  --primary: #FFD700;               /* Bright gold */
+  --primary-foreground: #0A1F44;
+
+  --secondary: #1F3A6B;
+  --secondary-foreground: #FFFFFF;
+
+  --accent: #FFD700;
+  --accent-foreground: #0A1F44;
+
+  --muted: #1F3A6B;
+  --muted-foreground: #D1D5DB;
+
+  --destructive: #F87171;
+
+  --border: #1F3A6B;
+  --input: #1F3A6B;
+  --ring: #FFD700;
+
+  /* Charts (dark variants) */
+  --chart-1: #FFD700;
+  --chart-2: #4ADE80;
+  --chart-3: #60A5FA;
+  --chart-4: #F59E0B;
+  --chart-5: #F87171;
+
+  /* Sidebar */
+  --sidebar: #112A57;
+  --sidebar-foreground: #FFFFFF;
+  --sidebar-primary: #FFD700;
+  --sidebar-primary-foreground: #0A1F44;
+  --sidebar-accent: #1F3A6B;
+  --sidebar-accent-foreground: #FFFFFF;
+  --sidebar-border: #1F3A6B;
+  --sidebar-ring: #FFD700;
+}
+
+/* Base Layer */
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
   }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  body {
+    @apply bg-background text-foreground;
+  }
 }
