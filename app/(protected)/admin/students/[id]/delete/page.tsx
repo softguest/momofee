@@ -1,5 +1,5 @@
 import { db } from "@/config/db";
-import { students, parentsStudents, fees } from "@/config/schema";
+import { students, parentsStudents, classFees, classes } from "@/config/schema";
 import { eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import DeleteStudentConfirm from "./delete-student-confirm";
@@ -15,12 +15,17 @@ export default async function DeleteStudentPage({
 }) {
   const { id } = await params;
   const [student] = await db
-    .select()
+    .select({
+      id: students.id,
+      firstName: students.firstName,
+      lastName: students.lastName,
+      className: classes.name, // ✅ ADD THIS
+    })
     .from(students)
+    .leftJoin(classes, eq(classes.id, students.classId))
     .where(eq(students.id, id))
     .limit(1);
-
-  if (!student) return notFound();
+    if (!student) return notFound();
 
   // Check if linked to parent or fees
   const linkedParents = await db
@@ -30,16 +35,19 @@ export default async function DeleteStudentPage({
 
   const linkedFees = await db
     .select()
-    .from(fees)
-    .where(eq(fees.studentId, student.id));
+    .from(classFees)
+    .where(eq(classFees.classId, classes.id));
 
   const hasDependencies =
     linkedParents.length > 0 || linkedFees.length > 0;
 
   return (
-    <DeleteStudentConfirm
-      student={student}
-      hasDependencies={hasDependencies}
-    />
+      <DeleteStudentConfirm
+        student={{
+          ...student,
+          className: student.className ?? "N/A", // fallback if null
+        }}
+        hasDependencies={hasDependencies}
+      />
   );
 }

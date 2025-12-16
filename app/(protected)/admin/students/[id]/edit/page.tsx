@@ -1,12 +1,8 @@
 import { db } from "@/config/db";
-import { students } from "@/config/schema";
+import { students, classes } from "@/config/schema"; // ✅ import classes
 import { eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import EditStudentForm from "./edit-student-form";
-
-interface Props {
-  params: { id: string };
-}
 
 export default async function EditStudentPage({
   params,
@@ -23,10 +19,18 @@ export default async function EditStudentPage({
 
   if (!student) return notFound();
 
+  const classRows = await db
+    .select({
+      id: classes.id,
+      name: classes.name,
+    })
+    .from(classes)
+    .orderBy(classes.name);
+
   return (
     <div className="max-w-md mx-auto py-10 space-y-4">
       <h1 className="text-xl font-semibold">Edit Student</h1>
-      <EditStudentForm student={student} />
+      <EditStudentForm student={student} classes={classRows} />
     </div>
   );
 }

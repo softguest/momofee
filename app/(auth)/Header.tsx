@@ -44,7 +44,8 @@ const Header = () => {
           {/* Dashboard Button */}
           <div className="hidden md:block">
             <Link href="/dashboard" className="cursor-pointer">
-              <Button variant="therapeutic2" size="sm">
+              <Button variant="default"
+               size="sm">
                 <LogIn className="w-4 h-4 mr-1" />
                   Start Therapy
               </Button>
@@ -93,7 +94,7 @@ const Header = () => {
               ))}
               <div className="px-3 py-2">
                 <Link href="/dashboard" className="w-full">
-                  <Button variant="therapeutic2" size="sm" className="w-full">
+                  <Button variant="secondary" size="sm" className="w-full">
                     Start Therapy
                   </Button>
                 </Link>

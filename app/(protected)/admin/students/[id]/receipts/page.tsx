@@ -1,5 +1,5 @@
 import { db } from "@/config/db";
-import { students, payments, installments, fees } from "@/config/schema";
+import { students, payments, classFeeInstallments, classFees } from "@/config/schema";
 import { notFound } from "next/navigation";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { eq, inArray } from "drizzle-orm";
@@ -9,9 +9,10 @@ import { Button } from "@/components/ui/button";
 export default async function StudentReceiptsPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const studentId = params.id;
+  const { id } = await params;
+  const studentId = id;
 
   const [student] = await db
     .select()
@@ -21,19 +22,20 @@ export default async function StudentReceiptsPage({
 
   if (!student) return notFound();
 
-  const rows = await db
-    .select({
-      id: payments.id,
-      amount: payments.amount,
-      status: payments.status,
-      createdAt: payments.createdAt,
-      momoTransactionId: payments.momoTransactionId,
-      installmentName: installments.name,
-      feeId: payments.feeId,
-    })
-    .from(payments)
-    .leftJoin(installments, eq(payments.installmentId, installments.id))
-    .where(eq(payments.studentId, studentId));
+const rows = await db
+  .select({
+    id: payments.id,
+    amount: payments.amount,
+    status: payments.status,
+    createdAt: payments.createdAt,
+    momoTransactionId: payments.momoTransactionId,
+    installmentName: classFeeInstallments.name,
+    feeId: classFeeInstallments.classFeeId, // ✅ get feeId from installments
+  })
+  .from(payments)
+  .leftJoin(classFeeInstallments, eq(payments.installmentId, classFeeInstallments.id))
+  .where(eq(payments.studentId, studentId));
+
 
   // Optionally join fees for year/term
   const feeMap = new Map<
@@ -47,8 +49,8 @@ export default async function StudentReceiptsPage({
     if (feeIds.length) {
       const feeRows = await db
         .select()
-        .from(fees)
-        .where(inArray(fees.id, feeIds));
+        .from(classFees)
+        .where(inArray(classFees.id, feeIds));
       feeRows.forEach((f) =>
         feeMap.set(f.id, {
           academicYear: f.academicYear,

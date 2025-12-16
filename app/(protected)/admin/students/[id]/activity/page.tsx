@@ -1,7 +1,7 @@
 import { db } from "@/config/db";
 import {
   students,
-  fees,
+  classFees,
   payments,
   studentNotes,
   parentsStudents,
@@ -14,9 +14,10 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 export default async function StudentActivityPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const studentId = params.id;
+  const { id } = await params;
+  const studentId = id;
 
   const [student] = await db
     .select()

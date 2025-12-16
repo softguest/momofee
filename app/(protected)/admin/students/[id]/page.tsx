@@ -1,47 +1,10 @@
-// // app/admin/students/[id]/page.tsx
-// import { db } from "@/config/db";
-// import { students } from "@/config/schema";
-// import { eq } from "drizzle-orm";
-// import { notFound } from "next/navigation";
-
-// interface Props {
-//   params: { id: string };
-// }
-
-// export default async function EditStudentPage({
-//   params,
-// }: {
-//   params: Promise<{ id: string }>;
-// }) {
-//   const { id } = await params;
-
-//   const student = await db
-//     .select()
-//     .from(students)
-//     .where(eq(students.id, id))
-//     .then((r) => r[0]);
-
-//   if (!student) return notFound();
-
-//   return (
-//     <div className="max-w-xl mx-auto py-10">
-//       <h1 className="text-xl font-semibold mb-4">
-//         Edit Student
-//       </h1>
-
-//     </div>
-//   );
-// }
-
-
 import { db } from "@/config/db";
 import {
   students,
   parentsStudents,
   users,
-  fees,
-  installments,
   payments,
+  classFees,
 } from "@/config/schema";
 import { eq, sql } from "drizzle-orm";
 import { notFound } from "next/navigation";
@@ -84,8 +47,8 @@ export default async function StudentDetailsPage({
   // ✅ Fetch fees for this student
   const feeRows = await db
     .select()
-    .from(fees)
-    .where(eq(fees.studentId, id));
+    .from(classFees)
+    .where(eq(classFees.classId, id));
 
   // ✅ Fetch installments + payment status
   const installmentsData = await db.execute(sql`
@@ -138,7 +101,7 @@ export default async function StudentDetailsPage({
           </p>
           <p>
             <span className="text-muted-foreground">Class:</span>{" "}
-            {student.className}
+            {student.classId}
           </p>
           <p>
             <span className="text-muted-foreground">Student Code:</span>{" "}
@@ -198,7 +161,7 @@ export default async function StudentDetailsPage({
                 {f.academicYear} — {f.term}
               </p>
               <p className="text-xs text-muted-foreground">
-                Total: {Number(f.totalAmount).toLocaleString()} XAF
+                Total: {Number(f.amount).toLocaleString()} XAF
               </p>
 
               <Button

@@ -1,5 +1,5 @@
 import { db } from "@/config/db";
-import { students, fees, payments, installments } from "@/config/schema";
+import { students, classFees, payments, classFeeInstallments } from "@/config/schema";
 import { eq, sql } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -16,8 +16,13 @@ import {
 
 ChartJS.register(CategoryScale, LinearScale, LineElement, PointElement, Tooltip, Legend);
 
-export default async function StudentAnalyticsPage({ params }: { params: { id: string } }) {
-  const studentId = params.id;
+export default async function StudentAnalyticsPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  const studentId = id;
 
   const [student] = await db
     .select()

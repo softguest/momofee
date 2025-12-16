@@ -1,5 +1,5 @@
 import { db } from "@/config/db";
-import { fees, students } from "@/config/schema";
+import {classFees, students } from "@/config/schema";
 import { sql, desc, ilike, or, eq } from "drizzle-orm";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -20,10 +20,10 @@ export default async function FeesListPage({ searchParams }: Props) {
 
   // Distinct classes from students who have fees
   const classRows = await db.execute(sql`
-    SELECT DISTINCT s.class_name
+    SELECT DISTINCT s.class_id
     FROM fees f
     JOIN students s ON s.id = f.student_id
-    ORDER BY s.class_name
+    ORDER BY s.class_id
   `);
   const classOptions = classRows.rows.map((r: any) => r.class_name as string);
 
@@ -37,7 +37,7 @@ export default async function FeesListPage({ searchParams }: Props) {
     )`;
   }
   if (selectedClass) {
-    whereClause = sql`${whereClause} AND s.class_name = ${selectedClass}`;
+    whereClause = sql`${whereClause} AND s.class_id = ${selectedClass}`;
   }
 
   const rows = await db.execute(sql`
@@ -48,7 +48,7 @@ export default async function FeesListPage({ searchParams }: Props) {
       f.total_amount,
       s.first_name,
       s.last_name,
-      s.class_name
+      s.class_id
     FROM fees f
     JOIN students s ON s.id = f.student_id
     WHERE ${whereClause}

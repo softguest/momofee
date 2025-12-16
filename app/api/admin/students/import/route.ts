@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { db } from "@/config/db";
-import { students } from "@/config/schema";
+import { users, students } from "@/config/schema";
+import { eq } from "drizzle-orm";
+import { v4 as uuid } from "uuid";
 
 export async function POST(req: Request) {
   const formData = await req.formData();
@@ -18,12 +20,7 @@ export async function POST(req: Request) {
   }
 
   const header = lines[0].split(",").map((h) => h.trim().toLowerCase());
-  const required = [
-    "first_name",
-    "last_name",
-    "class_name",
-    "student_code",
-  ];
+  const required = ["first_name", "last_name", "class_id", "student_code"];
 
   const missing = required.filter((col) => !header.includes(col));
   if (missing.length > 0) {
@@ -33,9 +30,7 @@ export async function POST(req: Request) {
     );
   }
 
-  const indices = Object.fromEntries(
-    header.map((h, i) => [h, i] as const)
-  );
+  const indices = Object.fromEntries(header.map((h, i) => [h, i] as const));
 
   let inserted = 0;
 
@@ -45,18 +40,29 @@ export async function POST(req: Request) {
 
     const firstName = cols[indices["first_name"]]?.trim();
     const lastName = cols[indices["last_name"]]?.trim();
-    const className = cols[indices["class_name"]]?.trim();
+    const classId = cols[indices["class_id"]]?.trim();
     const studentCode = cols[indices["student_code"]]?.trim();
 
-    if (!firstName || !lastName || !className || !studentCode) continue;
+    if (!firstName || !lastName || !classId || !studentCode) continue;
 
-    await db.insert(students).values({
-      firstName,
-      lastName,
-      className,
-      studentCode,
+    // ✅ Create user first
+    const userId = uuid();
+      await db.insert(users).values({
+      id: userId,
+      name: `${firstName} ${lastName}`, // Combine
+      role: "student",
+      clerkId: "SOME_CLERK_ID", // required
     });
 
+    // ✅ Create student linked to user
+    await db.insert(students).values({
+      userId,
+      classId,
+      studentCode,
+      firstName,
+      lastName,
+      createdByAdminId: "ADMIN_ID_HERE",
+    });
     inserted++;
   }
 

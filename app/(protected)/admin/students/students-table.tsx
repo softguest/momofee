@@ -16,7 +16,7 @@ interface StudentRow {
   id: string;
   firstName: string;
   lastName: string;
-  className: string;
+  classId: string;
   studentCode: string;
 }
 
@@ -122,7 +122,7 @@ export default function StudentsTable({
                 <td className="py-2">
                   {s.firstName} {s.lastName}
                 </td>
-                <td className="py-2">{s.className}</td>
+                <td className="py-2">{s.classId}</td>
                 <td className="py-2">{s.studentCode}</td>
                 <td className="py-2 text-right">
                   <Button

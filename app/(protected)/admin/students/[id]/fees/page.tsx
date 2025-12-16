@@ -1,13 +1,18 @@
 import { db } from "@/config/db";
-import { students, fees } from "@/config/schema";
+import { students, classFees } from "@/config/schema";
 import { eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
-export default async function StudentFeesPage({ params }: { params: { id: string } }) {
-  const studentId = params.id;
+export default async function StudentFeesPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  const studentId = id;
 
   const [student] = await db
     .select()
@@ -19,8 +24,8 @@ export default async function StudentFeesPage({ params }: { params: { id: string
 
   const feeRows = await db
     .select()
-    .from(fees)
-    .where(eq(fees.studentId, studentId));
+    .from(classFees)
+    .where(eq(classFees.classId, student.classId));
 
   return (
     <div className="max-w-4xl mx-auto py-10 space-y-8">
@@ -49,7 +54,7 @@ export default async function StudentFeesPage({ params }: { params: { id: string
                 {f.academicYear} — {f.term}
               </p>
               <p className="text-xs text-muted-foreground">
-                Total: {Number(f.totalAmount).toLocaleString()} XAF
+                Total: {Number(f.amount).toLocaleString()} XAF
               </p>
 
               <div className="flex gap-3 mt-2">

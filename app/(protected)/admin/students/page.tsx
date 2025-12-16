@@ -21,21 +21,21 @@ export default async function StudentsListPage({ searchParams }: Props) {
 
   // distinct classes for filter
   const classRows = await db.execute(sql`
-    SELECT DISTINCT class_name FROM students ORDER BY class_name
+    SELECT DISTINCT class_id FROM students ORDER BY class_id
   `);
-  const classOptions = classRows.rows.map((r: any) => r.class_name as string);
+  const classOptions = classRows.rows.map((r: any) => r.class_id as string);
 
   let whereClause = sql`true`;
   if (q) {
     whereClause = sql`${whereClause} AND (
       ${students.firstName} ILIKE ${"%" + q + "%"} OR
       ${students.lastName} ILIKE ${"%" + q + "%"} OR
-      ${students.className} ILIKE ${"%" + q + "%"} OR
+      ${students.classId} ILIKE ${"%" + q + "%"} OR
       ${students.studentCode} ILIKE ${"%" + q + "%"}
     )`;
   }
   if (selectedClass) {
-    whereClause = sql`${whereClause} AND ${students.className} = ${selectedClass}`;
+    whereClause = sql`${whereClause} AND ${students.classId} = ${selectedClass}`;
   }
 
   const rows = await db

@@ -6,9 +6,9 @@ import {
   users,
   students,
   parentsStudents,
-  fees,
-  installments,
   payments,
+  classFees,
+  classFeeInstallments,
 } from "@/config/schema";
 import { eq } from "drizzle-orm";
 import { PageShell } from "@/components/ui/page-shell";
@@ -41,7 +41,7 @@ export default async function DashboardPage() {
     linkedStudents = s.map((st) => ({
       id: st.id,
       name: `${st.firstName} ${st.lastName}`,
-      className: st.className,
+      className: st.classId,
     }));
   } else {
     const rows = await db
@@ -49,7 +49,7 @@ export default async function DashboardPage() {
         id: students.id,
         firstName: students.firstName,
         lastName: students.lastName,
-        className: students.className,
+        className: students.classId,
       })
       .from(parentsStudents)
       .innerJoin(students, eq(parentsStudents.studentId, students.id))
@@ -66,7 +66,6 @@ export default async function DashboardPage() {
 
   if (!activeStudent) {
     return (
-      <PageShell sidebarItems={[]}>
         <Card>
           <CardHeader>
             <CardTitle>No student linked</CardTitle>
@@ -75,7 +74,6 @@ export default async function DashboardPage() {
             Link a student profile to start managing fees.
           </CardContent>
         </Card>
-      </PageShell>
     );
   }
 
@@ -85,16 +83,16 @@ export default async function DashboardPage() {
 
   const [fee] = await db
     .select()
-    .from(fees)
-    .where(eq(fees.studentId, activeStudent.id))
+    .from(classFees)
+    .where(eq(classFees.classId, activeStudent.id))
     .limit(1);
 
   const feeInstallments =
     fee &&
     (await db
       .select()
-      .from(installments)
-      .where(eq(installments.feeId, fee.id)));
+      .from(classFeeInstallments)
+      .where(eq(classFeeInstallments.classFeeId, fee.id)));
 
   const studentPayments = await db
     .select()
@@ -106,7 +104,7 @@ export default async function DashboardPage() {
       .filter((p) => p.status === "success")
       .reduce((sum, p) => sum + Number(p.amount), 0) ?? 0;
 
-  const totalAmount = fee ? Number(fee.totalAmount) : 0;
+  const totalAmount = fee ? Number(fee.amount) : 0;
   const balance = totalAmount - totalPaid;
 
   // ----------------------------------------------------
@@ -114,12 +112,7 @@ export default async function DashboardPage() {
   // ----------------------------------------------------
 
   return (
-    <PageShell
-      sidebarItems={[
-        { label: "Dashboard", href: "/dashboard" },
-        { label: "Payment History", href: "/payment/history" },
-      ]}
-    >
+    <div>
        {user.role === "parent" && (
         <div className="mb-6">
           <ChildSwitcher
@@ -162,7 +155,6 @@ export default async function DashboardPage() {
           </div>
         </div>
       </div>
-
       {/* Progress bar */}
       {totalAmount > 0 && (
         <div className="mb-6">
@@ -177,7 +169,6 @@ export default async function DashboardPage() {
           </p>
         </div>
       )}
-
       {/* Installments */}
       <div className="grid gap-4 md:grid-cols-2">
         {feeInstallments?.map((inst) => {
@@ -189,7 +180,7 @@ export default async function DashboardPage() {
             !!inst.dueDate && new Date(inst.dueDate) < new Date();
 
           // FIXED: always boolean
-          const locked = !!inst.isOverdueLocked && isOverdue;
+          const locked = !!inst.dueDate && isOverdue;
 
           return (
             <Card key={inst.id}>
@@ -243,6 +234,6 @@ export default async function DashboardPage() {
           );
         })}
       </div>
-    </PageShell>
+    </div>
   );
 }

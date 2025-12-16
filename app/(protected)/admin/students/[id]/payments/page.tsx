@@ -1,11 +1,16 @@
 import { db } from "@/config/db";
-import { students, payments, installments } from "@/config/schema";
+import { students, payments, classFeeInstallments } from "@/config/schema";
 import { eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
-export default async function StudentPaymentsPage({ params }: { params: { id: string } }) {
-  const studentId = params.id;
+export default async function StudentPaymentsPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  const studentId = id;
 
   const [student] = await db
     .select()
@@ -22,10 +27,10 @@ export default async function StudentPaymentsPage({ params }: { params: { id: st
       status: payments.status,
       createdAt: payments.createdAt,
       momoTransactionId: payments.momoTransactionId,
-      installmentName: installments.name,
+      installmentName: classFeeInstallments.name,
     })
     .from(payments)
-    .leftJoin(installments, eq(payments.installmentId, installments.id))
+    .leftJoin(classFeeInstallments, eq(payments.installmentId, classFeeInstallments.id))
     .where(eq(payments.studentId, studentId));
 
   return (

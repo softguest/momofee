@@ -6,8 +6,6 @@ import {
   uuid,
   timestamp,
   integer,
-  boolean,
-  numeric,
 } from "drizzle-orm/pg-core";
 
 export const users = pgTable("users", {
@@ -27,18 +25,26 @@ export const classes = pgTable("classes", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
-
 export const students = pgTable("students", {
   id: uuid("id").defaultRandom().primaryKey(),
-  studentCode: varchar("student_code", { length: 32 }).notNull().unique(), // unique code for parent linking
+
+  userId: uuid("user_id")
+    .notNull()
+    .references(() => users.id), // student user account
+
+  studentCode: varchar("student_code", { length: 32 }).notNull().unique(),
+
+  classId: uuid("class_id")
+    .notNull()
+    .references(() => classes.id),
+    
   firstName: text("first_name").notNull(),
   lastName: text("last_name").notNull(),
-  classId: uuid("class_id").notNull().references(() => classes.id),
-  dateOfBirth: timestamp("date_of_birth"),
-  address: text("address"),
+
   createdByAdminId: uuid("created_by_admin_id"),
   createdAt: timestamp("created_at").defaultNow(),
 });
+
 
 export const parentsStudents = pgTable("parents_students", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -47,35 +53,50 @@ export const parentsStudents = pgTable("parents_students", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
-export const fees = pgTable("fees", {
+export const classFees = pgTable("class_fees", {
   id: uuid("id").defaultRandom().primaryKey(),
-  studentId: uuid("student_id").notNull(),
-  academicYear: text("academic_year").notNull(), // "2024/2025"
-  term: text("term").notNull(), // "First Term"
-  totalAmount: numeric("total_amount", { precision: 12, scale: 2 }).notNull(),
+  classId: uuid("class_id")
+    .notNull()
+    .references(() => classes.id),
+  firstName: varchar("first_name", { length: 50 }),
+  lastName: varchar("last_name", { length: 50 }),
+  academicYear: text("academic_year").notNull(),
+  term: text("term").notNull(),
+  name: text("name").notNull(), // e.g. "Tuition", "PTA", "Exam Fee"
+  amount: integer("amount").notNull(),
   description: text("description"),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
-export const installments = pgTable("installments", {
+export const classFeeInstallments = pgTable("class_fee_installments", {
   id: uuid("id").defaultRandom().primaryKey(),
-  feeId: uuid("fee_id").notNull(),
-  name: text("name").notNull(), // "First Installment", "Exam Fee" etc.
-  amount: numeric("amount", { precision: 12, scale: 2 }).notNull(),
+
+  classFeeId: uuid("class_fee_id")
+    .notNull()
+    .references(() => classFees.id),
+
+  name: text("name").notNull(),
+  amount: integer("amount").notNull(),
   dueDate: timestamp("due_date"),
-  isOverdueLocked: boolean("is_overdue_locked").default(false), // prevent pay after deadline
+
   createdAt: timestamp("created_at").defaultNow(),
 });
 
 export const payments = pgTable("payments", {
   id: uuid("id").defaultRandom().primaryKey(),
-  studentId: uuid("student_id").notNull(),
-  installmentId: uuid("installment_id"),
-  feeId: uuid("fee_id"),
-  amount: numeric("amount", { precision: 12, scale: 2 }).notNull(),
-  status: varchar("status", { length: 20 }).notNull(), // "pending" | "success" | "failed"
+
+  studentId: uuid("student_id")
+    .notNull()
+    .references(() => students.id),
+
+  installmentId: uuid("installment_id")
+    .notNull()
+    .references(() => classFeeInstallments.id),
+
+  amount: integer("amount").notNull(),
+  status: text("status").notNull(), // pending | success | failed
   momoTransactionId: text("momo_transaction_id"),
-  type: varchar("type", { length: 20 }).notNull(), // "full" | "partial" | "installment"
+
   createdAt: timestamp("created_at").defaultNow(),
 });
 

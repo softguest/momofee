@@ -1,13 +1,15 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { currentUser } from "@clerk/nextjs/server";
 import { db } from "@/config/db";
 import { users, studentNotes } from "@/config/schema";
 import { eq } from "drizzle-orm";
 
 export async function POST(
-  req: Request,
-  { params }: { params: { id: string } },
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id: studentId } = await params;
+
   const clerkUser = await currentUser();
   if (!clerkUser) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -31,7 +33,7 @@ export async function POST(
   const [note] = await db
     .insert(studentNotes)
     .values({
-      studentId: params.id,
+      studentId,
       authorUserId: user.id,
       content,
     })

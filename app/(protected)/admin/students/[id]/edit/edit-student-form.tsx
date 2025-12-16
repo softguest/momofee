@@ -10,23 +10,33 @@ interface EditStudentFormProps {
     id: string;
     firstName: string;
     lastName: string;
-    className: string;
+    classId: string;
     studentCode: string;
   };
+  classes: {
+    id: string;
+    name: string;
+  }[];
 }
 
-export default function EditStudentForm({ student }: EditStudentFormProps) {
+
+export default function EditStudentForm({
+  student,
+  classes,
+}: EditStudentFormProps) {
   const router = useRouter();
+
   const [form, setForm] = useState({
     firstName: student.firstName,
     lastName: student.lastName,
-    className: student.className,
+    classId: student.classId,
     studentCode: student.studentCode,
   });
 
   async function handleSubmit() {
     await fetch(`/api/admin/students/${student.id}`, {
       method: "PUT",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(form),
     });
 
@@ -47,11 +57,18 @@ export default function EditStudentForm({ student }: EditStudentFormProps) {
         onChange={(e) => setForm({ ...form, lastName: e.target.value })}
       />
 
-      <Input
-        placeholder="Class Name"
-        value={form.className}
-        onChange={(e) => setForm({ ...form, className: e.target.value })}
-      />
+      {/* ✅ Class dropdown */}
+      <select
+        className="border border-border rounded-md bg-background px-3 py-2 text-sm w-full"
+        value={form.classId}
+        onChange={(e) => setForm({ ...form, classId: e.target.value })}
+      >
+        {classes.map((c) => (
+          <option key={c.id} value={c.id}>
+            {c.name}
+          </option>
+        ))}
+      </select>
 
       <Input
         placeholder="Student Code"

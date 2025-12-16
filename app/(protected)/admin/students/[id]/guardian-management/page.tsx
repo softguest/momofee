@@ -8,9 +8,10 @@ import GuardianManager from "./guardian-manager";
 export default async function GuardianManagementPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const studentId = params.id;
+  const { id } = await params;
+  const studentId = id;
 
   const [student] = await db
     .select()
