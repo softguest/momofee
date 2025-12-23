@@ -14,11 +14,12 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 interface StudentRow {
   id: string;
-  firstName: string;
-  lastName: string;
-  classId: string;
-  studentCode: string;
+  firstName: string | null;
+  lastName: string | null;
+  classId: string | null;
+  studentCode: string | null;
 }
+
 
 interface Props {
   students: StudentRow[];

@@ -45,22 +45,23 @@ export default async function StudentsListPage({ searchParams }: Props) {
   }
 
   // Fetch students
-  const rows = await db
-    .select({
-      id: users.id,
-      // firstName: users.firstName,
-      // lastName: users.lastName,
-      email: users.email,
-      classId: students.classId,
-      studentCode: students.studentCode,
-      createdAt: users.createdAt,
-    })
-    .from(users)
-    .leftJoin(students, eq(users.id, students.userId))
-    .where(whereClause)
-    .orderBy(desc(users.createdAt))
-    .limit(PAGE_SIZE)
-    .offset(offset);
+const rows = await db
+  .select({
+    id: users.id,
+    firstName: users.firstName,
+    lastName: users.lastName,
+    email: users.email,
+    classId: students.classId,
+    studentCode: students.studentCode,
+    createdAt: users.createdAt,
+  })
+  .from(users)
+  .leftJoin(students, eq(users.id, students.userId))
+  .where(whereClause)
+  .orderBy(desc(users.createdAt))
+  .limit(PAGE_SIZE)
+  .offset(offset);
+
 
   const totalCount = await db
     .select({ count: sql<number>`COUNT(*)` })

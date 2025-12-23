@@ -12,6 +12,8 @@ export const users = pgTable("users", {
   id: uuid("id").defaultRandom().primaryKey(),
   clerkId: text("clerk_id").notNull().unique(), // map to Clerk user id
   role: varchar("role", { length: 20 }).notNull(), // "parent" | "student" | "admin"
+  firstName: varchar("first_name", { length: 50 }),
+  lastName: varchar("last_name", { length: 50 }),
   name: varchar({ length: 256 }).notNull(),
   email: text("email"),
   phone: text("phone"),
