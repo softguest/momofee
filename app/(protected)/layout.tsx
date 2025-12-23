@@ -2,6 +2,11 @@ import { currentUser } from "@clerk/nextjs/server";
 import { db } from "@/config/db";
 import { users } from "@/config/schema";
 import { eq } from "drizzle-orm";
+import DashboardHeader from "@/components/DashboardHeader";
+import Sidebar from "@/components/navigation/sidebar";
+import { parentMenu, studentMenu } from "@/components/navigation/sidebar-config";
+import MobileSidebar from "@/components/navigation/mobile-sidebar";
+
 
 export default async function ProtectedLayout({
   children,
@@ -10,6 +15,12 @@ export default async function ProtectedLayout({
 }) {
   const clerkUser = await currentUser();
   if (!clerkUser) return null;
+
+  const [user] = await db
+    .select()
+    .from(users)
+    .where(eq(users.clerkId, clerkUser.id))
+    .limit(1);
 
   const existing = await db
     .select()
@@ -30,5 +41,9 @@ export default async function ProtectedLayout({
     });
   }
 
-  return <>{children}</>;
+  return (
+    <div className="flex">
+        {children}
+    </div>
+  );
 }

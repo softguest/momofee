@@ -92,7 +92,7 @@ export default function StudentsTable({
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto">
+      <div className="">
         <table className="min-w-full text-sm">
           <thead>
             <tr className="border-b border-border text-xs text-muted-foreground">

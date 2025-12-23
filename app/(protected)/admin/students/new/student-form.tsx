@@ -1,69 +1,72 @@
 "use client";
 
-import { useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
+import { createStudentWithUser } from "@/actions/createStudentWithUser";
+import { useTransition } from "react";
 
-type StudentClass = { id: string; name: string };
+interface ClassRow {
+  id: string;
+  name: string;
+  description: string | null;
+  createdAt: Date | null;
+}
 
-export default function NewStudentForm({ classes }: { classes: StudentClass[] }) {
-  const router = useRouter();
+interface NewStudentFormProps {
+  classes: ClassRow[];
+}
 
-  const [form, setForm] = useState({
-    firstName: "",
-    lastName: "",
-    classId: classes.length > 0 ? classes[0].id : "",
-    studentCode: "",
-  });
+export default function NewStudentForm({ classes }: NewStudentFormProps) {
+  const [isPending, startTransition] = useTransition();
 
-  async function handleSubmit() {
-    await fetch("/api/admin/students", {
-      method: "POST",
-      body: JSON.stringify(form),
+  function handleSubmit(e: any) {
+    e.preventDefault();
+
+    const form = e.target;
+
+    startTransition(async () => {
+      await createStudentWithUser({
+        clerkId: crypto.randomUUID(),
+        name: form.name.value,
+        email: form.email.value,
+        phone: form.phone.value,
+        firstName: form.firstName.value,
+        lastName: form.lastName.value,
+        classId: form.classId.value,
+        adminId: "ADMIN-ID-HERE",
+      });
     });
-
-    router.push("/admin/students");
   }
 
   return (
-    <div className="max-w-md mx-auto py-10 space-y-4">
-      <h1 className="text-xl font-semibold">Create Student</h1>
-
-      <Input
-        placeholder="First Name"
-        value={form.firstName}
-        onChange={(e) => setForm({ ...form, firstName: e.target.value })}
-      />
-
-      <Input
-        placeholder="Last Name"
-        value={form.lastName}
-        onChange={(e) => setForm({ ...form, lastName: e.target.value })}
-      />
-
-      {/* ✅ Class Dropdown */}
-      <select
-        className="border border-border rounded-md bg-background px-3 py-2 text-sm w-full"
-        value={form.classId}
-        onChange={(e) => setForm({ ...form, classId: e.target.value })}
-      >
-        {classes.map((c) => (
-          <option key={c.id} value={c.id}>
-            {c.name}
-          </option>
-        ))}
-      </select>
-
-      <Input
-        placeholder="Student Code"
-        value={form.studentCode}
-        onChange={(e) => setForm({ ...form, studentCode: e.target.value })}
-      />
-
-      <Button className="w-full" onClick={handleSubmit}>
-        Save
-      </Button>
+    <div className="flex justify-center w-full p-4  rounded-md">
+      <form onSubmit={handleSubmit}>
+        <div className="space-y-4 mb-4">
+          <div>
+              <input name="name" placeholder="Full Name" />
+          </div>
+          <div>
+              <input name="email" placeholder="Email" />
+          </div>
+          <div>
+              <input name="phone" placeholder="Phone" />
+          </div>
+          <div>
+              <input name="firstName" placeholder="First Name" />
+          </div>
+          <div>
+              <input name="lastName" placeholder="Last Name" />
+          </div>
+          <select name="classId">
+            {classes.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.name}
+              </option>
+            ))}
+          </select>
+        </div>
+        <button disabled={isPending}>
+          {isPending ? "Creating..." : "Create Student"}
+        </button>
+      </form>
     </div>
   );
 }

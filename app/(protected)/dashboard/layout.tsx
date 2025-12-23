@@ -5,8 +5,9 @@ import { users } from "@/config/schema";
 import { eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
 import Sidebar from "@/components/navigation/sidebar";
-import MobileSidebar from "@/components/navigation/mobile-sidebar";
 import { parentMenu, studentMenu } from "@/components/navigation/sidebar-config";
+import DashboardHeader from "@/components/DashboardHeader";
+
 
 export default async function DashboardLayout({
   children,
@@ -15,6 +16,7 @@ export default async function DashboardLayout({
 }) {
   const clerkUser = await currentUser();
   if (!clerkUser) redirect("/sign-in");
+  // const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const [user] = await db
     .select()
@@ -28,7 +30,7 @@ export default async function DashboardLayout({
     <div className="flex">
       <Sidebar menu={menu} />
       <div className="flex-1 p-4">
-        <MobileSidebar menu={menu} />
+        {/* <DashboardHeader onOpenSidebar={() => setSidebarOpen(true)} /> */}
         {children}
       </div>
     </div>
