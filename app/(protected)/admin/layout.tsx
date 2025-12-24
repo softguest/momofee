@@ -7,8 +7,6 @@ import { redirect } from "next/navigation";
 
 import Sidebar from "@/components/navigation/sidebar";
 import { adminMenu } from "@/components/navigation/sidebar-config";
-import DashboardHeader from "@/components/DashboardHeader";
-// import DashboardHeader from "@/components/DashboardHeader";
 
 export default async function AdminLayout({
   children,
@@ -34,7 +32,6 @@ export default async function AdminLayout({
     <div className="flex">
       <Sidebar menu={adminMenu} />
       <div className="flex-1 p-4">
-        {/* <DashboardHeader onOpenSidebar={() => setSidebarOpen(true)} /> */}
         {children}
       </div>
     </div>

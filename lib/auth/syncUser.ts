@@ -32,9 +32,9 @@ export async function syncUser(
   const [created] = await db
     .insert(users)
     .values({
+      id: clerkUser.id,
       clerkId: clerkUser.id,
       role,
-      name: fullName, // ✅ REQUIRED FIELD FIXED
       email: clerkUser.emailAddresses[0]?.emailAddress,
       phone: clerkUser.phoneNumbers[0]?.phoneNumber,
     })

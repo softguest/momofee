@@ -30,11 +30,8 @@ export default async function ProtectedLayout({
 
   if (!existing[0]) {
     await db.insert(users).values({
+      id: clerkUser.id,
       clerkId: clerkUser.id,
-      name:
-        clerkUser.firstName && clerkUser.lastName
-          ? `${clerkUser.firstName} ${clerkUser.lastName}`
-          : clerkUser.username ?? "Unnamed User",
       email: clerkUser.emailAddresses[0]?.emailAddress,
       phone: clerkUser.phoneNumbers[0]?.phoneNumber,
       role: "parent",

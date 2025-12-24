@@ -35,20 +35,20 @@ export default function DashboardHeader({ onOpenSidebar }: DashboardHeaderProps)
           className="flex-1 border px-3 py-1 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-red-500"
         />
 
-        {!user ? (
-          <Link href="/sign-in">
-            <button className="w-24 transform rounded-lg bg-red-600 px-4 py-2 font-medium text-white transition hover:bg-red-700 md:w-32">
-              Login
-            </button>
-          </Link>
-        ) : (
-          <div className="flex items-center gap-3 md:gap-5">
-            <UserButton />
-            <span className="hidden md:block text-sm font-semibold text-gray-700">
-              {user?.firstName} {user?.lastName}
-            </span>
-          </div>
-        )}
+          {!user ? (
+            <Link href="/sign-in">
+              <button className="w-24 transform rounded-lg bg-red-600 px-4 py-2 font-medium text-white transition hover:bg-red-700 md:w-32">
+                Login
+              </button>
+            </Link>
+          ) : (
+            <div className="flex items-center gap-3 md:gap-5">
+              <UserButton />
+              <span className="hidden md:block text-sm font-semibold text-gray-700">
+                {user?.firstName} {user?.lastName}
+              </span>
+            </div>
+          )}
       </div>
     </header>
   );

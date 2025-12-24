@@ -11,7 +11,7 @@ export default function Problems() {
   return (
     <section className="bg-primary/5 py-20">
       <div className="mx-auto max-w-7xl px-6">
-        <h2 className="text-3xl font-bold text-center">
+        <h2 className="text-3xl md:text-4xl font-bold text-center">
           The Problem Schools Face Today
         </h2>
 

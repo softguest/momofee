@@ -6,9 +6,9 @@ import HowItWorks from "@/components/Homepage/HowItWorks";
 import Impact from "@/components/Homepage/Impact";
 import Beneficiaries from "@/components/Homepage/Beneficiaries";
 import Implementation from "@/components/Homepage/Implementation";
-// import Sustainability from "@/components/Homepage/Sustainability";
 import FundingCTA from "@/components/Homepage/FundingCTA";
 import Footer from "@/components/Homepage/Footer";
+// import Sustainability from "@/components/Homepage/Sustainability";
 
 
 export default function HomePage() {

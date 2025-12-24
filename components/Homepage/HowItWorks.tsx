@@ -9,7 +9,7 @@ export default function HowItWorks() {
   return (
     <section className="bg-primary py-20 text-white">
       <div className="mx-auto max-w-7xl px-6">
-        <h2 className="text-3xl font-bold text-center">How It Works</h2>
+        <h2 className="text-3xl md:text-4xl font-bold text-center">How It Works</h2>
 
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {steps.map((s, i) => (

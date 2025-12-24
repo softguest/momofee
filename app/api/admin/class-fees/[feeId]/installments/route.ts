@@ -1,0 +1,161 @@
+// import { NextResponse } from "next/server";
+// import { db } from "@/config/db";
+// import { classFees, classFeeInstallments } from "@/config/schema";
+// import { auth } from "@clerk/nextjs/server";
+// import { users } from "@/config/schema";
+// import { eq, and, sql } from "drizzle-orm";
+// import { assertAdmin } from "@/lib/auth";
+
+// export async function POST(
+//     req: Request, 
+//     context: { params: Promise<{ feeId: string }> }
+// ) {
+//   try {
+//     const session = await auth();
+//     const userId = session.userId;
+//     if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+//     // Fetch user from DB
+//     const dbUser = await db.query.users.findFirst({
+//         where: eq(users.id, userId)
+//     });
+
+//     if (!dbUser) {
+//         return NextResponse.json({ error: "User not found" }, { status: 401 });
+//     }
+
+//     assertAdmin(dbUser.role); // ✅ check DB role
+
+//     const { feeId } = await context.params;
+//     const body = await req.json();
+//     const { name, amount, dueDate } = body;
+
+//     if (!name || !amount) return NextResponse.json({ error: "Name and amount are required" }, { status: 400 });
+
+//     // Verify class fee exists
+//     const fee = await db.query.classFees.findFirst({ where: eq(classFees.id, feeId) });
+//     if (!fee) return NextResponse.json({ error: "Class fee not found" }, { status: 404 });
+
+//     // Sum of existing installments
+//     const sumExisting = await db.query.classFeeInstallments.aggregate({
+//       _sum: { amount: true },
+//       where: eq(classFeeInstallments.classFeeId, feeId),
+//     });
+
+//     const totalInstalled = sumExisting._sum.amount ?? 0;
+//     if (totalInstalled + amount > fee.amount) {
+//       return NextResponse.json({ error: "Installments cannot exceed total fee amount" }, { status: 400 });
+//     }
+
+//     // Create installment
+//     const [newInstallment] = await db.insert(classFeeInstallments).values({
+//       classFeeId: feeId,
+//       name,
+//       amount,
+//       dueDate: dueDate ? new Date(dueDate) : null,
+//     }).returning();
+
+//     return NextResponse.json(newInstallment, { status: 201 });
+
+//   } catch (error: any) {
+//     return NextResponse.json({ error: error.message ?? "Server error" }, { status: 500 });
+//   }
+// }
+
+
+import { NextResponse } from "next/server";
+import { db } from "@/config/db";
+import { classFees, classFeeInstallments, users } from "@/config/schema";
+import { auth } from "@clerk/nextjs/server";
+import { eq, sql } from "drizzle-orm";
+import { assertAdmin } from "@/lib/auth";
+
+interface InstallmentBody {
+  name: string;
+  amount: number;
+  dueDate?: string;
+}
+
+export async function POST(
+  req: Request,
+  context: { params: Promise<{ feeId: string }> }
+) {
+  try {
+    // --- Clerk auth ---
+    const session = await auth();
+    const userId = session.userId;
+    if (!userId) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    // --- Fetch user from DB ---
+    const dbUser = await db.query.users.findFirst({
+      where: eq(users.id, userId),
+    });
+
+    if (!dbUser) {
+      return NextResponse.json({ error: "User not found" }, { status: 401 });
+    }
+
+    assertAdmin(dbUser.role); // ✅ ensure admin
+
+    // --- Get feeId from dynamic route ---
+    const { feeId } = await context.params;
+
+    // --- Parse request body ---
+    const body: InstallmentBody = await req.json();
+    const { name, amount, dueDate } = body;
+
+    if (!name || !amount) {
+      return NextResponse.json(
+        { error: "Name and amount are required" },
+        { status: 400 }
+      );
+    }
+
+    // --- Verify class fee exists ---
+    const fee = await db.query.classFees.findFirst({
+      where: eq(classFees.id, feeId),
+    });
+
+    if (!fee) {
+      return NextResponse.json({ error: "Class fee not found" }, { status: 404 });
+    }
+
+    // --- Sum existing installments ---
+    const [sumRow] = await db
+      .select({
+        total: sql<number>`SUM(${classFeeInstallments.amount})`
+      })
+      .from(classFeeInstallments)
+      .where(eq(classFeeInstallments.classFeeId, feeId))
+
+    const totalInstalled = sumRow?.total ?? 0;
+
+    if (totalInstalled + amount > fee.amount) {
+      return NextResponse.json(
+        { error: "Installments cannot exceed total fee amount" },
+        { status: 400 }
+      );
+    }
+
+    // --- Create new installment ---
+    const [newInstallment] = await db
+      .insert(classFeeInstallments)
+      .values({
+        classFeeId: feeId,
+        name,
+        amount,
+        dueDate: dueDate ? new Date(dueDate) : null,
+      })
+      .returning();
+
+    return NextResponse.json(newInstallment, { status: 201 });
+  } catch (error: any) {
+    console.error("Create installment error:", error);
+    return NextResponse.json(
+      { error: error.message ?? "Server error" },
+      { status: 500 }
+    );
+  }
+}

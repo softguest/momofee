@@ -1,41 +1,118 @@
+// import { db } from "@/config/db";
+// import { users } from "@/config/schema";
+// import { currentUser } from "@clerk/nextjs/server";
+// import { eq } from "drizzle-orm";
+// import { NextRequest, NextResponse } from "next/server";
+
+// export async function POST(req: NextRequest) {
+//   const user = await currentUser();
+
+//   if (!user) {
+//     return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+//   }
+
+//   try {
+//     // check if user already exists
+//     const existing = await db
+//       .select()
+//       .from(users)
+//       .where(eq(users.email, user.primaryEmailAddress?.emailAddress || ""));
+
+//     if (existing.length === 0) {
+//       // Create new user
+//       const result = await db
+//         .insert(users)
+//         .values({
+//           userName: user.username || "No name",
+//           email: user.primaryEmailAddress?.emailAddress || "No email",
+//           clerkId: user.id,               // REQUIRED
+//           role: "student",                // REQUIRED — choose default
+//         })
+//         .returning();
+
+//       return NextResponse.json(result[0]);
+//     }
+
+//     return NextResponse.json(existing[0]);
+//   } catch (e) {
+//     console.error("Create user error:", e);
+//     return NextResponse.json({ error: e });
+//   }
+// }
+
+
 import { db } from "@/config/db";
 import { users } from "@/config/schema";
 import { currentUser } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 
+/**
+ * POST /api/users
+ * Creates or returns the authenticated user
+ */
 export async function POST(req: NextRequest) {
-  const user = await currentUser();
+  const clerkUser = await currentUser();
 
-  if (!user) {
-    return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+  if (!clerkUser) {
+    return NextResponse.json(
+      { error: "Not authenticated" },
+      { status: 401 }
+    );
   }
 
   try {
-    // check if user already exists
+    // 1️⃣ Extract & normalize data from Clerk
+    const email =
+      clerkUser.primaryEmailAddress?.emailAddress ?? null;
+
+    const firstName =
+      clerkUser.firstName ??
+      clerkUser.fullName?.split(" ")[0] ??
+      "Unknown";
+
+    const lastName =
+      clerkUser.lastName ??
+      clerkUser.fullName?.split(" ").slice(1).join(" ") ??
+      "User";
+
+    // 2️⃣ Optional role from request body
+    const body = await req.json().catch(() => ({}));
+    const role =
+      body?.role && ["admin", "student", "parent"].includes(body.role)
+        ? body.role
+        : "student"; // default role
+
+    // 3️⃣ Check if user already exists (by clerkId)
     const existing = await db
       .select()
       .from(users)
-      .where(eq(users.email, user.primaryEmailAddress?.emailAddress || ""));
+      .where(eq(users.clerkId, clerkUser.id))
+      .limit(1);
 
-    if (existing.length === 0) {
-      // Create new user
-      const result = await db
-        .insert(users)
-        .values({
-          name: user.fullName || "No name",
-          email: user.primaryEmailAddress?.emailAddress || "No email",
-          clerkId: user.id,               // REQUIRED
-          role: "student",                // REQUIRED — choose default
-        })
-        .returning();
-
-      return NextResponse.json(result[0]);
+    if (existing.length > 0) {
+      return NextResponse.json(existing[0]);
     }
 
-    return NextResponse.json(existing[0]);
-  } catch (e) {
-    console.error("Create user error:", e);
-    return NextResponse.json({ error: e });
+    // 4️⃣ Create new user
+    const [createdUser] = await db
+      .insert(users)
+      .values({
+        id: clerkUser.id,
+        clerkId: clerkUser.id,
+        email,
+        firstName,
+        lastName,
+        role,
+      })
+      .returning();
+
+    return NextResponse.json(createdUser, { status: 201 });
+  } catch (error) {
+    console.error("Create user error:", error);
+    return NextResponse.json(
+      { error: "Failed to create user" },
+      { status: 500 }
+    );
   }
 }

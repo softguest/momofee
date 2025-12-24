@@ -32,29 +32,31 @@ export async function createStudentWithUser(formData: {
   return await db.transaction(async (tx) => {
     // 1️⃣ Create user
     const [newUser] = await tx
-      .insert(users)
-      .values({
-        clerkId,
-        role: "student",
-        name,
-        email,
-        phone,
-      })
-      .returning();
+  .insert(users)
+    .values({
+      id: clerkId,
+      clerkId,
+      role: "student",
+      userName: name,          // <-- map to userName
+      email,
+      phone,
+      firstName,
+      lastName,
+    })
+    .returning();
+
 
     if (!newUser) {
       throw new Error("Failed to create user");
     }
 
     // 2️⃣ Create student linked to user
-    const [newStudent] = await tx
+   const [newStudent] = await tx
       .insert(students)
       .values({
-        userId: newUser.id,
+        userId: newUser.id,  // must match users.id type
         studentCode: generateStudentCode(),
         classId,
-        firstName,
-        lastName,
         createdByAdminId: adminId ?? null,
       })
       .returning();

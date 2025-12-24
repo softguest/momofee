@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef } from "react";
 
 export default function Solution() {
@@ -75,10 +76,10 @@ export default function Solution() {
           {/* Fake dashboard layers */}
           <div className="absolute top-6 left-6 h-20 w-32 rounded-lg bg-accent" />
           <div className="absolute bottom-6 right-6 h-24 w-40 rounded-lg bg-accent/40" />
-
-          <span className="text-sm font-semibold text-secondary">
+            <Image src="/images/paycard.png" fill alt="paycard"/>
+          {/* <span className="text-sm font-semibold text-secondary">
             Dashboard / App Preview
-          </span>
+          </span> */}
         </div>
       </div>
     </section>
