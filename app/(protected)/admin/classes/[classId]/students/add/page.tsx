@@ -57,7 +57,7 @@ export default function AddStudentPage() {
 
         <button
           disabled={loading}
-          className="w-full bg-primary text-white px-4 py-2 rounded"
+          className="w-bg-primary text-white px-4 py-2 rounded"
         >
           {loading ? "Adding..." : "Add Student"}
         </button>

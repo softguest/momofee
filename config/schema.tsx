@@ -184,13 +184,16 @@ export const parentsStudents = pgTable("parents_students", {
 // ================= CLASS FEES =================
 export const classFees = pgTable("class_fees", {
   id: uuid("id").defaultRandom().primaryKey(),
-  classId: uuid("class_id").notNull().references(() => classes.id),
-  name: text("name").notNull(), // e.g. "Tuition", "PTA"
-  amount: integer("amount").notNull(), // total fee amount
+  classId: uuid("class_id").notNull().references(() => classes.id, { onDelete: "cascade" }),
+  name: text("name").notNull(), // Tuition, Exam fee
+  academicYear: text("academic_year").notNull(), // 2024/2025
   description: text("description"),
-  term: text("term").notNull(),
+  term: text("term").notNull(), // Term 1
+  totalAmount: integer("total_amount").notNull(),
+  paymentType: text("payment_type").notNull(), // FULL | INSTALLMENT
+  createdByAdminId: text("created_by_admin_id").notNull().references(() => users.id),
   createdAt: timestamp("created_at").defaultNow(),
-  deletedAt: timestamp("deleted_at"), // soft delete
+  deletedAt: timestamp("deleted_at"),
 });
 
 // ================= FEE INSTALLMENTS =================
@@ -220,14 +223,15 @@ export const studentFees = pgTable("student_fees", {
 export const payments = pgTable("payments", {
   id: uuid("id").defaultRandom().primaryKey(),
   studentId: uuid("student_id").notNull().references(() => students.id),
-  classFeeId: uuid("class_fee_id").references(() => classFees.id), // optional if paying full fee
-  installmentId: uuid("installment_id").references(() => classFeeInstallments.id), // optional if full fee
+  classFeeId: uuid("class_fee_id").notNull().references(() => classFees.id),
+  installmentId: uuid("installment_id"), // nullable for full payment
   amount: integer("amount").notNull(),
-  status: varchar("status", { length: 20 }).notNull(), // "pending" | "success" | "failed"
+  status: text("status").notNull(), // pending | success | failed
   momoTransactionId: text("momo_transaction_id"),
   createdAt: timestamp("created_at").defaultNow(),
   deletedAt: timestamp("deleted_at"), // soft delete
 });
+
 
 // ================= STUDENT NOTES =================
 export const studentNotes = pgTable("student_notes", {

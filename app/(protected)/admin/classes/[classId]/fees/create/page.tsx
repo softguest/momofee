@@ -69,9 +69,7 @@ export default function CreateFeePage() {
           placeholder="Optional description"
           className="w-full border p-2 rounded"
         />
-
         {error && <p className="text-red-500">{error}</p>}
-
         <button
           disabled={loading}
           className="w-full bg-primary text-white px-4 py-2 rounded"

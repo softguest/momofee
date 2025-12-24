@@ -4,7 +4,7 @@ export default function FundingCTA() {
       id="funding"
       className="bg-primary py-20 text-white text-center"
     >
-      <h2 className="text-3xl md:text-4xl font-bold">
+      <h2 className="text-3xl md:text-4xl font-bold drop-shadow-[0_0_12px_rgba(52,211,153,0.8)]">
         Support Digital Education Transformation
       </h2>
 

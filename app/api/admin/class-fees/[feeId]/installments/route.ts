@@ -132,7 +132,7 @@ export async function POST(
 
     const totalInstalled = sumRow?.total ?? 0;
 
-    if (totalInstalled + amount > fee.amount) {
+    if (totalInstalled + amount > fee.totalAmount) {
       return NextResponse.json(
         { error: "Installments cannot exceed total fee amount" },
         { status: 400 }

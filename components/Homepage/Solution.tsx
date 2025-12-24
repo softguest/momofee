@@ -41,7 +41,7 @@ export default function Solution() {
       <div className="mx-auto max-w-7xl px-6 mb-32 grid gap-16 lg:grid-cols-2 items-center">
         {/* 📝 Text */}
         <div ref={textRef} className="space-y-6">
-          <h2 className="text-3xl md:text-4xl font-bold tracking-tight">
+          <h2 className="text-3xl md:text-4xl font-bold tracking-tight drop-shadow-[0_0_12px_rgba(52,211,153,0.8)]">
             A Simple, Secure Digital Solution
           </h2>
 
@@ -76,7 +76,7 @@ export default function Solution() {
           {/* Fake dashboard layers */}
           <div className="absolute top-6 left-6 h-20 w-32 rounded-lg bg-accent" />
           <div className="absolute bottom-6 right-6 h-24 w-40 rounded-lg bg-accent/40" />
-            <Image src="/images/paycard.png" fill alt="paycard"/>
+            <Image src="/images/paycard.png" width={400} height={400} alt="paycard"/>
           {/* <span className="text-sm font-semibold text-secondary">
             Dashboard / App Preview
           </span> */}

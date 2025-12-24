@@ -45,7 +45,6 @@ export async function createStudentWithUser(formData: {
     })
     .returning();
 
-
     if (!newUser) {
       throw new Error("Failed to create user");
     }
