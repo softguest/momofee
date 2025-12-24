@@ -8,7 +8,7 @@ export default function FundingCTA() {
         Support Digital Education Transformation
       </h2>
 
-      <p className="mx-auto mt-4 max-w-2xl text-white/80">
+      <p className="mx-auto mt-4 max-w-2xl text-white/80 font-semibold">
         We seek grants, donations, and partnerships to support outreach,
         training, onboarding, and long-term impact.
       </p>

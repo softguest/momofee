@@ -45,7 +45,7 @@ export default function Solution() {
             A Simple, Secure Digital Solution
           </h2>
 
-          <p className="text-gray-600 max-w-xl">
+          <p className="text-gray-600 max-w-xl font-bold">
             Our School Fee Payment Platform modernizes how schools collect,
             track, and manage fees — removing cash, delays, and uncertainty.
           </p>

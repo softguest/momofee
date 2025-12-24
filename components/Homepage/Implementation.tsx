@@ -27,7 +27,7 @@ export default function Implementation() {
               data-aos-delay={idx * 150} // staggered fade-in
             >
               <span className="text-accent font-bold text-xl">✓</span>
-              <span className="text-gray-800">{i}</span>
+              <span className="text-gray-800 font-semibold">{i}</span>
             </li>
           ))}
         </ul>
