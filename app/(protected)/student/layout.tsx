@@ -26,12 +26,12 @@ export default async function AdminLayout({
     .where(eq(users.clerkId, clerkUser.id))
     .limit(1);
 
-  if (!user || user.role !== "student") redirect("/student");
+  if (!user || user.role !== "student") redirect("/");
 
   return (
     <div className="flex">
       <Sidebar menu={studentMenu} />
-      <div className="flex-1 p-4">
+      <div className="p-4">
         {children}
       </div>
     </div>

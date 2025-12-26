@@ -26,7 +26,7 @@ export default async function AdminLayout({
     .where(eq(users.clerkId, clerkUser.id))
     .limit(1);
 
-  if (!user || user.role !== "admin") redirect("/student");
+  if (!user || user.role !== "admin") redirect("/student/dashboard");
 
   return (
     <div className="flex">

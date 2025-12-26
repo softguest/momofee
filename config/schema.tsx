@@ -15,10 +15,8 @@ export const userRoleEnum = pgEnum("user_role", [
   "parent",
 ]);
 
-
 // ================= USERS =================
 export const users = pgTable("users", {
-  // id: uuid("id").defaultRandom().primaryKey(),
   id: text("id").primaryKey(),
   clerkId: text("clerk_id").notNull().unique(),
   role: userRoleEnum("role").default("student").notNull(),

@@ -1,5 +1,5 @@
 export const adminMenu = [
-  { label: "Dashboard", href: "/admin" },
+  { label: "Dashboard", href: "/admin/dashboard" },
   { label: "Students", href: "/admin/students" },
   { label: "Classes", href: "/admin/classes" },
   // { label: "Class", href: "/classes" },
@@ -9,17 +9,17 @@ export const adminMenu = [
 ];
 
 export const parentMenu = [
-  { label: "Dashboard", href: "/dashboard" },
+  { label: "Dashboard", href: "/parent/dashboard" },
   { label: "Children", href: "/parent/children" },
   { label: "Classes", href: "/classes" },
   { label: "Payments", href: "/parent/payments" },
-  { label: "Profile", href: "/profile" },
+  // { label: "Profile", href: "/profile" },
 ];
 
 export const studentMenu = [
-  { label: "Dashboard", href: "/dashboard" },
-  { label: "Classes", href: "/classes" },
+  { label: "Dashboard", href: "/student/dashboard" },
+  { label: "Classes", href: "/student/classes" },
   { label: "My Fees", href: "/student/fees" },
   { label: "Payments", href: "/student/payments" },
-  { label: "Profile", href: "/profile" },
+  // { label: "Profile", href: "/student/profile" },
 ];
