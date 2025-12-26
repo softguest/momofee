@@ -1,9 +1,5 @@
-import React from 'react'
+import StudentsClient from "./StudentsClient";
 
-const StudentPage = () => {
-  return (
-    <div>Student Page</div>
-  )
+export default function StudentsPage() {
+  return <StudentsClient />;
 }
-
-export default StudentPage;

@@ -3,14 +3,14 @@ import React from 'react'
 
 const AdminPage = () => {
     const steps = [
-        "Schools are onboarded and trained",
-        "Fee structures are configured",
-        "Parents & students pay digitally",
-        "Schools track payments in realtime",
+        "CLasses",
+        "Students",
+        "Fees",
+        "Installments",
     ];
 
   return (
-    <section className="bg-primary py-20 text-white">
+    <section className="w-full bg-primary py-20 text-white">
       <div className="px-6">
         <h2 className="text-3xl md:text-4xl font-bold text-center">How It Works</h2>
 
@@ -21,7 +21,7 @@ const AdminPage = () => {
                     
                     className="rounded-xl bg-white/10 p-6 text-center"
                     >
-                    <div className="mb-4 text-accent text-4xl font-bold">
+                    <div className="bg-primary/70 mb-4 text-accent text-4xl p-8 rounded-full font-bold">
                         {i + 1}
                     </div>
                     <p>{s}</p>

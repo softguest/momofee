@@ -17,7 +17,7 @@ export default async function AdminLayout({
   if (!clerkUser) {
     redirect("/sign-in");
   }
-  // const clerkUser = await currentUser();
+
   if (!clerkUser) redirect("/sign-in");
   
   const [user] = await db
@@ -26,7 +26,7 @@ export default async function AdminLayout({
     .where(eq(users.clerkId, clerkUser.id))
     .limit(1);
 
-  if (!user || user.role !== "admin") redirect("/dashboard");
+  if (!user || user.role !== "admin") redirect("/student");
 
   return (
     <div className="flex">

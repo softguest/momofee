@@ -3,7 +3,7 @@ import { db } from "@/config/db";
 import { classes } from "@/config/schema";
 import { auth } from "@clerk/nextjs/server";
 import { users } from "@/config/schema";
-import { eq, and } from "drizzle-orm";
+import { eq, and, isNull } from "drizzle-orm";
 import { assertAdmin } from "@/lib/auth";
 
 export async function POST(req: Request) {
@@ -52,7 +52,7 @@ export async function POST(req: Request) {
 
     const [createdClass] = await db
       .insert(classes)
-      .values({ name, academicYear, description })
+      .values({ name, academicYear, description, createdBy: dbUser.id, })
       .returning();
 
     return NextResponse.json(createdClass, { status: 201 });
@@ -64,3 +64,30 @@ export async function POST(req: Request) {
   }
 }
 
+export async function GET() {
+  try {
+    const { userId } = await auth();
+    if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+    const dbUser = await db.query.users.findFirst({
+      where: eq(users.id, userId),
+    });
+    if (!dbUser) return NextResponse.json({ error: "User not found" }, { status: 404 });
+
+    assertAdmin(dbUser.role);
+
+    // ✅ Use isNull() to filter soft-deleted classes
+    const userClasses = await db.query.classes.findMany({
+      where: and(
+        eq(classes.createdBy, dbUser.id),
+        isNull(classes.deletedAt) // 👈 correct
+      ),
+      orderBy: (c, { desc }) => [desc(c.createdAt)],
+    });
+
+    return NextResponse.json(userClasses);
+  } catch (err: any) {
+    console.error("GET /api/admin/classes error:", err);
+    return NextResponse.json({ error: err.message ?? "Server error" }, { status: 500 });
+  }
+}

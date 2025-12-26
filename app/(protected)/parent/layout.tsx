@@ -17,7 +17,6 @@ export default async function AdminLayout({
   if (!clerkUser) {
     redirect("/sign-in");
   }
-  // const clerkUser = await currentUser();
   if (!clerkUser) redirect("/sign-in");
   
   const [user] = await db

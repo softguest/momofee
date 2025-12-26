@@ -56,7 +56,7 @@ export async function createStudentWithUser(formData: {
         userId: newUser.id,  // must match users.id type
         studentCode: generateStudentCode(),
         classId,
-        createdByAdminId: adminId ?? null,
+        createdByAdminId: "",
       })
       .returning();
 

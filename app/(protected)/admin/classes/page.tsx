@@ -1,8 +1,9 @@
 import React from 'react'
+import ClassesClient from "./ClassesClient"
 
 const ClassPage = () => {
   return (
-    <div> Class Page</div>
+    <ClassesClient />
   )
 }
 

@@ -2,9 +2,9 @@ export const adminMenu = [
   { label: "Dashboard", href: "/admin" },
   { label: "Students", href: "/admin/students" },
   { label: "Classes", href: "/admin/classes" },
-  { label: "Class", href: "/classes" },
+  // { label: "Class", href: "/classes" },
   { label: "Fees", href: "/admin/fees" },
-  { label: "Ticket", href: "/admin/ticket" },
+  { label: "Ticket", href: "/admin/tickets" },
   { label: "Analytics", href: "/admin/analytics" },
 ];
 
