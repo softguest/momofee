@@ -39,7 +39,7 @@ export default function Sidebar({ menu }: SidebarProps) {
       <nav className="space-y-1">
         {menu.map((item) => {
           const active = pathname.startsWith(item.href);
-
+          // const Icon = step.icon;
           return (
             <Link
               key={item.href}

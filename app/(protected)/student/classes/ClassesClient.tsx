@@ -1,99 +1,7 @@
-// "use client";
-
-// import { useEffect, useState } from "react";
-// import Link from "next/link";
-
-// type ClassItem = {
-//   id: string;
-//   name: string;
-//   description: string | null;
-//   academicYear: string;
-//   createdAt: string;
-// };
-
-// export default function ClassesClient() {
-//   const [classes, setClasses] = useState<ClassItem[]>([]);
-//   const [loading, setLoading] = useState(true);
-
-//   useEffect(() => {
-//     fetch("/api/admin/classes")
-//       .then((res) => res.json())
-//       .then((data) => {
-//         setClasses(data);
-//         setLoading(false);
-//       })
-//       .catch(() => setLoading(false));
-//   }, []);
-
-//   if (loading) {
-//     return (
-//       <div className="max-w-5xl mx-auto py-10">
-//         <p className="text-gray-500">Loading classes...</p>
-//       </div>
-//     );
-//   }
-
-//   return (
-//     <div className="max-w-5xl mx-auto py-10">
-//       {/* Header */}
-//       <div className="flex items-center justify-between mb-6">
-//         <h1 className="text-2xl font-semibold">Classes</h1>
-
-//         <Link
-//           href="/admin/classes/new"
-//           className="bg-black text-white px-4 py-2 rounded"
-//         >
-//           + New Class
-//         </Link>
-//       </div>
-
-//       {/* Empty State */}
-//       {classes.length === 0 && (
-//         <div className="border rounded p-6 text-center text-gray-500">
-//           No classes created yet.
-//         </div>
-//       )}
-
-//       {/* Classes Table */}
-//       {classes.length > 0 && (
-//         <table className="w-full border">
-//           <thead className="bg-gray-100">
-//             <tr>
-//               <th className="p-2 text-left">Name</th>
-//               <th>Academic Year</th>
-//               <th>Description</th>
-//               <th></th>
-//             </tr>
-//           </thead>
-
-//           <tbody>
-//             {classes.map((cls) => (
-//               <tr key={cls.id} className="border-t">
-//                 <td className="p-2 font-medium">{cls.name}</td>
-//                 <td>{cls.academicYear}</td>
-//                 <td className="text-gray-600">
-//                   {cls.description || "—"}
-//                 </td>
-//                 <td className="text-right pr-3">
-//                   <Link
-//                     href={`/admin/classes/${cls.id}`}
-//                     className="text-blue-600"
-//                   >
-//                     View
-//                   </Link>
-//                 </td>
-//               </tr>
-//             ))}
-//           </tbody>
-//         </table>
-//       )}
-//     </div>
-//   );
-// }
-
-
 "use client";
 
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 type StudentClass = {
@@ -130,7 +38,7 @@ export default function StudentClassClient() {
 
   if (loading) {
     return (
-      <div className="max-w-3xl mx-auto py-10 text-gray-500">
+      <div className="max-w-3xl mx-auto py-10 text-center text-gray-500">
         Loading your class...
       </div>
     );
@@ -138,7 +46,7 @@ export default function StudentClassClient() {
 
   if (error) {
     return (
-      <div className="max-w-3xl mx-auto py-10 text-red-600">
+      <div className="max-w-3xl mx-auto py-10 text-center text-red-600">
         {error}
       </div>
     );
@@ -147,25 +55,34 @@ export default function StudentClassClient() {
   if (!cls) return null;
 
   return (
-    <div className="max-w-3xl mx-auto py-10">
-      <h1 className="text-2xl font-semibold mb-6">My Class</h1>
+    <div className="max-w-5xl mx-auto px-4 py-10">
+      <h1 className="text-2xl font-bold mb-8">My Class</h1>
 
-      <div className="border rounded-lg p-6 bg-white">
-        <div className="mb-4">
-          <p className="text-sm text-gray-500">Class Name</p>
-          <p className="text-lg font-medium">{cls.name}</p>
+      <div
+        className="bg-white shadow hover:shadow-lg hover:scale-[1.02] transition rounded-lg p-6 opacity-0 animate-fade-in"
+        style={{ animationDelay: "150ms", animationFillMode: "forwards" }}
+      >
+        <div className="flex justify-between items-center mb-4">
+          <p className="text-sm text-gray-500">Class Name:</p>
+          <p className="text-lg font-semibold text-gray-900">{cls.name}</p>
         </div>
 
         <div className="mb-4">
-          <p className="text-sm text-gray-500">Academic Year</p>
-          <p>{cls.academicYear}</p>
+          <p className="text-sm text-gray-500">Academic Year:</p>
+          <p className="text-gray-800">{cls.academicYear}</p>
         </div>
 
         <div>
-          <p className="text-sm text-gray-500">Description</p>
-          <p className="text-gray-700">
-            {cls.description || "—"}
-          </p>
+          <p className="text-sm text-gray-500">Description:</p>
+          <p className="text-gray-700">{cls.description || "—"}</p>
+        </div>
+
+        <div className="mt-6 text-right">
+          <Link href="/student/fees">
+            <Button className="px-4 py-2 bg-primary hover:bg-blue-700 text-white text-sm rounded-md transition">
+              View Fees
+            </Button>
+          </Link>
         </div>
       </div>
     </div>

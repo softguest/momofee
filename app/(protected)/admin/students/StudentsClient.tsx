@@ -45,8 +45,8 @@ export default function StudentsClient() {
         <h1 className="text-2xl font-semibold">Students</h1>
 
         <Link
-          href="/admin/students/new"
-          className="bg-black text-white px-4 py-2 rounded"
+          href="/admin/students/create"
+          className="bg-primary text-white px-4 py-2 rounded"
         >
           + New Student
         </Link>

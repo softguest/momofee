@@ -14,110 +14,87 @@ export default function StudentFees() {
       .finally(() => setLoading(false));
   }, []);
 
-  if (loading) return <p>Loading...</p>;
-  if (data?.error) return <p>{data.error}</p>;
+  if (loading) return <p className="text-center text-gray-500">Loading...</p>;
+  if (data?.error) return <p className="text-center text-red-500">{data.error}</p>;
 
   const { student, fees } = data;
 
   return (
-    <div className="space-y-6">
-      <div className="border rounded p-4">
-        <p className="font-medium">
+    <div className="space-y-8">
+      {/* Student Info */}
+      <div className="bg-white shadow rounded-lg p-6 animate-fade-in">
+        <p className="text-lg font-semibold text-gray-800">
           Student: {student.firstName} {student.lastName}
         </p>
       </div>
 
-      <div className="space-y-4">
-        {fees.map((item: any) => (
-          <div
-            key={item.fee.id}
-            className="border rounded p-4 flex justify-between items-center"
-          >
-            <div>
-              <p className="font-semibold">{item.fee.name}</p>
-              <p className="text-sm text-gray-600">
-                Total: {item.fee.totalAmount.toLocaleString()} XAF
-              </p>
-              <p className="text-sm text-gray-600">
-                Paid: {item.totalPaid.toLocaleString()} XAF
-              </p>
-              <p className="text-sm text-gray-600">
-                Balance: {item.balance.toLocaleString()} XAF
-              </p>
+      {/* Fees Grid */}
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {fees.map((item: any, idx: number) => {
+          const percentPaid = Math.min(
+            (item.totalPaid / item.fee.totalAmount) * 100,
+            100
+          );
 
-              <span
-                className={`inline-block mt-2 px-3 py-1 rounded text-xs ${
-                  item.status === "PAID"
-                    ? "bg-green-100 text-green-700"
-                    : item.status === "PARTIALLY PAID"
-                    ? "bg-yellow-100 text-yellow-700"
-                    : "bg-red-100 text-red-700"
-                }`}
-              >
-                {item.status}
-              </span>
+          return (
+            <div
+              key={item.fee.id}
+              className={`bg-white shadow hover:shadow-lg transition rounded-lg p-6 flex flex-col justify-between opacity-0 animate-fade-in`}
+              style={{ animationDelay: `${idx * 150}ms`, animationFillMode: "forwards" }}
+            >
+              <div>
+                <p className="text-lg font-bold text-gray-900">{item.fee.name}</p>
+                <p className="text-sm text-gray-600 mt-2">
+                  Total: <span className="font-medium">{item.fee.totalAmount.toLocaleString()} XAF</span>
+                </p>
+                <p className="text-sm text-gray-600 mt-1">
+                  Paid: <span className="font-medium">{item.totalPaid.toLocaleString()} XAF</span>
+                </p>
+                <p className="text-sm text-gray-600 mt-1">
+                  Balance: <span className="font-medium">{item.balance.toLocaleString()} XAF</span>
+                </p>
+
+                {/* Animated Progress Bar */}
+                <div className="mt-4">
+                  <div className="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
+                    <div
+                      className={`h-2.5 rounded-full transition-all duration-700 ease-out ${
+                        percentPaid === 100
+                          ? "bg-green-500"
+                          : percentPaid >= 50
+                          ? "bg-yellow-500"
+                          : "bg-red-500"
+                      }`}
+                      style={{ width: `${percentPaid}%` }}
+                    ></div>
+                  </div>
+                  <p className="text-xs text-gray-500 mt-1">{percentPaid.toFixed(0)}% Paid</p>
+                </div>
+              </div>
+
+              {/* Status + Action */}
+              <div className="mt-4 flex items-center justify-between">
+                <span
+                  className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                    item.status === "PAID"
+                      ? "bg-green-100 text-green-700"
+                      : item.status === "PARTIALLY PAID"
+                      ? "bg-yellow-100 text-yellow-700"
+                      : "bg-red-100 text-red-700"
+                  }`}
+                >
+                  {item.status}
+                </span>
+                <Link href={`/student/fees/${item.fee.id}`}>
+                  <button className="px-4 py-2 bg-primary hover:bg-blue-700 text-white text-sm rounded-md transition">
+                    View
+                  </button>
+                </Link>
+              </div>
             </div>
-
-            <Link href={`/student/fees/${item.fee.id}`}>
-              <button className="px-4 py-2 bg-assent text-white rounded">
-                View
-              </button>
-            </Link>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
 }
-
-
-// "use client";
-
-// import { useEffect, useState } from "react";
-// import Link from "next/link";
-
-// export default function StudentFees({
-//   studentId,
-//   role = "student",
-// }: {
-//   studentId?: string;
-//   role?: "student" | "parent";
-// }) {
-//   const [data, setData] = useState<any>(null);
-
-//   useEffect(() => {
-//     const url =
-//       role === "parent"
-//         ? `/api/parent/students/${studentId}/fees`
-//         : "/api/student/fees";
-
-//     fetch(url)
-//       .then((res) => res.json())
-//       .then(setData);
-//   }, [studentId, role]);
-
-//   if (!data) return <p>Loading...</p>;
-//   if (data.error) return <p>{data.error}</p>;
-
-//   return (
-//     <div className="space-y-4">
-//       {data.fees.map((item: any) => (
-//         <div key={item.fee.id} className="border p-4 rounded flex justify-between">
-//           <div>
-//             <p className="font-semibold">{item.fee.name}</p>
-//             <p>Balance: {item.balance.toLocaleString()} XAF</p>
-//             <span className="text-sm">{item.status}</span>
-//           </div>
-
-//           <Link
-//             href={`/${role}/fees/${item.fee.id}?studentId=${data.student.id}`}
-//           >
-//             <button className="bg-assent text-white px-4 py-2 rounded">
-//               View
-//             </button>
-//           </Link>
-//         </div>
-//       ))}
-//     </div>
-//   );
-// }

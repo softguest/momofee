@@ -85,11 +85,11 @@ export default function PaymentHistory() {
   }, []);
 
   return (
-    <div className="mx-auto py-8">
+    <div className="max-w-5xl mx-auto px-4 py-10">
       <h1 className="text-2xl font-semibold mb-6">Payment History</h1>
 
-      <div className="overflow-x-auto">
-        <table className="w-full border">
+      <div>
+        <table className="table">
           <thead className="hidden md:table-header-group">
             <tr className="bg-gray-100">
               <th className="p-2 text-left">Date</th>

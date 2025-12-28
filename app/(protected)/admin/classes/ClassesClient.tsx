@@ -40,8 +40,8 @@ export default function ClassesClient() {
         <h1 className="text-2xl font-semibold">Classes</h1>
 
         <Link
-          href="/admin/classes/new"
-          className="bg-black text-white px-4 py-2 rounded"
+          href="/admin/classes/create"
+          className="bg-primary text-white px-4 py-2 rounded"
         >
           + New Class
         </Link>

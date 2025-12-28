@@ -1,25 +1,22 @@
 export const adminMenu = [
-  { label: "Dashboard", href: "/admin/dashboard" },
-  { label: "Students", href: "/admin/students" },
-  { label: "Classes", href: "/admin/classes" },
-  // { label: "Class", href: "/classes" },
-  { label: "Fees", href: "/admin/fees" },
-  { label: "Ticket", href: "/admin/tickets" },
-  { label: "Analytics", href: "/admin/analytics" },
+  { label: "A Dashboard", href: "/dashboard" },
+  { label: "A Analytics", href: "/admin/analytics/fees" },
+  { label: "A Students", href: "/admin/students" },
+  { label: "A Classes", href: "/admin/classes" },
+  { label: "A Fees", href: "/admin/fees" },
+  { label: "A Ticket", href: "/admin/tickets" },
 ];
 
 export const parentMenu = [
-  { label: "Dashboard", href: "/parent/dashboard" },
-  { label: "Children", href: "/parent/children" },
-  { label: "Classes", href: "/classes" },
-  { label: "Payments", href: "/parent/payments" },
-  // { label: "Profile", href: "/profile" },
+  { label: "P Dashboard", href: "/dashboard" },
+  { label: "P Children", href: "/parent/children" },
+  { label: "P Classes", href: "/classes" },
+  { label: "P Payments", href: "/parent/payments" },
 ];
 
 export const studentMenu = [
-  { label: "Dashboard", href: "/student/dashboard" },
-  { label: "Classes", href: "/student/classes" },
-  { label: "My Fees", href: "/student/fees" },
-  { label: "Payments", href: "/student/payments" },
-  // { label: "Profile", href: "/student/profile" },
+  { label: "S Dashboard", href: "/dashboard" },
+  { label: "S Classes", href: "/student/classes" },
+  { label: "S My Fees", href: "/student/fees" },
+  { label: "S Payments", href: "/student/payments" },
 ];

@@ -132,17 +132,17 @@ export default function Hero() {
 
           <div className="mt-10 flex justify-center gap-4">
             <Link
-              href="#funding"
+              href="/sign-up"
               className="rounded-xl bg-white px-6 py-3 font-semibold text-black"
             >
               SignUp for Free Demo
             </Link>
 
             <Link
-              href="#contact"
+              href="/dashboard"
               className="rounded-xl border border-white px-6 py-3 font-semibold text-white hover:bg-white hover:text-black"
             >
-              Partner With Us
+              Go to Account
             </Link>
           </div>
 
