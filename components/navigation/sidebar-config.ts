@@ -1,22 +1,50 @@
+import {
+  FiHome,
+  FiUser,
+  FiUsers,
+  FiLayers,
+  FiBook,
+  FiDollarSign,
+  FiBarChart2,
+  FiHelpCircle,
+  FiCreditCard,
+} from "react-icons/fi";
+
+const iconMap: Record<string, React.ElementType> = {
+  home: FiHome,
+  analytics: FiBarChart2,
+  users: FiUsers,
+  user: FiUser,
+  book: FiBook,
+  layers: FiLayers,
+  money: FiDollarSign,
+  ticket: FiHelpCircle,
+  payments: FiCreditCard,
+};
+
+
+
 export const adminMenu = [
-  { label: "A Dashboard", href: "/dashboard" },
-  { label: "A Analytics", href: "/admin/analytics/fees" },
-  { label: "A Students", href: "/admin/students" },
-  { label: "A Classes", href: "/admin/classes" },
-  { label: "A Fees", href: "/admin/fees" },
-  { label: "A Ticket", href: "/admin/tickets" },
+  { label: "Dashboard", href: "/dashboard", icon: "home" },
+  { label: "Analytics", href: "/admin/analytics/fees", icon: "analytics" },
+  { label: "Students", href: "/admin/students", icon: "users" },
+  { label: "Classes", href: "/admin/classes", icon: "layers" },
+  { label: "Fees", href: "/admin/fees", icon: "money" },
+  { label: "Tickets", href: "/admin/tickets", icon: "ticket" },
 ];
 
 export const parentMenu = [
-  { label: "P Dashboard", href: "/dashboard" },
-  { label: "P Children", href: "/parent/children" },
-  { label: "P Classes", href: "/classes" },
-  { label: "P Payments", href: "/parent/payments" },
+  { label: "Dashboard", href: "/dashboard", icon: "home" },
+  { label: "Children", href: "/parent/children", icon: "user" },
+  { label: "Classes", href: "/classes", icon: "book" },
+  { label: "Payments", href: "/parent/payments", icon: "payments"},
 ];
 
+
 export const studentMenu = [
-  { label: "S Dashboard", href: "/dashboard" },
-  { label: "S Classes", href: "/student/classes" },
-  { label: "S My Fees", href: "/student/fees" },
-  { label: "S Payments", href: "/student/payments" },
+  { label: "Dashboard", href: "/dashboard", icon: "home" },
+  { label: "Classes", href: "/student/classes", icon: "book" },
+  { label: "My Fees", href: "/student/fees", icon: "money" },
+  { label: "Payments", href: "/student/payments", icon: "payments" },
 ];
+

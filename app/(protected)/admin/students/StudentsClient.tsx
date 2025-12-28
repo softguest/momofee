@@ -83,7 +83,7 @@ export default function StudentsClient() {
                 <td>{new Date(s.createdAt).toLocaleDateString()}</td>
                 <td className="text-right pr-3">
                   <Link
-                    href={`/admin/students/${s.id}/fees`}
+                    href={`/admin/students/${s.id}`}
                     className="text-blue-600"
                   >
                     View

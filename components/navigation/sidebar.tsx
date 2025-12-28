@@ -3,19 +3,41 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { useClerk } from "@clerk/nextjs"; // <-- use this
+import { useClerk, UserButton, useUser } from "@clerk/nextjs";
 import { FiLogOut } from "react-icons/fi";
+import {
+  FiHome,
+  FiUsers,
+  FiLayers,
+  FiDollarSign,
+  FiBarChart2,
+  FiHelpCircle,
+  FiCreditCard,
+} from "react-icons/fi";
 import {
   TooltipProvider,
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { UserButton, useUser } from '@clerk/nextjs';
+import { IconType } from "react-icons";
+
+/* ✅ ICON MAP (CLIENT SIDE ONLY) */
+const iconMap: Record<string, IconType> = {
+  home: FiHome,
+  analytics: FiBarChart2,
+  users: FiUsers,
+  layers: FiLayers,
+  money: FiDollarSign,
+  ticket: FiHelpCircle,
+  payments: FiCreditCard,
+};
+
 
 interface MenuItem {
   label: string;
   href: string;
+  icon: string;
 }
 
 interface SidebarProps {
@@ -39,23 +61,26 @@ export default function Sidebar({ menu }: SidebarProps) {
       <nav className="space-y-1">
         {menu.map((item) => {
           const active = pathname.startsWith(item.href);
-          // const Icon = step.icon;
+          const Icon = iconMap[item.icon];
+
           return (
             <Link
               key={item.href}
               href={item.href}
               className={cn(
-                "block px-3 py-2 rounded-md text-sm font-medium transition-colors",
+                "flex items-center gap-3 px-3 py-2 rounded-md text-sm font-bold transition-colors",
                 active
                   ? "bg-accent text-accent-foreground"
                   : "text-muted-foreground hover:bg-muted hover:text-foreground"
               )}
             >
-              {item.label}
+              {Icon && <Icon size={18} />}
+              <span>{item.label}</span>
             </Link>
           );
         })}
       </nav>
+
 
       {/* Logout button with icon and tooltip */}
       <div className="space-y-4">

@@ -135,7 +135,7 @@ export default function Hero() {
               href="/sign-up"
               className="rounded-xl bg-white px-6 py-3 font-semibold text-black"
             >
-              SignUp for Free Demo
+              Sign Up for Free Demo
             </Link>
 
             <Link

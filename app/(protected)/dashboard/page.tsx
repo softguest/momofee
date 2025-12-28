@@ -33,7 +33,7 @@ const DashboardPage = async () => {
         ];
   
   return (
-    <div>
+    <div className="max-w-6xl mx-auto py-8 space-y-8">
       {user.role === "admin" && (
         <div className="bg-primary max-w-6xl mx-auto py-8 px-8 space-y-8 rounded-2xl">
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
