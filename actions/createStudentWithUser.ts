@@ -40,8 +40,6 @@ export async function createStudentWithUser(formData: {
       userName: name,          // <-- map to userName
       email,
       phone,
-      firstName,
-      lastName,
     })
     .returning();
 
@@ -56,7 +54,7 @@ export async function createStudentWithUser(formData: {
         userId: newUser.id,  // must match users.id type
         studentCode: generateStudentCode(),
         classId,
-        createdByAdminId: "",
+        createdByUserId: "",
       })
       .returning();
 

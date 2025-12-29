@@ -89,7 +89,7 @@ export default function PaymentHistory() {
       <h1 className="text-2xl font-semibold mb-6">Payment History</h1>
 
       <div>
-        <table className="table">
+        <table className="w-full border">
           <thead className="hidden md:table-header-group">
             <tr className="bg-gray-100">
               <th className="p-2 text-left">Date</th>

@@ -1,24 +1,62 @@
 "use client";
 
 import { useState } from "react";
-import { FiX, FiMenu } from "react-icons/fi"; // <-- add icons
-import Sidebar from "./sidebar";
-import type { MenuItem } from "@/types/navigation";
-import { FiBook, FiCreditCard, FiClock, FiDatabase, FiUsers } from "react-icons/fi";
+import { FiX, FiMenu, FiLogOut } from "react-icons/fi"; // <-- add icons
+import { usePathname, useRouter } from "next/navigation";
+// import type { MenuItem } from "@/types/navigation";
+import {
+  FiHome,
+  FiUsers,
+  FiLayers,
+  FiDollarSign,
+  FiBarChart2,
+  FiHelpCircle,
+  FiCreditCard,
+} from "react-icons/fi";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
+import { useClerk, UserButton, useUser } from "@clerk/nextjs";
+import {
+  TooltipProvider,
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { IconType } from "react-icons";
+
+const iconMap: Record<string, IconType> = {
+  home: FiHome,
+  analytics: FiBarChart2,
+  users: FiUsers,
+  layers: FiLayers,
+  money: FiDollarSign,
+  ticket: FiHelpCircle,
+  payments: FiCreditCard,
+};
+
+interface MenuItem {
+  label: string;
+  href: string;
+  icon: string;
+}
 
 interface MobileSidebarProps {
   menu: MenuItem[];
 }
 
 export default function MobileSidebar({ menu }: MobileSidebarProps) {
-        const steps = [
-      { link: "/admin/students", label: "All Students", icon: FiUsers },
-      { link: "/admin/classes", label: "All Classes", icon: FiDatabase },
-      { link: "/admin/fees", label: "Fees to Pay", icon: FiCreditCard },
-      { link: "/admin/analytics/overdue-installments", label: "Fee Installments", icon: FiBook },
-      { link: "/admin/payments", label: "Payment History", icon: FiClock },
-    ];
+    const pathname = usePathname();
+  const router = useRouter();
+  const { signOut } = useClerk(); // <-- get signOut from useClerk hook
+  //  const { user } = useUser();
+
+  const handleLogout = async () => {
+    await signOut(); // signs out user
+    router.push("/"); // redirect after logout
+  };
+
+       const { user } = useUser();
+
   
   const [open, setOpen] = useState(false);
 
@@ -50,29 +88,55 @@ export default function MobileSidebar({ menu }: MobileSidebarProps) {
           </div>
 
           {/* Fullscreen menu */}
-          <div className="grid sm:grid-col-2 md-grid-col-3 overflow-y-auto bg-card p-6">
-            {steps.map((step, index) => {
-            const Icon = step.icon;
+          <div className="grid grid-col-2 md-grid-col-3 overflow-y-auto bg-card p-6">
+                 <nav className="space-y-1">
+        {menu.map((item) => {
+          const active = pathname.startsWith(item.href);
+          const Icon = iconMap[item.icon];
 
-           return (
-              <Link
-                key={index}
-                href={step.link}
-                className="group opacity-0 animate-fade-in"
-                style={{ animationDelay: `${index * 150}ms`, animationFillMode: "forwards" }}
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={cn(
+                "flex items-center gap-3 px-3 py-2 rounded-md text-sm font-bold transition-colors",
+                active
+                  ? "bg-accent text-accent-foreground"
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
+              )}
+            >
+              {Icon && <Icon size={18} />}
+              <span>{item.label}</span>
+            </Link>
+          );
+        })}
+      </nav>
+
+
+      {/* Logout button with icon and tooltip */}
+      <div className="space-y-4">
+        <div className="flex items-center gap-3 md:gap-5 pl-2">
+          <UserButton />
+          <span className="hidden md:block text-sm font-semibold text-gray-700">
+            {user?.firstName} {user?.lastName}
+          </span>
+        </div>
+
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                className="w-full flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium text-red-600 hover:bg-red-50 transition-colors"
+                onClick={handleLogout}
               >
-                <div className="rounded-xl bg-white/10 p-6 text-center shadow hover:shadow-lg hover:scale-[1.03] transition cursor-pointer">
-                  <div className="bg-primary/70 mb-4 mx-auto flex h-16 w-16 items-center justify-center rounded-full text-accent text-2xl transition group-hover:scale-110">
-                    <Icon size={28} />
-                  </div>
-
-                  <p className="font-medium text-white group-hover:text-accent transition">
-                    {step.label}
-                  </p>
-                </div>
-              </Link>
-            );
-          })}
+                <FiLogOut size={18} />
+                Logout
+              </button>
+            </TooltipTrigger>
+            <TooltipContent side="right">Logout</TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </div> 
           </div>
         </div>
       )}

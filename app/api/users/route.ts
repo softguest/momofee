@@ -58,8 +58,6 @@ export async function POST(req: NextRequest) {
         id: clerkUser.id,
         clerkId: clerkUser.id,
         email,
-        firstName,
-        lastName,
         role,
       })
       .returning();

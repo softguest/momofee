@@ -48,7 +48,7 @@ export async function POST(
       userId: studentUser.id,
       classId,
       studentCode: studentCode ?? `STU-${Date.now()}`, // auto-generate code if not provided
-      createdByAdminId: userId,
+      createdByUserId: userId,
     }).returning();
 
     return NextResponse.json(newStudent, { status: 201 });

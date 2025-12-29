@@ -35,32 +35,39 @@ const DashboardPage = async () => {
   return (
     <div className="max-w-6xl mx-auto py-8 space-y-8">
       {user.role === "admin" && (
-        <div className="bg-primary max-w-6xl mx-auto py-8 px-8 space-y-8 rounded-2xl">
-        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {adminSteps.map((step, index) => {
-            const Icon = step.icon;
+        <>
+          <h1 className="text-2xl font-semibold">
+              Admin Dashboard
+          </h1>
+          <div className="bg-primary max-w-6xl mx-auto p-2 md:p-8 space-y-8 rounded-2xl">
+            <div className="p-2 md:p-8 space-y-8 rounded-2xl">
+              <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                {adminSteps.map((step, index) => {
+                  const Icon = step.icon;
 
-           return (
-              <Link
-                key={index}
-                href={step.link}
-                className="group opacity-0 animate-fade-in"
-                style={{ animationDelay: `${index * 150}ms`, animationFillMode: "forwards" }}
-              >
-                <div className="rounded-xl bg-white/10 p-6 text-center shadow hover:shadow-lg hover:scale-[1.03] transition cursor-pointer">
-                  <div className="bg-primary/70 mb-4 mx-auto flex h-16 w-16 items-center justify-center rounded-full text-accent text-2xl transition group-hover:scale-110">
-                    <Icon size={28} />
-                  </div>
+                return (
+                    <Link
+                      key={index}
+                      href={step.link}
+                      className="group opacity-0 animate-fade-in"
+                      style={{ animationDelay: `${index * 150}ms`, animationFillMode: "forwards" }}
+                    >
+                      <div className="bg-primary rounded-xl bg-white/10 p-6 text-center shadow hover:shadow-lg hover:scale-[1.03] transition cursor-pointer">
+                        <div className="bg-primary/70 mb-4 mx-auto flex h-16 w-16 items-center justify-center rounded-full text-accent text-2xl transition group-hover:scale-110">
+                          <Icon size={28} />
+                        </div>
 
-                  <p className="font-medium text-white group-hover:text-accent transition">
-                    {step.label}
-                  </p>
-                </div>
-              </Link>
-            );
-          })}
-        </div>
-      </div>
+                        <p className="font-medium text-white group-hover:text-accent transition">
+                          {step.label}
+                        </p>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </>
       )}
       {user.role === "parent" && (
         <div className="text-green-600 font-semibold">
@@ -68,30 +75,39 @@ const DashboardPage = async () => {
         </div>
       )}
       {user.role === "student" && (
-        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {studentSteps.map((step, index) => {
-            const Icon = step.icon;
+        <>
+          <h1 className="text-2xl text-primary font-semibold">
+              Student Dashboard
+          </h1>
+          <div className="bg-primary max-w-6xl mx-auto p-4 md:p-8 space-y-8 rounded-2xl">
+            <div className="p-2 md:p-8 space-y-8 rounded-2xl">
+              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                {studentSteps.map((step, index) => {
+                  const Icon = step.icon;
 
-            return (
-              <Link
-                key={index}
-                href={step.link}
-                className="group opacity-0 animate-fade-in"
-                style={{ animationDelay: `${index * 150}ms`, animationFillMode: "forwards" }}
-              >
-                <div className="rounded-xl bg-white/10 p-6 text-center shadow hover:shadow-lg hover:scale-[1.03] transition cursor-pointer">
-                  <div className="bg-primary/70 mb-4 mx-auto flex h-16 w-16 items-center justify-center rounded-full text-accent text-2xl transition group-hover:scale-110">
-                    <Icon size={28} />
-                  </div>
+                return (
+                    <Link
+                      key={index}
+                      href={step.link}
+                      className="group opacity-0 animate-fade-in"
+                      style={{ animationDelay: `${index * 150}ms`, animationFillMode: "forwards" }}
+                    >
+                      <div className="bg-primary rounded-xl bg-white/10 p-6 text-center shadow hover:shadow-lg hover:scale-[1.03] transition cursor-pointer">
+                        <div className="bg-primary/70 mb-4 mx-auto flex h-16 w-16 items-center justify-center rounded-full text-accent text-2xl transition group-hover:scale-110">
+                          <Icon size={28} />
+                        </div>
 
-                  <p className="font-medium text-white group-hover:text-accent transition">
-                    {step.label}
-                  </p>
-                </div>
-              </Link>
-            );
-          })}
-        </div>
+                        <p className="font-medium text-white group-hover:text-accent transition">
+                          {step.label}
+                        </p>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </>
       )}
     </div>
   )

@@ -20,8 +20,6 @@ export const users = pgTable("users", {
   id: text("id").primaryKey(),
   clerkId: text("clerk_id").notNull().unique(),
   role: userRoleEnum("role").default("student").notNull(),
-  firstName: varchar("first_name", { length: 50 }),
-  lastName: varchar("last_name", { length: 50 }),
   userName: varchar({ length: 256 }),
   email: text("email"),
   phone: text("phone"),
@@ -47,8 +45,15 @@ export const students = pgTable("students", {
   id: uuid("id").defaultRandom().primaryKey(),
   userId: text("user_id").notNull().references(() => users.id),
   studentCode: varchar("student_code", { length: 32 }).notNull().unique(),
+  firstName: varchar("first_name", { length: 50 }),
+  middleName: varchar("middle_name", { length: 50 }),
+  lastName: varchar("last_name", { length: 50 }),
+  age: integer("total_amount"),
+  gender: varchar("gender", { length: 50 }),
   classId: uuid("class_id").notNull().references(() => classes.id),
-  createdByAdminId: text("created_by_admin_id").notNull().references(() => users.id),
+  createdByUserId: text("created_by_user_id")
+  .notNull()
+  .references(() => users.id),
   createdAt: timestamp("created_at").defaultNow(),
   deletedAt: timestamp("deleted_at"), // soft delete
 });

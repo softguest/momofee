@@ -22,8 +22,6 @@ const iconMap: Record<string, React.ElementType> = {
   payments: FiCreditCard,
 };
 
-
-
 export const adminMenu = [
   { label: "Dashboard", href: "/dashboard", icon: "home" },
   { label: "Analytics", href: "/admin/analytics/fees", icon: "analytics" },
@@ -43,8 +41,9 @@ export const parentMenu = [
 
 export const studentMenu = [
   { label: "Dashboard", href: "/dashboard", icon: "home" },
-  { label: "Classes", href: "/student/classes", icon: "book" },
+  { label: "Classes", href: "/student/classes", icon: "layers" },
   { label: "My Fees", href: "/student/fees", icon: "money" },
   { label: "Payments", href: "/student/payments", icon: "payments" },
+  { label: "Profile", href: "/student/profile", icon: "users" },
 ];
 

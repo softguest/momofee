@@ -25,7 +25,7 @@ export async function GET() {
 
     const result = await db.query.students.findMany({
       where: and(
-        eq(students.createdByAdminId, dbUser.id),
+        eq(students.createdByUserId, dbUser.id),
         isNull(students.deletedAt)
       ),
       // remove `with` if relations not set
@@ -90,7 +90,7 @@ export async function POST(req: Request) {
     userId: dbUser.id,
     classId,
     studentCode: `STU-${randomUUID().slice(0, 8).toUpperCase()}`,
-    createdByAdminId: admin!.id,
+    createdByUserId: admin!.id,
   }).returning();
 
   return NextResponse.json(student, { status: 201 });
