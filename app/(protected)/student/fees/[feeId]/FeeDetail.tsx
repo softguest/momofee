@@ -93,9 +93,10 @@ export default function FeeDetail({ feeId }: { feeId: string }) {
       {/* -------- FEE SUMMARY -------- */}
       <div className="border rounded p-4">
         <h1 className="text-xl font-semibold">{fee.name}</h1>
+        <hr className="my-2"/>
         <p className="text-gray-600">{fee.term}</p>
 
-        <div className="mt-4 space-y-1">
+        <div className="mt-4 p-2 bg-primary/10 space-y-1">
           <p>
             Total Fee: <b>{fee.totalAmount.toLocaleString()} XAF</b>
           </p>

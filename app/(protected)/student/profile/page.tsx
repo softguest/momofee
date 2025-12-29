@@ -1,134 +1,49 @@
-// "use client";
-
-// import { useEffect, useState } from "react";
-// import { useRouter } from "next/navigation";
-
-// type Class = {
-//   id: string;
-//   name: string;
-// };
-
-// export default function StudentProfilePage() {
-//   const router = useRouter();
-//   const [loading, setLoading] = useState(false);
-//   const [classes, setClasses] = useState<Class[]>([]);
-//   const [classesLoading, setClassesLoading] = useState(true);
-
-//   // ✅ Check if profile already exists
-//   useEffect(() => {
-//     async function checkProfile() {
-//       const res = await fetch("/api/student/profile/status");
-//       const data = await res.json();
-
-//       if (data.exists) {
-//         router.push("/dashboard");
-//       }
-//     }
-
-//     checkProfile();
-//   }, [router]);
-
-//   // ✅ Fetch classes
-//   useEffect(() => {
-//     async function fetchClasses() {
-//       try {
-//         const res = await fetch("/api/student/class");
-//         const data = await res.json();
-//         setClasses(data);
-//       } catch (err) {
-//         console.error(err);
-//       } finally {
-//         setClassesLoading(false);
-//       }
-//     }
-
-//     fetchClasses();
-//   }, []);
-
-//   async function submit(formData: FormData) {
-//     setLoading(true);
-
-//     const res = await fetch("/api/student/profile", {
-//       method: "POST",
-//       headers: { "Content-Type": "application/json" },
-//       body: JSON.stringify({
-//         classId: formData.get("classId"),
-//       }),
-//     });
-
-//     if (res.ok) {
-//       router.push("/dashboard");
-//     }
-
-//     setLoading(false);
-//   }
-
-//   return (
-//     <form action={submit} className="max-w-xl mx-auto space-y-4">
-//       <h1 className="text-2xl font-semibold">Complete Student Profile</h1>
-
-//       <select
-//         name="classId"
-//         required
-//         disabled={classesLoading}
-//         className="w-full border rounded px-3 py-2"
-//       >
-//         <option value="">
-//           {classesLoading ? "Loading classes..." : "Select Class"}
-//         </option>
-
-//         {classes.map((cls) => (
-//           <option key={cls.id} value={cls.id}>
-//             {cls.name}
-//           </option>
-//         ))}
-//       </select>
-
-//       <button
-//         disabled={loading || classesLoading}
-//         className="px-4 py-2 bg-black text-white rounded"
-//       >
-//         {loading ? "Saving..." : "Create Profile"}
-//       </button>
-//     </form>
-//   );
-// }
-
-
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 
 type Class = {
   id: string;
   name: string;
 };
 
+type StudentProfile = {
+  firstName: string | null;
+  middleName: string | null;
+  lastName: string | null;
+  age: number | null;
+  gender: string | null;
+  classId: string;
+};
+
 export default function StudentProfilePage() {
-  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [classes, setClasses] = useState<Class[]>([]);
   const [classesLoading, setClassesLoading] = useState(true);
 
-  // 🔹 Check if student profile already exists
+  const [profileExists, setProfileExists] = useState(false);
+  const [profile, setProfile] = useState<StudentProfile | null>(null);
+
+  // 🔹 Check if profile exists
   useEffect(() => {
     async function checkProfile() {
       const res = await fetch("/api/student/profile/status");
       const data = await res.json();
 
       if (data.exists) {
-        router.push("/dashboard");
+        setProfileExists(true);
+        setProfile(data.student);
       }
     }
+
     checkProfile();
-  }, [router]);
+  }, []);
 
   // 🔹 Fetch classes
   useEffect(() => {
     async function fetchClasses() {
       try {
-        const res = await fetch("/api/student/class");
+        const res = await fetch("/api/student/class/all");
         const data = await res.json();
         setClasses(data);
       } catch (err) {
@@ -142,6 +57,8 @@ export default function StudentProfilePage() {
   }, []);
 
   async function submit(formData: FormData) {
+    if (profileExists) return;
+
     setLoading(true);
 
     const res = await fetch("/api/student/profile", {
@@ -157,50 +74,56 @@ export default function StudentProfilePage() {
       }),
     });
 
-    if (res.ok) {
-      router.push("/dashboard");
-    }
-
     setLoading(false);
   }
 
   return (
     <form action={submit} className="max-w-xl mx-auto space-y-4">
-      <h1 className="text-2xl font-semibold">Complete Student Profile</h1>
+      <h1 className="text-2xl font-semibold">
+        {profileExists ? "Student Profile" : "Complete Student Profile"}
+      </h1>
 
       <input
         name="firstName"
         placeholder="First Name"
+        defaultValue={profile?.firstName ?? ""}
+        disabled={profileExists}
         required
-        className="w-full border px-3 py-2 rounded"
+        className="w-full border px-3 py-2 rounded disabled:bg-gray-100"
       />
 
       <input
         name="middleName"
-        placeholder="Middle Name (optional)"
-        className="w-full border px-3 py-2 rounded"
+        placeholder="Middle Name"
+        defaultValue={profile?.middleName ?? ""}
+        disabled={profileExists}
+        className="w-full border px-3 py-2 rounded disabled:bg-gray-100"
       />
 
       <input
         name="lastName"
         placeholder="Last Name"
+        defaultValue={profile?.lastName ?? ""}
+        disabled={profileExists}
         required
-        className="w-full border px-3 py-2 rounded"
+        className="w-full border px-3 py-2 rounded disabled:bg-gray-100"
       />
 
       <input
         name="age"
         type="number"
-        min={1}
-        placeholder="Age"
+        defaultValue={profile?.age ?? ""}
+        disabled={profileExists}
         required
-        className="w-full border px-3 py-2 rounded"
+        className="w-full border px-3 py-2 rounded disabled:bg-gray-100"
       />
 
       <select
         name="gender"
+        defaultValue={profile?.gender ?? ""}
+        disabled={profileExists}
         required
-        className="w-full border px-3 py-2 rounded"
+        className="w-full border px-3 py-2 rounded disabled:bg-gray-100"
       >
         <option value="">Select Gender</option>
         <option value="Male">Male</option>
@@ -209,14 +132,14 @@ export default function StudentProfilePage() {
 
       <select
         name="classId"
+        defaultValue={profile?.classId ?? ""}
+        disabled={profileExists || classesLoading}
         required
-        disabled={classesLoading}
-        className="w-full border px-3 py-2 rounded"
+        className="w-full border px-3 py-2 rounded disabled:bg-gray-100"
       >
         <option value="">
           {classesLoading ? "Loading classes..." : "Select Class"}
         </option>
-
         {classes.map((cls) => (
           <option key={cls.id} value={cls.id}>
             {cls.name}
@@ -225,10 +148,14 @@ export default function StudentProfilePage() {
       </select>
 
       <button
-        disabled={loading || classesLoading}
-        className="px-4 py-2 bg-black text-white rounded"
+        disabled={profileExists || loading || classesLoading}
+        className="px-4 py-2 bg-black text-white rounded disabled:bg-gray-400"
       >
-        {loading ? "Saving..." : "Create Profile"}
+        {profileExists
+          ? "Profile Already Created"
+          : loading
+          ? "Saving..."
+          : "Create Profile"}
       </button>
     </form>
   );
