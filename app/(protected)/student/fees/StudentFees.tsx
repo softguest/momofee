@@ -22,11 +22,17 @@ export default function StudentFees() {
   return (
     <div className="space-y-8">
       {/* Student Info */}
-      <div className="bg-white shadow rounded-lg p-6 animate-fade-in">
-        <p className="text-lg font-semibold text-gray-800">
-          Student: {student.firstName} {student.lastName}
-        </p>
-      </div>
+      <section className="max-w-5xl mx-auto px-4 py-10 py-12 bg-primary text-white rounded-md">
+        <div className="px-6">
+          <h2 className="text-3xl md:text-4xl font-bold text-center animate-fade-in">
+            Student Class Fees
+          </h2>
+
+          <p className="text-lg text-center font-semibold text-white mt-2">
+            Student: {student.firstName} {student.lastName}
+          </p>
+        </div>
+      </section>
 
       {/* Fees Grid */}
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { FiUser } from "react-icons/fi";
 
 type Class = {
   id: string;
@@ -78,10 +79,20 @@ export default function StudentProfilePage() {
   }
 
   return (
-    <form action={submit} className="max-w-xl mx-auto space-y-4">
-      <h1 className="text-2xl font-semibold">
-        {profileExists ? "Student Profile" : "Complete Student Profile"}
-      </h1>
+    <div className="max-w-5xl mx-auto px-4 py-10">
+      <div className="flex items-center space-x-2 text-2xl font-semibold mb-6"><div>Profile Details</div> <div><FiUser /></div></div>
+      <section className="max-w-5xl mx-auto px-4 py-10 py-12 bg-primary text-white rounded-md">
+        <div className="px-6">
+          <h1 className="text-3xl md:text-4xl font-bold text-center animate-fade-in">
+            {profileExists ? "Student Profile" : "Complete Student Profile"}
+          </h1>
+
+          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          </div>
+        </div>
+      </section>
+
+      <form action={submit} className="space-y-4 mt-8">
 
       <input
         name="firstName"
@@ -158,5 +169,7 @@ export default function StudentProfilePage() {
           : "Create Profile"}
       </button>
     </form>
+    </div>
+    
   );
 }

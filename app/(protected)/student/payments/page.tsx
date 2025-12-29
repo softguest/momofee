@@ -74,6 +74,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { FiClock } from "react-icons/fi";
 
 export default function PaymentHistory() {
   const [payments, setPayments] = useState<any[]>([]);
@@ -86,9 +87,18 @@ export default function PaymentHistory() {
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-10">
-      <h1 className="text-2xl font-semibold mb-6">Payment History</h1>
+      <div className="flex items-center space-x-2 text-2xl font-semibold mb-6"><div>Payment History</div> <div><FiClock /></div></div>
+      <section className="max-w-5xl mx-auto px-4 py-10 py-12 bg-primary text-white rounded-md">
+        <div className="px-6">
+          <h2 className="text-3xl md:text-4xl font-bold text-center animate-fade-in">
+            Student Payment History
+          </h2>
 
-      <div>
+          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          </div>
+        </div>
+      </section>
+      <div className="mt-8">
         <table className="w-full border">
           <thead className="hidden md:table-header-group">
             <tr className="bg-gray-100">

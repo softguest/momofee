@@ -25,13 +25,13 @@ const DashboardPage = async () => {
         { link: "/admin/payments", label: "Payment History", icon: FiClock },
       ];
 
-      const studentSteps = [
-          { link: "/student/classes", label: "Student's Class", icon: FiUser },
-          { link: "/student/fees", label: "Fees to Pay", icon: FiDollarSign},
-          { link: "/student/installments", label: "Fee Installments", icon: FiBook },
-          { link: "/student/payments", label: "Payment History", icon: FiClock },
-        ];
-  
+    const studentSteps = [
+        { link: "/student/classes", label: "Student's Class", icon: FiUser },
+        { link: "/student/fees", label: "Fees to Pay", icon: FiDollarSign},
+        { link: "/student/profile", label: "Student Profile", icon: FiBook },
+        { link: "/student/payments", label: "Payment History", icon: FiClock },
+      ];
+
   return (
     <div className="max-w-6xl mx-auto py-8 space-y-8">
       {user.role === "admin" && (
