@@ -1,5 +1,5 @@
 import FeeDetail from "./FeeDetail";
-export default async function StudentFeePage({
+export default async function ClassPage({
   params,
 }: {
   params: Promise<{ feeId: string }>;

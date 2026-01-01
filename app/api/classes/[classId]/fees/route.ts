@@ -11,7 +11,7 @@ export async function GET(
   const fees = await db.query.classFees.findMany({
     where: eq(classFees.classId, classId),
     with: {
-      installments: true,
+      // installments: true,
     },
     orderBy: (fees, { desc }) => [desc(fees.createdAt)],
   });

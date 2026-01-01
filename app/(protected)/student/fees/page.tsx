@@ -1,11 +1,10 @@
+import { FiDollarSign } from "react-icons/fi";
 import StudentFees from "./StudentFees";
 
 export default function StudentFeesPage() {
   return (
     <div className="max-w-5xl mx-auto px-4 py-10">
-      <h1 className="text-2xl font-semibold mb-6">
-        My School Fees
-      </h1>
+      <div className="flex items-center space-x-2 text-2xl font-semibold mb-6"><div>My School Fees</div> <div><FiDollarSign  /></div></div>
       <StudentFees />
     </div>
   );

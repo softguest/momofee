@@ -1,9 +1,14 @@
-import React from 'react'
+import ClassDetail from "./ClassDetail";
+export default async function StudentFeePage({
+  params,
+}: {
+  params: Promise<{ classId: string }>;
+}) {
+  const { classId } = await params;
 
-const ClassDetails = () => {
   return (
-    <div>Class Details Game Changer.</div>
-  )
+    <div className="max-w-3xl mx-auto py-8">
+      <ClassDetail classId={classId} />
+    </div>
+  );
 }
-
-export default ClassDetails

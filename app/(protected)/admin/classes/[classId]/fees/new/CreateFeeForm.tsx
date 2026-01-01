@@ -28,7 +28,7 @@ export default function CreateFeeForm({ classId }: Props) {
     setLoading(true);
 
     const res = await fetch(
-      `/api/admin/classes/${classId}/fees`,
+      `/api/admin/classes/${classId}/fees/new`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

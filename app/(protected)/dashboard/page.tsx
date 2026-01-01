@@ -3,7 +3,7 @@ import { currentUser } from "@clerk/nextjs/server";
 import {db} from "@/config/db"
 import { users } from "@/config/schema";
 import {eq} from "drizzle-orm"
-import { FiBook, FiCreditCard, FiClock, FiDatabase, FiDollarSign, FiUsers, FiUser } from "react-icons/fi";
+import { FiBook, FiCreditCard, FiClock, FiDollarSign, FiUsers, FiUser, FiLayers } from "react-icons/fi";
 import Link from 'next/link';
 
 
@@ -19,7 +19,7 @@ const DashboardPage = async () => {
 
     const adminSteps = [
         { link: "/admin/students", label: "All Students", icon: FiUsers },
-        { link: "/admin/classes", label: "All Classes", icon: FiDatabase },
+        { link: "/admin/classes", label: "All Classes", icon: FiLayers},
         { link: "/admin/fees", label: "Fees to Pay", icon: FiCreditCard },
         { link: "/admin/analytics/overdue-installments", label: "Fee Installments", icon: FiBook },
         { link: "/admin/payments", label: "Payment History", icon: FiClock },

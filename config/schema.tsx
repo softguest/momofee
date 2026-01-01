@@ -8,6 +8,7 @@ import {
   integer,
   pgEnum
 } from "drizzle-orm/pg-core";
+import { relations } from "drizzle-orm";
 
 export const userRoleEnum = pgEnum("user_role", [
   "admin",
@@ -57,6 +58,8 @@ export const students = pgTable("students", {
   createdAt: timestamp("created_at").defaultNow(),
   deletedAt: timestamp("deleted_at"), // soft delete
 });
+
+// ###### this sis the step where we take the code to the next level 
 
 // ================= PARENTS-STUDENTS =================
 export const parentsStudents = pgTable("parents_students", {
@@ -138,3 +141,21 @@ export const studentClassHistory = pgTable("student_class_history", {
   endDate: timestamp("end_date"),
   deletedAt: timestamp("deleted_at"), // soft delete
 });
+
+export const studentsRelations = relations(students, ({ one }) => ({
+  class: one(classes, {
+    fields: [students.classId],
+    references: [classes.id],
+  }),
+}));
+
+export const classesRelations = relations(classes, ({ many }) => ({
+  fees: many(classFees),
+}));
+
+export const classFeesRelations = relations(classFees, ({ one }) => ({
+  class: one(classes, {
+    fields: [classFees.classId],
+    references: [classes.id],
+  }),
+}));

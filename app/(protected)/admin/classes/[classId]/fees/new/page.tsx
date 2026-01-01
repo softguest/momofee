@@ -2,12 +2,10 @@
 
 import CreateFeeForm from "./CreateFeeForm";
 
-export default function CreateFeePage({
-  params,
-}: {
-  params: { classId: string };
+export default async function CreateFeePage(
+  {params,}: {params: Promise<{ classId: string }>;
 }) {
-  const { classId } = params;
+  const { classId } = await params;
 
   return (
     <div className="max-w-3xl mx-auto py-10">

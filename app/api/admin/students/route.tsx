@@ -24,13 +24,13 @@ export async function GET() {
     assertAdmin(dbUser.role);
 
     const result = await db.query.students.findMany({
-      where: and(
-        eq(students.createdByUserId, dbUser.id),
-        isNull(students.deletedAt)
-      ),
-      // remove `with` if relations not set
+      where: isNull(students.deletedAt),
+      with: {
+        class: true,
+      },
       orderBy: (s, { desc }) => [desc(s.createdAt)],
     });
+
 
     console.log("Students result:", result);
 
@@ -40,6 +40,40 @@ export async function GET() {
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
+
+// export async function GET() {
+//   try {
+//     const { userId } = await auth();
+
+//     if (!userId) {
+//       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+//     }
+
+//     const admin = await db.query.users.findFirst({
+//       where: eq(users.id, userId),
+//     });
+
+//     if (!admin) {
+//       return NextResponse.json({ error: "User not found" }, { status: 404 });
+//     }
+
+//     assertAdmin(admin.role);
+
+//     const studentsList = await db.query.students.findMany({
+//       where: isNull(students.deletedAt),
+//       with: {
+//         class: true, // keep this ONLY if class relation exists
+//       },
+//       orderBy: (s, { desc }) => [desc(s.createdAt)],
+//     });
+
+//     return NextResponse.json(studentsList);
+//   } catch (error) {
+//     console.error("GET /api/admin/students error:", error);
+//     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+//   }
+// }
+
 
 
 export async function POST(req: Request) {
