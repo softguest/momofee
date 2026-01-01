@@ -16,7 +16,7 @@ export default function AdminFeeAnalytics() {
   const { summary, classes } = data;
 
   return (
-    <div className="max-w-6xl mx-auto py-8 space-y-8">
+    <div className="max-w-5xl mx-auto py-8 space-y-8">
       <h1 className="text-2xl font-semibold">
         Fee Collection Analytics
       </h1>

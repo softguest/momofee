@@ -142,6 +142,7 @@ export const studentClassHistory = pgTable("student_class_history", {
   deletedAt: timestamp("deleted_at"), // soft delete
 });
 
+
 // Relationships ####
 export const studentsRelations = relations(students, ({ one }) => ({
   class: one(classes, {
