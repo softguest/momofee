@@ -7,7 +7,7 @@ export default async function StudentFeePage({
   const { classId } = await params;
 
   return (
-    <div className="max-w-3xl mx-auto py-8">
+    <div className="">
       <ClassDetail classId={classId} />
     </div>
   );

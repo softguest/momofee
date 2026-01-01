@@ -142,6 +142,7 @@ export const studentClassHistory = pgTable("student_class_history", {
   deletedAt: timestamp("deleted_at"), // soft delete
 });
 
+// Relationships ####
 export const studentsRelations = relations(students, ({ one }) => ({
   class: one(classes, {
     fields: [students.classId],
@@ -153,9 +154,17 @@ export const classesRelations = relations(classes, ({ many }) => ({
   fees: many(classFees),
 }));
 
-export const classFeesRelations = relations(classFees, ({ one }) => ({
+export const classFeesRelations = relations(classFees, ({ one, many }) => ({
+  installments: many(classFeeInstallments),
   class: one(classes, {
     fields: [classFees.classId],
     references: [classes.id],
+  }),
+}));
+
+export const classFeeInstallmentsRelations = relations(classFeeInstallments, ({ one }) => ({
+  classFee: one(classFees, {
+    fields: [classFeeInstallments.classFeeId],
+    references: [classFees.id],
   }),
 }));

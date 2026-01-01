@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { db } from "@/config/db";
-import { classes, users, classFees } from "@/config/schema";
+import { classes, users, classFees, classFeeInstallments, classFeesRelations } from "@/config/schema";
 import { auth } from "@clerk/nextjs/server";
 import { assertAdmin } from "@/lib/auth";
 import { eq, isNull } from "drizzle-orm";
@@ -21,11 +21,13 @@ export async function GET() {
       where: eq(classes.createdBy, dbUser.id),
       with: {
         fees: {
-          where: isNull(classFees.deletedAt), // only active class fees
-        //   orderBy: (f, { asc }) => [f.term] // optional: sort by term
-        }
+          where: isNull(classFees.deletedAt),
+          with: {
+            installments: true, // ✅ use the defined relation
+          },
+        },
       },
-      orderBy: (c, { desc }) => [desc(c.createdAt)],
+      orderBy: (c, { desc }) => [c.createdAt],
     });
 
     return NextResponse.json(userClasses);

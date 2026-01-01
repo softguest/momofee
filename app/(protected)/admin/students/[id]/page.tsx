@@ -1,52 +1,99 @@
-// import Link from "next/link";
-// import { FiUser, FiBook, FiCreditCard, FiClock } from "react-icons/fi";
+// import { db } from "@/config/db";
+// import { students, users, classes } from "@/config/schema";
+// import { eq, and, isNull } from "drizzle-orm";
+// import { FiUser } from "react-icons/fi";
 
 // export default async function StudentPage({
 //   params,
 // }: {
-//   params: Promise<{ id: string }>;
+//    params: Promise<{ id: string }>;
 // }) {
-//   const { id } = await params;
+//   const {id} = await params;
+
+//   const [student] = await db
+//     .select({
+//       id: students.id,
+//       studentCode: students.studentCode,
+//       firstName: students.firstName,
+//       middleName: students.middleName,
+//       lastName: students.lastName,
+//       gender: students.gender,
+//       age: students.age,
+//       createdAt: students.createdAt,
+//       className: classes.name,
+//       academicYear: classes.academicYear,
+//       email: users.email,
+//       role: users.role,
+//     })
+//     .from(students)
+//     .innerJoin(users, eq(students.userId, users.id))
+//     .innerJoin(classes, eq(students.classId, classes.id))
+//     .where(
+//       and(
+//         eq(students.id, id),
+//         isNull(students.deletedAt),
+//         isNull(users.deletedAt)
+//       )
+//     )
+//     .limit(1);
+
+//   if (!student) return <p>Student not found</p>;
 
 //   return (
-//     <section className="max-w-5xl mx-auto px-4 py-10 py-12 bg-primary text-white rounded-md">
-//       <div className="px-6">
-//         <h2 className="text-3xl md:text-4xl font-bold text-center animate-fade-in">
-//           Student Details
-//         </h2>
+//     <div className="max-w-5xl mx-auto px-4 py-10">
+//       <div className="flex items-center space-x-2 text-2xl font-semibold mb-6"><div>Student Details</div> <div><FiUser /></div></div>
+//       <section className="px-4 py-10 py-12 bg-primary text-white rounded-md">
+//         <div className="px-6">
+//           <h2 className="text-3xl md:text-4xl font-bold text-center animate-fade-in">
+//             <span>Student: </span>{student.firstName} {student.lastName}
+//           </h2>
 
-//         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-//           {id}
+//           <div className="mt-12">
+//             <span>Student Code: </span> <span className="ml-4 bg-accent/20 p-4 rounded-sm">{student.studentCode}</span>
+//           </div>
 //         </div>
+//       </section>
+//       <div className="px-4 py-10 py-12 space-y-2">
+//         <h1 className="text-2xl font-bold">
+//           {student.firstName} {student.middleName} {student.lastName}
+//         </h1>
+//         <p>{student.className} – {student.academicYear}</p>
+//         <p>{student.email}</p>
+//         <p><span>Student Age: </span>{student.age}</p>
 //       </div>
-//     </section>
+//     </div>
 //   );
-// };
+// }
+
 
 import { db } from "@/config/db";
-import { students, users, classes } from "@/config/schema";
+import { students, users, classes, classFees, payments } from "@/config/schema";
 import { eq, and, isNull } from "drizzle-orm";
-import { FiUser } from "react-icons/fi";
+import { FiUser, FiCreditCard } from "react-icons/fi";
 
 export default async function StudentPage({
   params,
 }: {
-   params: Promise<{ id: string }>;
+  params: Promise<{ id: string }>;
 }) {
-  const {id} = await params;
+  const { id } = await params;
 
+  /* -------- FETCH STUDENT DETAILS -------- */
   const [student] = await db
     .select({
       id: students.id,
       studentCode: students.studentCode,
       firstName: students.firstName,
+      middleName: students.middleName,
       lastName: students.lastName,
       gender: students.gender,
+      age: students.age,
       createdAt: students.createdAt,
       className: classes.name,
       academicYear: classes.academicYear,
       email: users.email,
       role: users.role,
+      classId: students.classId,
     })
     .from(students)
     .innerJoin(users, eq(students.userId, users.id))
@@ -62,27 +109,136 @@ export default async function StudentPage({
 
   if (!student) return <p>Student not found</p>;
 
-  return (
-    <div className="max-w-5xl mx-auto px-4 py-10">
-      <div className="flex items-center space-x-2 text-2xl font-semibold mb-6"><div>Student Details</div> <div><FiUser /></div></div>
-      <section className="px-4 py-10 py-12 bg-primary text-white rounded-md">
-        <div className="px-6">
-          <h2 className="text-3xl md:text-4xl font-bold text-center animate-fade-in">
-            <span>Student: </span>{student.firstName} {student.lastName}
-          </h2>
+  /* -------- FETCH FEES FOR STUDENT'S CLASS -------- */
+  const classFeesList = await db
+    .select({
+      id: classFees.id,
+      title: classFees.name,
+      amount: classFees.totalAmount
+    })
+    .from(classFees)
+    .where(
+      and(
+        eq(classFees.classId, student.classId),
+        isNull(classFees.deletedAt)
+      )
+    );
 
-          <div className="mt-12">
-            <span>Student Code: </span> <span className="ml-4 bg-accent/20 p-4 rounded-sm">{student.studentCode}</span>
+  /* -------- FETCH PAYMENTS MADE BY STUDENT -------- */
+  const studentPayments = await db
+    .select({
+      feeId: payments.classFeeId,
+      amountPaid: payments.amount,
+      status: payments.status,
+    })
+    .from(payments)
+    .where(
+      and(
+        eq(payments.studentId, student.id),
+        eq(payments.status, "success")
+      )
+    );
+
+  /* -------- CALCULATE FEE SUMMARY -------- */
+  let totalFee = 0;
+  let totalPaid = 0;
+
+  classFeesList.forEach((f) => {
+    totalFee += f.amount ?? 0;
+    const paidForFee = studentPayments
+      .filter((p) => p.feeId === f.id)
+      .reduce((sum, p) => sum + (p.amountPaid ?? 0), 0);
+    totalPaid += paidForFee;
+  });
+
+  const balance = totalFee - totalPaid;
+
+  /* -------- RENDER -------- */
+  return (
+    <div className="max-w-5xl mx-auto px-4 py-10 space-y-6">
+      {/* -------- STUDENT HEADER -------- */}
+      <div className="flex items-center space-x-2 text-2xl font-semibold">
+        <div>Student Details</div> <FiUser />
+      </div>
+
+      <section className="px-6 py-10 bg-primary text-white rounded-md">
+        <h2 className="text-3xl md:text-4xl font-bold text-center animate-fade-in">
+          {student.firstName} {student.middleName} {student.lastName}
+        </h2>
+        <p className="mt-4 text-center">
+          {student.className} – {student.academicYear}
+        </p>
+        <p className="text-center mt-2">{student.email}</p>
+      </section>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* -------- STUDENT INFO -------- */}
+        <div className="px-4 py-6 border rounded shadow-sm space-y-2">
+          <p>
+            <span className="font-semibold">Student Code:</span>{" "}
+            {student.studentCode}
+          </p>
+          <p>
+            <span className="font-semibold">Gender:</span> {student.gender}
+          </p>
+          <p>
+            <span className="font-semibold">Age:</span> {student.age ?? "-"}
+          </p>
+          <p>
+            <span className="font-semibold">Role:</span> {student.role}
+          </p>
+          <div>
+            {/* <span className="font-semibold">Joined:</span>{" "} */}
+            <p>
+              <span className="font-semibold">Joined:</span>{" "}
+              {student.createdAt
+                ? new Date(student.createdAt).toLocaleDateString()
+                : "-"}
+            </p>
           </div>
         </div>
-      </section>
-      <div className="px-4 py-10 py-12">
-        <h1 className="text-2xl font-bold">
-          {student.firstName} {student.lastName}
-        </h1>
-        <p>{student.className} – {student.academicYear}</p>
-        <p>{student.email}</p>
-      </div>
+        {/* -------- FEE SUMMARY -------- */}
+        <div className="px-4 py-6 border rounded shadow-sm space-y-2 bg-yellow-50">
+          <h3 className="text-xl font-semibold flex items-center space-x-2">
+            <FiCreditCard /> <span className="mr-4">Fee Summary</span>
+          </h3>
+          <p>
+            <span className="font-semibold">Total Fee:</span>{" "}
+            {totalFee.toLocaleString()} XAF
+          </p>
+          <p>
+            <span className="font-semibold">Paid:</span>{" "}
+            {totalPaid.toLocaleString()} XAF
+          </p>
+          <p>
+            <span className="font-semibold">Balance:</span>{" "}
+            {balance.toLocaleString()} XAF
+          </p>
+
+          {/* Optional: show per-fee breakdown */}
+          {classFeesList.length > 0 && (
+            <div className="mt-4 space-y-1">
+              {classFeesList.map((f) => {
+                const paidForFee = studentPayments
+                  .filter((p) => p.feeId === f.id)
+                  .reduce((sum, p) => sum + (p.amountPaid ?? 0), 0);
+                const feeBalance = (f.amount ?? 0) - paidForFee;
+                return (
+                  <div
+                    key={f.id}
+                    className="flex justify-between border-b pb-1"
+                  >
+                    <span>{f.title}</span>
+                    <span>
+                      Paid: <span className="font-bold">{paidForFee.toLocaleString()}</span> XAF | Balance:{" "}
+                      <span className="font-bold">{feeBalance.toLocaleString()}</span> XAF
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      </div>  
     </div>
   );
 }
