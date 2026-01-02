@@ -29,7 +29,7 @@ export const adminMenu = [
   { label: "Classes", href: "/admin/classes", icon: "layers" },
   { label: "Fees", href: "/admin/fees", icon: "money" },
   { label: "Installments", href: "/admin/installments", icon: "layers" },
-  // { label: "Tickets", href: "/admin/tickets", icon: "ticket" },
+  { label: "Payments History", href: "/admin/payments", icon: "payments" },
 ];
 
 export const parentMenu = [
