@@ -73,7 +73,8 @@
   --popover-foreground: #0A1F44;
 
   /* Brand Colors */
-  --primary: #0A1F44;              /* Deep navy */
+  --primary: #0A1F44;
+  --primarytwo:#091c3b;               /* Deep navy */
   --primary-foreground: #FFFFFF;
 
   --secondary: #E6ECF5;            /* Light slate */
@@ -121,7 +122,8 @@
   --popover: #112A57;
   --popover-foreground: #FFFFFF;
 
-  --primary: #FFD700;               /* Bright gold */
+  --primary: #FFD700; 
+  --primarytwo:#e0bf00;               /* Bright gold */
   --primary-foreground: #0A1F44;
 
   --secondary: #1F3A6B;

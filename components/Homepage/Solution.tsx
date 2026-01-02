@@ -35,21 +35,53 @@ export default function Solution() {
 
   return (
       <section
-        className="relative bg-cover bg-center bg-fixed overflow-hidden"
+        className="
+          relative overflow-hidden
+          bg-cover bg-center
+          md:bg-fixed
+        "
         style={{ backgroundImage: "url('/images/payment02.jpg')" }}
       >
-        {/* Subtle background accent */}
-        <div className="py-32 px-6 bg-white/60 backdrop-blur-md rounded-xl"
-           data-aos="fade-up"
+        {/* Glass Background */}
+        <div
+          className="
+            mx-auto
+            py-20 sm:py-24 lg:py-32
+            px-4 sm:px-6 lg:px-8
+            bg-white/70 backdrop-blur-md
+          "
+          data-aos="fade-up"
         >
-          <div className="mx-auto max-w-7xl px-6 mb-32 grid gap-16 lg:grid-cols-2 items-center">
+          <div
+            className="
+              mx-auto max-w-7xl
+              grid gap-14 lg:gap-20
+              lg:grid-cols-2
+              items-center
+            "
+          >
             {/* 📝 Text */}
-            <div ref={textRef} className="space-y-6">
-              <h2 className="text-3xl md:text-4xl font-bold tracking-tight drop-shadow-[0_0_12px_rgba(52,211,153,0.8)]">
+            <div ref={textRef} className="space-y-6 text-center lg:text-left">
+              <h2
+                className="
+                  font-bold tracking-tight text-gray-900
+                  text-[clamp(1.75rem,4.5vw,2.5rem)]
+                  leading-tight
+                  drop-shadow-[0_0_14px_rgba(59,130,246,0.5)]
+                "
+              >
                 A Simple, Secure Digital Solution
               </h2>
 
-              <p className="text-gray-600 max-w-xl font-bold">
+              <p
+                className="
+                  mx-auto lg:mx-0
+                  max-w-xl
+                  text-[clamp(0.95rem,2.5vw,1.05rem)]
+                  font-semibold
+                  text-gray-700
+                "
+              >
                 Our School Fee Payment Platform modernizes how schools collect,
                 track, and manage fees — removing cash, delays, and uncertainty.
               </p>
@@ -58,15 +90,25 @@ export default function Solution() {
                 {features.map((f, i) => (
                   <li
                     key={i}
-                    className="flex items-start gap-3 text-sm text-gray-700"
-                    style={{
-                      transitionDelay: `${i * 80}ms`,
-                    }}
+                    className="
+                      flex items-start gap-3
+                      text-[clamp(0.85rem,2.2vw,0.95rem)]
+                      text-gray-700
+                    "
+                    style={{ transitionDelay: `${i * 80}ms` }}
                   >
-                    <span className="mt-1 flex h-5 w-5 items-center justify-center rounded-full bg-accent/10 text-accent text-xs font-bold">
+                    <span
+                      className="
+                        mt-1 flex h-5 w-5 shrink-0
+                        items-center justify-center
+                        rounded-full
+                        bg-accent/15 text-accent
+                        text-xs font-bold
+                      "
+                    >
                       ✓
                     </span>
-                    <span className="font-bold">{f}</span>
+                    <span className="font-semibold">{f}</span>
                   </li>
                 ))}
               </ul>
@@ -75,15 +117,35 @@ export default function Solution() {
             {/* 🖥️ Visual */}
             <div
               ref={visualRef}
-              className="relative h-[360px] rounded-2xl bg-primary shadow-xl ring-1 ring-black/5 flex items-center justify-center"
+              className="
+                relative
+                mx-auto
+                w-full max-w-md lg:max-w-none
+                h-[clamp(260px,45vw,380px)]
+                rounded-2xl
+                bg-primary
+                shadow-xl
+                ring-1 ring-black/5
+                flex items-center justify-center
+                overflow-hidden
+              "
             >
-              {/* Fake dashboard layers */}
-              <div className="absolute top-6 left-6 h-20 w-32 rounded-lg bg-accent" />
-              <div className="absolute bottom-6 right-6 h-24 w-40 rounded-lg bg-accent/40" />
-                <Image src="/images/paycard.png" width={400} height={400} alt="paycard"/>
+              {/* Accent layers */}
+              <div className="absolute top-4 left-4 h-16 w-24 rounded-lg bg-accent" />
+              <div className="absolute bottom-4 right-4 h-20 w-32 rounded-lg bg-accent/40" />
+
+              <Image
+                src="/images/paycard.png"
+                width={400}
+                height={400}
+                alt="paycard"
+                className="relative z-10 w-[70%] sm:w-[60%] object-contain"
+                priority
+              />
             </div>
           </div>
         </div>
       </section>
+
   );
 }

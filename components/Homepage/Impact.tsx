@@ -5,7 +5,7 @@ export default function Impact() {
     <section className="py-32">
       <div className="mx-auto max-w-7xl px-6 grid gap-12 lg:grid-cols-2 items-center">
         <div>
-          <h2 className="text-3xl md:text-4xl font-bold drop-shadow-[0_0_12px_rgba(52,211,153,0.8)]">Our Impact Goals</h2>
+          <h2 className="text-3xl md:text-4xl font-bold tracking-tight drop-shadow-[0_0_16px_rgba(59,130,246,0.6)]">Our Impact Goals</h2>
           <ul className="mt-6 space-y-3 text-gray-700">
             <li className="font-semibold flex mr-2">
               <span className="mr-2 mt-1 flex h-6 w-6 items-center justify-center rounded-full bg-accent/10 text-accent text-xs font-bold">

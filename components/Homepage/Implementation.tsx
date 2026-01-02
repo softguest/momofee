@@ -14,7 +14,7 @@ export default function Implementation() {
       <div className="py-32 px-6 bg-white/60 backdrop-blur-md rounded-xl"
            data-aos="fade-up"
       >
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-10 drop-shadow-[0_0_12px_rgba(52,211,153,0.8)]" data-aos="fade-down">
+        <h2 className="text-3xl md:text-4xl font-bold text-center mb-10 tracking-tight drop-shadow-[0_0_16px_rgba(59,130,246,0.6)]" data-aos="fade-down">
           Implementation Activities
         </h2>
 
