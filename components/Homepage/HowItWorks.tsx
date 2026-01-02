@@ -17,7 +17,7 @@ export default function HowItWorks() {
               key={i}
               className="rounded-xl bg-white/10 p-6 text-center"
             >
-              <div className="mb-4 text-accent text-xl font-extrabold">
+              <div className="mb-4 text-accent text-4xl font-extrabold">
                 {i + 1}
               </div>
               <p className="font-bold">{s}</p>

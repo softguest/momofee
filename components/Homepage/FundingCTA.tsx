@@ -9,8 +9,8 @@ export default function FundingCTA() {
       </h2>
 
       <p className="mx-auto mt-4 max-w-2xl text-white/80 font-semibold">
-        We seek grants, donations, and partnerships to support outreach,
-        training, onboarding, and long-term impact.
+        We Curently in the stages of Outreaching, Demo resentations and Partnering with Schools and institutions,
+        showing them the Simple onboarding, and long-term impact of Subjectspot.
       </p>
 
       <div className="mt-8 flex justify-center gap-4">
@@ -24,4 +24,3 @@ export default function FundingCTA() {
     </section>
   );
 }
-

@@ -120,8 +120,8 @@ export default function Hero() {
 
       <div className="relative z-20 mx-auto flex h-full max-w-7xl items-center px-6 text-center">
         <div className="w-full">
-          <h1 className="text-4xl font-bold text-white sm:text-5xl drop-shadow-[0_0_12px_rgba(52,211,153,0.8)]">
-            Digitizing School Fee Payments for a More Transparent Education System.
+          <h1 className="text-6xl font-bold text-white sm:text-5xl drop-shadow-[0_0_12px_rgba(52,211,153,0.8)]">
+            Digitizing School Fee Payments<br /> for a More Transparent<br /> Education System.
           </h1>
 
           <p className="mx-auto mt-6 max-w-3xl text-lg text-white/90">
