@@ -17,21 +17,21 @@ export default function Solution() {
   const visualRef = useRef<HTMLDivElement | null>(null);
 
   // 🎢 Parallax
-  useEffect(() => {
-    const onScroll = () => {
-      const y = window.scrollY;
+  // useEffect(() => {
+  //   const onScroll = () => {
+  //     const y = window.scrollY;
 
-      if (textRef.current) {
-        textRef.current.style.transform = `translateY(${y * 0.08}px)`;
-      }
-      if (visualRef.current) {
-        visualRef.current.style.transform = `translateY(${y * 0.15}px)`;
-      }
-    };
+  //     if (textRef.current) {
+  //       textRef.current.style.transform = `translateY(${y * 0.08}px)`;
+  //     }
+  //     if (visualRef.current) {
+  //       visualRef.current.style.transform = `translateY(${y * 0.15}px)`;
+  //     }
+  //   };
 
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  //   window.addEventListener("scroll", onScroll, { passive: true });
+  //   return () => window.removeEventListener("scroll", onScroll);
+  // }, []);
 
   return (
       <section

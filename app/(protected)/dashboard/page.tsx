@@ -41,23 +41,76 @@ const DashboardPage = async () => {
           </h1>
           <div className="bg-primary p-2 md:p-8 space-y-8 rounded-md">
             <div className="p-2 md:p-8 space-y-8 rounded-2xl">
-              <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              <div
+                className="
+                  mt-10
+                  grid
+                  grid-cols-2        /* mobile: 2 per row */
+                  sm:grid-cols-2     /* small tablets */
+                  md:grid-cols-3     /* tablets */
+                  lg:grid-cols-4     /* laptops */
+                  xl:grid-cols-4
+                  gap-4 sm:gap-5 md:gap-6
+                "
+              >
                 {adminSteps.map((step, index) => {
                   const Icon = step.icon;
 
-                return (
+                  return (
                     <Link
                       key={index}
                       href={step.link}
                       className="group opacity-0 animate-fade-in"
-                      style={{ animationDelay: `${index * 150}ms`, animationFillMode: "forwards" }}
+                      style={{
+                        animationDelay: `${index * 150}ms`,
+                        animationFillMode: "forwards",
+                      }}
                     >
-                      <div className="bg-primary rounded-xl bg-white/10 p-6 text-center shadow hover:shadow-lg hover:scale-[1.03] transition cursor-pointer">
-                        <div className="bg-primary/70 mb-4 mx-auto flex h-16 w-16 items-center justify-center rounded-full text-accent text-2xl transition group-hover:scale-110">
-                          <Icon size={28} />
+                      <div
+                        className="
+                          bg-white/10
+                          rounded-xl
+                          p-4 sm:p-5 md:p-6
+                          text-center
+                          shadow
+                          hover:shadow-lg
+                          hover:scale-[1.03]
+                          transition
+                          cursor-pointer
+                          h-full
+                          flex
+                          flex-col
+                          justify-center
+                        "
+                      >
+                        <div
+                          className="
+                            bg-primary/70
+                            mb-3 sm:mb-4
+                            mx-auto
+                            flex
+                            h-14 w-14 sm:h-16 sm:w-16
+                            items-center
+                            justify-center
+                            rounded-full
+                            text-accent
+                            text-xl sm:text-2xl
+                            transition
+                            group-hover:scale-110
+                          "
+                        >
+                          <Icon size={26} />
                         </div>
 
-                        <p className="font-medium text-white group-hover:text-accent transition">
+                        <p
+                          className="
+                            font-medium
+                            text-sm sm:text-base
+                            text-white
+                            group-hover:text-accent
+                            transition
+                          "
+                        >
                           {step.label}
                         </p>
                       </div>
@@ -65,6 +118,7 @@ const DashboardPage = async () => {
                   );
                 })}
               </div>
+
             </div>
           </div>
         </>
@@ -81,30 +135,82 @@ const DashboardPage = async () => {
           </h1>
           <div className="bg-primary max-w-5xl mx-auto p-4 md:p-8 space-y-8 rounded-md">
             <div className="p-2 md:p-8 space-y-8 rounded-2xl">
-              <div className="grid gap-6 grid-cols-2 lg:grid-cols-4">
-                {studentSteps.map((step, index) => {
-                  const Icon = step.icon;
+              <div
+              className="
+                grid
+                grid-cols-2        /* mobile: 2 per row */
+                sm:grid-cols-2     /* small tablets */
+                md:grid-cols-3     /* tablets */
+                lg:grid-cols-4     /* laptops */
+                xl:grid-cols-4     /* large screens */
+                gap-4 sm:gap-5 md:gap-6
+              "
+            >
+              {studentSteps.map((step, index) => {
+                const Icon = step.icon;
 
                 return (
-                    <Link
-                      key={index}
-                      href={step.link}
-                      className="group opacity-0 animate-fade-in"
-                      style={{ animationDelay: `${index * 150}ms`, animationFillMode: "forwards" }}
+                  <Link
+                    key={index}
+                    href={step.link}
+                    className="group opacity-0 animate-fade-in"
+                    style={{
+                      animationDelay: `${index * 150}ms`,
+                      animationFillMode: "forwards",
+                    }}
+                  >
+                    <div
+                      className="
+                        bg-white/10
+                        rounded-xl
+                        p-4 sm:p-5 md:p-6
+                        text-center
+                        shadow
+                        hover:shadow-lg
+                        hover:scale-[1.03]
+                        transition
+                        cursor-pointer
+                        h-full
+                        flex
+                        flex-col
+                        justify-center
+                      "
                     >
-                      <div className="bg-primary rounded-xl bg-white/10 p-6 text-center shadow hover:shadow-lg hover:scale-[1.03] transition cursor-pointer">
-                        <div className="bg-primary/70 mb-4 mx-auto flex h-16 w-16 items-center justify-center rounded-full text-accent text-2xl transition group-hover:scale-110">
-                          <Icon size={28} />
-                        </div>
-
-                        <p className="font-medium text-white group-hover:text-accent transition">
-                          {step.label}
-                        </p>
+                      <div
+                        className="
+                          bg-primary/70
+                          mb-3 sm:mb-4
+                          mx-auto
+                          flex
+                          h-14 w-14 sm:h-16 sm:w-16
+                          items-center
+                          justify-center
+                          rounded-full
+                          text-accent
+                          text-xl sm:text-2xl
+                          transition
+                          group-hover:scale-110
+                        "
+                      >
+                        <Icon size={26} />
                       </div>
-                    </Link>
-                  );
-                })}
-              </div>
+
+                      <p
+                        className="
+                          font-medium
+                          text-sm sm:text-base
+                          text-white
+                          group-hover:text-accent
+                          transition
+                        "
+                      >
+                        {step.label}
+                      </p>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
             </div>
           </div>
         </>
