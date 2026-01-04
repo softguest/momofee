@@ -1,5 +1,6 @@
 "use client";
 
+import WaterLoader from "@/components/loaders/WaterLoader";
 import { useEffect, useState } from "react";
 
 export default function AdminFeeAnalytics() {
@@ -11,7 +12,7 @@ export default function AdminFeeAnalytics() {
       .then(setData);
   }, []);
 
-  if (!data) return <p>Loading analytics...</p>;
+  if (!data) return  <WaterLoader label="Loading Analytics..." />;
 
   const { summary, classes } = data;
 
@@ -31,77 +32,77 @@ export default function AdminFeeAnalytics() {
 
       {/* Per Class Table */}
       <div className="border rounded overflow-hidden">
-  <table className="w-full text-sm">
-    {/* Desktop header */}
-    <thead className="hidden md:table-header-group bg-gray-100">
-      <tr>
-        <th className="p-3 text-left">Class</th>
-        <th className="p-3 text-left">Billed</th>
-        <th className="p-3 text-left">Collected</th>
-        <th className="p-3 text-left">Outstanding</th>
-        <th className="p-3 text-left">Rate</th>
-      </tr>
-    </thead>
+        <table className="w-full text-sm">
+          {/* Desktop header */}
+          <thead className="hidden md:table-header-group bg-gray-100">
+            <tr>
+              <th className="p-3 text-left">Class</th>
+              <th className="p-3 text-left">Billed</th>
+              <th className="p-3 text-left">Collected</th>
+              <th className="p-3 text-left">Outstanding</th>
+              <th className="p-3 text-left">Rate</th>
+            </tr>
+          </thead>
 
-    <tbody>
-      {classes.map((cls: any) => (
-        <tr
-          key={cls.classId}
-          className="
-            border-t
-            md:table-row
-            block
-            md:border-0
-            p-4
-            md:p-0
-            space-y-2
-            md:space-y-0
-          "
-        >
-          {/* Class */}
-          <td className="md:p-3 block md:table-cell">
-            <span className="font-semibold text-gray-500 md:hidden">
-              Class
-            </span>
-            <p className="md:inline">{cls.className}</p>
-          </td>
+          <tbody>
+            {classes.map((cls: any) => (
+              <tr
+                key={cls.classId}
+                className="
+                  border-t
+                  md:table-row
+                  block
+                  md:border-0
+                  p-4
+                  md:p-0
+                  space-y-2
+                  md:space-y-0
+                "
+              >
+                {/* Class */}
+                <td className="md:p-3 block md:table-cell">
+                  <span className="font-semibold text-gray-500 md:hidden">
+                    Class
+                  </span>
+                  <p className="md:inline">{cls.className}</p>
+                </td>
 
-          {/* Billed */}
-          <td className="block md:table-cell">
-            <span className="font-semibold text-gray-500 md:hidden">
-              Billed
-            </span>
-            <p>{cls.billed.toLocaleString()} XAF</p>
-          </td>
+                {/* Billed */}
+                <td className="block md:table-cell">
+                  <span className="font-semibold text-gray-500 md:hidden">
+                    Billed
+                  </span>
+                  <p>{cls.billed.toLocaleString()} XAF</p>
+                </td>
 
-          {/* Collected */}
-          <td className="block md:table-cell">
-            <span className="font-semibold text-gray-500 md:hidden">
-              Collected
-            </span>
-            <p>{cls.collected.toLocaleString()} XAF</p>
-          </td>
+                {/* Collected */}
+                <td className="block md:table-cell">
+                  <span className="font-semibold text-gray-500 md:hidden">
+                    Collected
+                  </span>
+                  <p>{cls.collected.toLocaleString()} XAF</p>
+                </td>
 
-          {/* Outstanding */}
-          <td className="block md:table-cell">
-            <span className="font-semibold text-gray-500 md:hidden">
-              Outstanding
-            </span>
-            <p>{cls.outstanding.toLocaleString()} XAF</p>
-          </td>
+                {/* Outstanding */}
+                <td className="block md:table-cell">
+                  <span className="font-semibold text-gray-500 md:hidden">
+                    Outstanding
+                  </span>
+                  <p>{cls.outstanding.toLocaleString()} XAF</p>
+                </td>
 
-          {/* Rate */}
-          <td className="block md:table-cell">
-            <span className="font-semibold text-gray-500 md:hidden">
-              Rate
-            </span>
-            <p>{cls.rate}%</p>
-          </td>
-        </tr>
-      ))}
-    </tbody>
-  </table>
-</div>
+                {/* Rate */}
+                <td className="block md:table-cell">
+                  <span className="font-semibold text-gray-500 md:hidden">
+                    Rate
+                  </span>
+                  <p>{cls.rate}%</p>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
     </div>
   );

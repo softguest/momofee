@@ -3,6 +3,7 @@
 import { useEffect, useState, Fragment } from "react";
 import Link from "next/link";
 import { Dialog, Transition } from "@headlessui/react";
+import WaterLoader from "@/components/loaders/WaterLoader";
 
 export default function StudentFees() {
   const [data, setData] = useState<any>(null);
@@ -19,7 +20,7 @@ export default function StudentFees() {
       .finally(() => setLoading(false));
   }, []);
 
-  if (loading) return <p className="text-center text-gray-500">Loading St...</p>;
+  if (loading) return <WaterLoader label="Loading Your Fees..." />;
   if (data?.error) return <p className="text-center text-red-500">{data.error}</p>;
 
   const { student, fees } = data;

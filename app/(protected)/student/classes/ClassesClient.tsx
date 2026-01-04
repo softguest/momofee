@@ -3,6 +3,8 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+// import WaterLoader from "@/components/loaders/WaterLoader";
+
 
 type StudentClass = {
   id: string;
@@ -36,13 +38,14 @@ export default function StudentClassClient() {
       });
   }, []);
 
-  if (loading) {
-    return (
-      <div className="max-w-3xl mx-auto py-10 text-center text-gray-500">
-        Loading your class...
-      </div>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <div className="max-w-3xl mx-auto py-10 text-center text-gray-500">
+  //       Loading your class...
+  //     </div>
+  //   );
+  // }
+  // if (loading) return <WaterLoader label="Loading Your Class..." />;
 
   if (error) {
     return (

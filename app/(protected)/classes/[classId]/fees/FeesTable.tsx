@@ -27,7 +27,7 @@ export default function FeesTable({
       .finally(() => setLoading(false));
   }, [classId]);
 
-  if (loading) return <p>Loading fees...</p>;
+  // if (loading) return <p>Loading fees...</p>;
 
   if (fees.length === 0)
     return <p className="text-gray-500">No fees created yet.</p>;

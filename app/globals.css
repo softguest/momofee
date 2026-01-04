@@ -178,3 +178,21 @@
   animation: fade-in 0.6s ease-out forwards;
 }
 
+
+@keyframes water-wave {
+  0% {
+    transform: translateY(100%);
+  }
+  50% {
+    transform: translateY(40%);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+.animate-water-wave {
+  animation: water-wave 1.8s ease-in-out infinite;
+  border-radius: 0 0 50% 50%;
+}
+
