@@ -1,9 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { FiX, FiMenu, FiLogOut } from "react-icons/fi"; // <-- add icons
+import { FiX, FiMenu, FiLogOut } from "react-icons/fi";
 import { usePathname, useRouter } from "next/navigation";
-// import type { MenuItem } from "@/types/navigation";
 import {
   FiHome,
   FiUsers,
@@ -45,20 +44,22 @@ interface MobileSidebarProps {
 }
 
 export default function MobileSidebar({ menu }: MobileSidebarProps) {
-    const pathname = usePathname();
+  const pathname = usePathname();
   const router = useRouter();
-  const { signOut } = useClerk(); // <-- get signOut from useClerk hook
-  //  const { user } = useUser();
+  const { signOut } = useClerk();
+  const { user } = useUser();
+  const [open, setOpen] = useState(false);
 
   const handleLogout = async () => {
-    await signOut(); // signs out user
-    router.push("/"); // redirect after logout
+    await signOut();
+    router.push("/");
   };
 
-       const { user } = useUser();
-
-  
-  const [open, setOpen] = useState(false);
+  // Close menu and navigate
+  const handleNavigate = (href: string) => {
+    router.push(href);
+    setOpen(false);
+  };
 
   return (
     <>
@@ -75,68 +76,65 @@ export default function MobileSidebar({ menu }: MobileSidebarProps) {
 
       {/* Fullscreen overlay */}
       {open && (
-        <div className="fixed inset-0 z-50 bg-black/50 flex flex-col">
+        <div className="fixed inset-0 z-50 flex flex-col bg-primary/80 backdrop-blur-sm">
           {/* Header with close button */}
-          <div className="flex justify-end p-4 bg-card border-b border-border">
+          <div className="flex justify-end p-4">
             <button
               onClick={() => setOpen(false)}
-              className="flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-gray-900"
+              className="flex items-center gap-2 text-sm font-medium text-white hover:text-gray-200"
             >
-              <FiX size={22} />
+              <FiX size={24} />
               Close
             </button>
           </div>
 
-          {/* Fullscreen menu */}
-          <div className="grid grid-col-2 md-grid-col-3 overflow-y-auto bg-card p-6">
-                 <nav className="space-y-1">
-        {menu.map((item) => {
-          const active = pathname.startsWith(item.href);
-          const Icon = iconMap[item.icon];
+          {/* Menu content */}
+          <div className="flex-1 overflow-y-auto p-6 flex flex-col justify-between">
+            <nav className="space-y-4">
+              {menu.map((item) => {
+                const active = pathname.startsWith(item.href);
+                const Icon = iconMap[item.icon];
 
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={cn(
-                "flex items-center gap-3 px-3 py-2 rounded-md text-sm font-bold transition-colors",
-                active
-                  ? "bg-accent text-accent-foreground"
-                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
-              )}
-            >
-              {Icon && <Icon size={18} />}
-              <span>{item.label}</span>
-            </Link>
-          );
-        })}
-      </nav>
+                return (
+                  <button
+                    key={item.href}
+                    onClick={() => handleNavigate(item.href)}
+                    className={cn(
+                      "flex items-center gap-3 w-full px-4 py-3 rounded-md text-lg font-semibold transition-colors text-white hover:bg-primary",
+                      active ? "bg-accent" : ""
+                    )}
+                  >
+                    {Icon && <Icon size={20} />}
+                    {item.label}
+                  </button>
+                );
+              })}
+            </nav>
 
+            {/* Bottom user & logout section */}
+            <div className="mt-6 space-y-4">
+              <div className="flex items-center gap-3">
+                <UserButton />
+                <span className="text-white font-medium">
+                  {user?.firstName} {user?.lastName}
+                </span>
+              </div>
 
-      {/* Logout button with icon and tooltip */}
-      <div className="space-y-4">
-        <div className="flex items-center gap-3 md:gap-5 pl-2">
-          <UserButton />
-          <span className="hidden md:block text-sm font-semibold text-gray-700">
-            {user?.firstName} {user?.lastName}
-          </span>
-        </div>
-
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <button
-                className="w-full flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium text-red-600 hover:bg-red-50 transition-colors"
-                onClick={handleLogout}
-              >
-                <FiLogOut size={18} />
-                Logout
-              </button>
-            </TooltipTrigger>
-            <TooltipContent side="right">Logout</TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-      </div> 
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      className="flex items-center gap-2 w-full px-4 py-3 rounded-md text-sm font-medium text-red-200 hover:bg-red-600 hover:text-white transition-colors"
+                      onClick={handleLogout}
+                    >
+                      <FiLogOut size={18} />
+                      Logout
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">Logout</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
           </div>
         </div>
       )}

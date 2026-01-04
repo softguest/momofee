@@ -1,11 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Fragment } from "react";
 import Link from "next/link";
+import { Dialog, Transition } from "@headlessui/react";
 
 export default function StudentFees() {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedFee, setSelectedFee] = useState<any>(null);
+  const [processingPayment, setProcessingPayment] = useState(false);
 
   useEffect(() => {
     fetch("/api/student/fees")
@@ -14,21 +19,47 @@ export default function StudentFees() {
       .finally(() => setLoading(false));
   }, []);
 
-  if (loading) return <p className="text-center text-gray-500">Loading...</p>;
+  if (loading) return <p className="text-center text-gray-500">Loading St...</p>;
   if (data?.error) return <p className="text-center text-red-500">{data.error}</p>;
 
   const { student, fees } = data;
 
+  const handlePayClick = (fee: any) => {
+    setSelectedFee(fee);
+    setModalOpen(true);
+  };
+
+  const confirmPayment = async () => {
+    if (!selectedFee) return;
+
+    setProcessingPayment(true);
+
+    try {
+      // Replace this with your real payment API
+      const res = await fetch(`/api/student/pay/${selectedFee.fee.id}`, {
+        method: "POST",
+      });
+      const result = await res.json();
+
+      alert(`Payment Status: ${result.status}`);
+    } catch (err) {
+      console.error(err);
+      alert("Payment failed. Try again.");
+    } finally {
+      setProcessingPayment(false);
+      setModalOpen(false);
+    }
+  };
+
   return (
     <div className="space-y-8">
       {/* Student Info */}
-      <section className="max-w-5xl mx-auto px-4 py-10 py-12 bg-primary text-white rounded-md">
+      <section className="max-w-5xl mx-auto px-4 py-10 bg-primary text-white rounded-md">
         <div className="px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-center animate-fade-in">
             Student Class Fees
           </h2>
-
-          <p className="text-lg text-center font-semibold text-white mt-2">
+          <p className="text-lg text-center font-semibold mt-2">
             Student: {student.firstName} {student.lastName}
           </p>
         </div>
@@ -60,7 +91,7 @@ export default function StudentFees() {
                   Balance: <span className="font-medium">{item.balance.toLocaleString()} XAF</span>
                 </p>
 
-                {/* Animated Progress Bar */}
+                {/* Progress Bar */}
                 <div className="mt-4">
                   <div className="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
                     <div
@@ -91,16 +122,80 @@ export default function StudentFees() {
                 >
                   {item.status}
                 </span>
-                <Link href={`/student/fees/${item.fee.id}`}>
-                  <button className="px-4 py-2 bg-primary hover:bg-blue-700 text-white text-sm rounded-md transition">
-                    View
+                <div className="flex gap-2">
+                  <Link href={`/student/fees/${item.fee.id}`}>
+                    <button className="px-4 py-2 bg-primary hover:bg-blue-700 text-white text-sm rounded-md transition">
+                      View
+                    </button>
+                  </Link>
+                  <button
+                    className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white text-sm rounded-md transition"
+                    onClick={() => handlePayClick(item)}
+                  >
+                    Pay
                   </button>
-                </Link>
+                </div>
               </div>
             </div>
           );
         })}
       </div>
+
+      {/* Headless UI Modal */}
+      <Transition appear show={modalOpen} as={Fragment}>
+        <Dialog as="div" className="relative z-50" onClose={() => setModalOpen(false)}>
+          {/* Overlay */}
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-50"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-50"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm" />
+          </Transition.Child>
+
+          {/* Modal content */}
+          <div className="fixed inset-0 flex items-center justify-center p-4">
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0 scale-95"
+              enterTo="opacity-100 scale-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100 scale-100"
+              leaveTo="opacity-0 scale-95"
+            >
+              <Dialog.Panel className="bg-white rounded-xl shadow-lg max-w-md w-full p-6">
+                <Dialog.Title className="text-lg font-semibold mb-4">
+                  Confirm Payment
+                </Dialog.Title>
+                <Dialog.Description className="text-gray-700 mb-6">
+                  Are you sure you want to pay <strong>{selectedFee?.fee.name}</strong>? <br />
+                  Amount: <strong>{selectedFee?.balance.toLocaleString()} XAF</strong>
+                </Dialog.Description>
+                <div className="flex justify-end gap-3">
+                  <button
+                    className="px-4 py-2 rounded-md bg-gray-200 hover:bg-gray-300 text-gray-800"
+                    onClick={() => setModalOpen(false)}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    className="px-4 py-2 rounded-md bg-green-500 hover:bg-green-600 text-white"
+                    onClick={confirmPayment}
+                    disabled={processingPayment}
+                  >
+                    {processingPayment ? "Processing..." : "Confirm"}
+                  </button>
+                </div>
+              </Dialog.Panel>
+            </Transition.Child>
+          </div>
+        </Dialog>
+      </Transition>
     </div>
   );
 }
