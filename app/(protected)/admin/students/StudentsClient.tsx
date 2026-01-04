@@ -8,6 +8,7 @@ type StudentItem = {
   studentCode: string;
   userId: string;
   firstName: string;
+  middleName: string;
   lastName: string;
   createdByAdminId: string;
   createdAt: string;
@@ -63,38 +64,98 @@ export default function StudentsClient() {
 
       {/* Students Table */}
       {students.length > 0 && (
-        <table className="w-full border">
-          <thead className="bg-gray-100">
-            <tr>
-              <th className="p-2 text-left">Student Code</th>
-              <th className="p-2 text-left">Name / User ID</th>
-              <th className="p-2 text-left">Class</th>
-              <th className="p-2 text-left">Academic Year</th>
-              <th className="p-2 text-left">Created At</th>
-              <th>Options</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {students.map((s) => (
-              <tr key={s.id} className="border-t">
-                <td className="p-2 font-medium">{s.studentCode}</td>
-                <td className="p-2 font-medium">{s.firstName} {s.lastName}</td>
-                <td className="p-2 font-medium">{s.class?.name || "—"}</td>
-                <td className="p-2 font-medium">{s.class?.academicYear || "—"}</td>
-                <td className="p-2 font-medium">{new Date(s.createdAt).toLocaleDateString()}</td>
-                <td className="text-right pr-3">
-                  <Link
-                    href={`/admin/students/${s.id}`}
-                    className="text-blue-600"
-                  >
-                    View
-                  </Link>
-                </td>
+        <div className="border rounded overflow-hidden">
+          <table className="w-full text-sm">
+            {/* Desktop header */}
+            <thead className="hidden md:table-header-group bg-gray-100">
+              <tr>
+                <th className="p-2 text-left">Student Code</th>
+                <th className="p-2 text-left">Name / User ID</th>
+                <th className="p-2 text-left">Class</th>
+                <th className="p-2 text-left">Academic Year</th>
+                <th className="p-2 text-left">Created At</th>
+                <th className="p-2 text-right">Options</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+
+            <tbody>
+              {students.map((s) => (
+                <tr
+                  key={s.id}
+                  className="
+                    border-t
+                    md:table-row
+                    block
+                    p-4
+                    md:p-0
+                    space-y-2
+                    md:space-y-0
+                  "
+                >
+                  {/* Student Code */}
+                  <td className="block md:table-cell md:p-2">
+                    <span className="md:hidden text-gray-500 font-semibold">
+                      Student Code
+                    </span>
+                    <p className="font-medium">{s.studentCode}</p>
+                  </td>
+
+                  {/* Name */}
+                  <td className="block md:table-cell md:p-2">
+                    <span className="md:hidden text-gray-500 font-semibold">
+                      Name
+                    </span>
+                    <p className="font-medium">
+                      {s.firstName} {s.middleName} {s.lastName}
+                    </p>
+                  </td>
+
+                  {/* Class */}
+                  <td className="block md:table-cell md:p-2">
+                    <span className="md:hidden text-gray-500 font-semibold">
+                      Class
+                    </span>
+                    <p className="font-medium">{s.class?.name || "—"}</p>
+                  </td>
+
+                  {/* Academic Year */}
+                  <td className="block md:table-cell md:p-2">
+                    <span className="md:hidden text-gray-500 font-semibold">
+                      Academic Year
+                    </span>
+                    <p className="font-medium">
+                      {s.class?.academicYear || "—"}
+                    </p>
+                  </td>
+
+                  {/* Created At */}
+                  <td className="block md:table-cell md:p-2">
+                    <span className="md:hidden text-gray-500 font-semibold">
+                      Created At
+                    </span>
+                    <p className="font-medium">
+                      {new Date(s.createdAt).toLocaleDateString()}
+                    </p>
+                  </td>
+
+                  {/* Options */}
+                  <td className="block md:table-cell md:p-2 md:text-right">
+                    <span className="md:hidden text-gray-500 font-semibold">
+                      Options
+                    </span>
+                    <Link
+                      href={`/admin/students/${s.id}`}
+                      className="text-blue-600 font-medium inline-block mt-1"
+                    >
+                      View →
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
       )}
     </div>
   );

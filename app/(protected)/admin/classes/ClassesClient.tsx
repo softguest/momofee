@@ -56,36 +56,67 @@ export default function ClassesClient() {
 
       {/* Classes Table */}
       {classes.length > 0 && (
-        <table className="w-full border">
-          <thead className="bg-gray-100">
-            <tr>
-              <th className="p-2 text-left">Name</th>
-              <th>Academic Year</th>
-              <th>Description</th>
-              <th></th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {classes.map((cls) => (
-              <tr key={cls.id} className="border-t">
-                <td className="p-2 font-medium">{cls.name}</td>
-                <td>{cls.academicYear}</td>
-                <td className="text-gray-600">
-                  {cls.description || "—"}
-                </td>
-                <td className="text-right pr-3">
-                  <Link
-                    href={`/admin/classes/${cls.id}`}
-                    className="text-blue-600"
-                  >
-                    View
-                  </Link>
-                </td>
+        <div className="overflow-x-auto rounded-lg border">
+          <table className="w-full border-collapse text-sm">
+            {/* Desktop header only */}
+            <thead className="hidden md:table-header-group bg-gray-100 text-gray-700">
+              <tr>
+                <th className="p-3 text-left font-semibold">Name</th>
+                <th className="p-3 text-left font-semibold">Academic Year</th>
+                <th className="p-3 text-left font-semibold">Description</th>
+                <th className="p-3 text-right font-semibold">Action</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+
+            <tbody className="divide-y">
+              {classes.map((cls) => (
+                <tr
+                  key={cls.id}
+                  className="
+                    block md:table-row
+                    p-3 md:p-0
+                    hover:bg-gray-50 transition
+                  "
+                >
+                  {/* Name */}
+                  <td className="block md:table-cell p-2 md:p-3">
+                    <span className="md:hidden text-xs font-semibold text-gray-500">
+                      Name
+                    </span>
+                    <div className="font-medium">{cls.name}</div>
+                  </td>
+
+                  {/* Academic Year */}
+                  <td className="block md:table-cell p-2 md:p-3">
+                    <span className="md:hidden text-xs font-semibold text-gray-500">
+                      Academic Year
+                    </span>
+                    <div>{cls.academicYear}</div>
+                  </td>
+
+                  {/* Description */}
+                  <td className="block md:table-cell p-2 md:p-3 text-gray-600">
+                    <span className="md:hidden text-xs font-semibold text-gray-500">
+                      Description
+                    </span>
+                    <div>{cls.description || "—"}</div>
+                  </td>
+
+                  {/* Action */}
+                  <td className="block md:table-cell p-2 md:p-3 md:text-right">
+                    <Link
+                      href={`/admin/classes/${cls.id}`}
+                      className="inline-block text-blue-600 hover:underline font-medium"
+                    >
+                      View
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+</div>
+
       )}
     </div>
   );

@@ -40,66 +40,150 @@ export default function PaymentsPage() {
   if (loading) return <p className="p-6">Loading payments...</p>;
 
   return (
-    <Card className="max-w-5xl mx-auto p-2 space-y-4">
-      <h1 className="text-xl font-semibold mb-4">All Payments</h1>
-      <section className="max-w-5xl mx-auto px-4 py-10 py-12 bg-primary text-white rounded-md">
-        <div className="px-6">
-          <h2 className="text-3xl md:text-4xl font-bold text-center animate-fade-in">
-            Recent Payments
-          </h2>
+    <Card className="max-w-5xl mx-auto p-2 space-y-6">
+      <h1 className="text-xl font-semibold">
+        All Payments
+      </h1>
 
-          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          </div>
+      {/* Hero / Summary Section */}
+      <section className="px-4 py-10 bg-primary text-white rounded-md">
+        <h2 className="text-3xl md:text-4xl font-bold text-center animate-fade-in">
+          Recent Payments
+        </h2>
+
+        <div className="
+          mt-12
+          grid
+          grid-cols-2
+          sm:grid-cols-2
+          md:grid-cols-3
+          lg:grid-cols-4
+          gap-4 sm:gap-5 md:gap-6
+        ">
+          {/* cards go here */}
         </div>
       </section>
 
-      <div className="overflow-x-auto">
-        <table className="w-full border">
-          <thead className="bg-muted">
+      {/* Payments Table */}
+      <div className="border rounded-lg overflow-hidden bg-white">
+        <table className="w-full text-sm border-collapse">
+          {/* Desktop Header */}
+          <thead className="hidden md:table-header-group bg-muted">
             <tr>
-              <th className="p-2 text-left">Student</th>
-              <th className="p-2">Class</th>
-              <th className="p-2">Fee</th>
-              <th className="p-2">Installment</th>
-              <th className="p-2">Amount</th>
-              <th className="p-2">Status</th>
-              <th className="p-2">Date</th>
+              <th className="p-3 text-left">Student</th>
+              <th className="p-3 text-left">Class</th>
+              <th className="p-3 text-left">Fee</th>
+              <th className="p-3 text-left">Installment</th>
+              <th className="p-3 text-right">Amount</th>
+              <th className="p-3 text-center">Status</th>
+              <th className="p-3 text-center">Date</th>
             </tr>
           </thead>
 
-          <tbody>
-            {payments.map(p => (
-              <tr key={p.id} className="border-t">
-                <td className="p-2">
-                  <div className="font-medium">
-                    {p.student.firstName} {p.student.lastName}
-                  </div>
-                  <div className="text-xs text-muted-foreground">
-                    {p.student.studentCode}
+          <tbody className="block md:table-row-group">
+            {payments.map((p) => (
+              <tr
+                key={p.id}
+                className="
+                  block
+                  md:table-row
+                  border-b
+                  md:border-0
+                  p-4
+                  md:p-0
+                "
+              >
+                {/* Student */}
+                <td className="block md:table-cell md:p-3">
+                  <div className="flex justify-between md:block">
+                    <span className="md:hidden text-muted-foreground font-semibold">
+                      Student
+                    </span>
+                    <div>
+                      <div className="font-medium">
+                        {p.student.firstName} {p.student.lastName}
+                      </div>
+                      <div className="text-xs text-muted-foreground">
+                        {p.student.studentCode}
+                      </div>
+                    </div>
                   </div>
                 </td>
 
-                <td className="p-2">{p.class.name}</td>
-                <td className="p-2">{p.fee.name}</td>
-                <td className="p-2">{p.installment?.name || "Full Payment"}</td>
-                <td className="p-2 font-semibold">{p.amount.toLocaleString()} FCFA</td>
-
-                <td className="p-2">
-                  <Badge
-                    variant={
-                      p.status === "success"
-                        ? "default"
-                        : p.status === "pending"
-                        ? "warning"
-                        : "error"
-                    }
-                  >
-                    {p.status}
-                  </Badge>
+                {/* Class */}
+                <td className="block md:table-cell md:p-3">
+                  <div className="flex justify-between md:block">
+                    <span className="md:hidden text-muted-foreground font-semibold">
+                      Class
+                    </span>
+                    <span>{p.class.name}</span>
+                  </div>
                 </td>
 
-                <td className="p-2 text-sm">
-                  {new Date(p.createdAt).toLocaleDateString()}
+                {/* Fee */}
+                <td className="block md:table-cell md:p-3">
+                  <div className="flex justify-between md:block">
+                    <span className="md:hidden text-muted-foreground font-semibold">
+                      Fee
+                    </span>
+                    <span>{p.fee.name}</span>
+                  </div>
+                </td>
+
+                {/* Installment */}
+                <td className="block md:table-cell md:p-3">
+                  <div className="flex justify-between md:block">
+                    <span className="md:hidden text-muted-foreground font-semibold">
+                      Installment
+                    </span>
+                    <span>
+                      {p.installment?.name || "Full Payment"}
+                    </span>
+                  </div>
+                </td>
+
+                {/* Amount */}
+                <td className="block md:table-cell md:p-3 md:text-right">
+                  <div className="flex justify-between md:block">
+                    <span className="md:hidden text-muted-foreground font-semibold">
+                      Amount
+                    </span>
+                    <span className="font-semibold">
+                      {p.amount.toLocaleString()} FCFA
+                    </span>
+                  </div>
+                </td>
+
+                {/* Status */}
+                <td className="block md:table-cell md:p-3 md:text-center">
+                  <div className="flex justify-between md:block">
+                    <span className="md:hidden text-muted-foreground font-semibold">
+                      Status
+                    </span>
+                    <Badge
+                      variant={
+                        p.status === "success"
+                          ? "default"
+                          : p.status === "pending"
+                          ? "warning"
+                          : "error"
+                      }
+                    >
+                      {p.status}
+                    </Badge>
+                  </div>
+                </td>
+
+                {/* Date */}
+                <td className="block md:table-cell md:p-3 md:text-center">
+                  <div className="flex justify-between md:block">
+                    <span className="md:hidden text-muted-foreground font-semibold">
+                      Date
+                    </span>
+                    <span>
+                      {new Date(p.createdAt).toLocaleDateString()}
+                    </span>
+                  </div>
                 </td>
               </tr>
             ))}
@@ -107,5 +191,6 @@ export default function PaymentsPage() {
         </table>
       </div>
     </Card>
+
   );
 }

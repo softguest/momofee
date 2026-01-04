@@ -48,132 +48,159 @@ export default function AdminInstallmentsPage() {
     return new Date(dueDate) < new Date();
   }
 
-
   return (
     <div className="max-w-5xl mx-auto py-8 px-4">
       <h1 className="text-2xl font-semibold mb-6">
         Fee Installments
       </h1>
 
-      <div className="overflow-x-auto border rounded-lg">
-        <div className="flex items-center gap-4 mb-4 text-sm">
-            <div className="flex items-center gap-2 p-2">
-                <span className="w-3 h-3 bg-red-500 rounded-full" />
-                <span>Overdue installment</span>
-            </div>
+      <div className="border rounded-lg overflow-hidden bg-white">
+        {/* Legend */}
+        <div className="flex flex-wrap items-center gap-4 p-4 text-sm border-b">
+          <div className="flex items-center gap-2">
+            <span className="w-3 h-3 bg-red-500 rounded-full" />
+            <span>Overdue installment</span>
+          </div>
 
-            <div className="flex items-center gap-2">
-                <span className="w-3 h-3 bg-gray-300 rounded-full" />
-                <span>Upcoming / No due date</span>
-            </div>
+          <div className="flex items-center gap-2">
+            <span className="w-3 h-3 bg-gray-300 rounded-full" />
+            <span>Upcoming / No due date</span>
+          </div>
         </div>
 
-        <table className="w-full text-sm">
-          <thead className="bg-gray-100 border-b">
+        <table className="w-full text-sm border-collapse">
+          {/* Desktop header */}
+          <thead className="hidden md:table-header-group bg-gray-100">
             <tr>
               <th className="p-3 text-left">Installment</th>
-              <th className="text-left">Class</th>
-              <th className="text-left">Fee</th>
-              <th className="text-right">Amount</th>
-              <th className="text-center">Due Date</th>
-              <th className="text-center">Payment Type</th>
-              <th className="text-left">Options</th>
+              <th className="p-3 text-left">Class</th>
+              <th className="p-3 text-left">Fee</th>
+              <th className="p-3 text-right">Amount</th>
+              <th className="p-3 text-center">Due Date</th>
+              <th className="p-3 text-center">Payment Type</th>
+              <th className="p-3 text-left">Options</th>
             </tr>
           </thead>
-          {/* <tbody>
-            {installments.map((i) => (
-              <tr key={i.installmentId} className="border-t">
-                <td className="p-3 font-medium">
-                  {i.installmentName}
-                </td>
-                <td>{i.className}</td>
-                <td>{i.feeName}</td>
-                <td className="text-right">
-                  {i.amount.toLocaleString()} XAF
-                </td>
-                <td className="text-center">
-                  {i.dueDate
-                    ? new Date(i.dueDate).toLocaleDateString()
-                    : "—"}
-                </td>
-                <td className="text-center">
-                  <span
-                    className={`px-2 py-1 rounded text-xs font-medium ${
-                      i.paymentType === "INSTALLMENT"
-                        ? "bg-blue-100 text-blue-700"
-                        : "bg-green-100 text-green-700"
-                    }`}
-                  >
-                    {i.paymentType}
-                  </span>
-                </td>
-                <td><Button variant="outline"><FiEye /> <span className="ml-2">view</span></Button></td>
-              </tr>
-            ))}
-          </tbody> */}
-          <tbody>
+
+          <tbody className="block md:table-row-group">
             {installments.map((i) => {
-                const overdue = isOverdue(i.dueDate);
+              const overdue = isOverdue(i.dueDate);
 
-                return (
+              return (
                 <tr
-                    key={i.installmentId}
-                    className={`border-t ${
-                    overdue ? "bg-red-50" : ""
-                    }`}
+                  key={i.installmentId}
+                  className={`
+                    block
+                    md:table-row
+                    border-b
+                    md:border-0
+                    p-4
+                    md:p-0
+                    ${overdue ? "bg-red-50" : ""}
+                  `}
                 >
-                    <td className="p-3 font-medium">
-                    {i.installmentName}
-                    </td>
+                  {/* Installment */}
+                  <td className="block md:table-cell md:p-3">
+                    <div className="flex justify-between md:block">
+                      <span className="md:hidden text-gray-500 font-semibold">
+                        Installment
+                      </span>
+                      <span className="font-medium">
+                        {i.installmentName}
+                      </span>
+                    </div>
+                  </td>
 
-                    <td>{i.className}</td>
+                  {/* Class */}
+                  <td className="block md:table-cell md:p-3">
+                    <div className="flex justify-between md:block">
+                      <span className="md:hidden text-gray-500 font-semibold">
+                        Class
+                      </span>
+                      <span>{i.className}</span>
+                    </div>
+                  </td>
 
-                    <td>{i.feeName}</td>
+                  {/* Fee */}
+                  <td className="block md:table-cell md:p-3">
+                    <div className="flex justify-between md:block">
+                      <span className="md:hidden text-gray-500 font-semibold">
+                        Fee
+                      </span>
+                      <span>{i.feeName}</span>
+                    </div>
+                  </td>
 
-                    <td className="text-right font-semibold">
-                    {i.amount.toLocaleString()} XAF
-                    </td>
+                  {/* Amount */}
+                  <td className="block md:table-cell md:p-3 md:text-right">
+                    <div className="flex justify-between md:block">
+                      <span className="md:hidden text-gray-500 font-semibold">
+                        Amount
+                      </span>
+                      <span className="font-semibold">
+                        {i.amount.toLocaleString()} XAF
+                      </span>
+                    </div>
+                  </td>
 
-                    <td className="text-center">
-                    {i.dueDate ? (
+                  {/* Due Date */}
+                  <td className="block md:table-cell md:p-3 md:text-center">
+                    <div className="flex justify-between md:block">
+                      <span className="md:hidden text-gray-500 font-semibold">
+                        Due Date
+                      </span>
+                      {i.dueDate ? (
                         <span
-                        className={`px-2 py-1 rounded text-xs font-medium ${
+                          className={`px-2 py-1 rounded text-xs font-medium ${
                             overdue
-                            ? "bg-red-100 text-red-700"
-                            : "bg-gray-100 text-gray-700"
-                        }`}
+                              ? "bg-red-100 text-red-700"
+                              : "bg-gray-100 text-gray-700"
+                          }`}
                         >
-                        {new Date(i.dueDate).toLocaleDateString()}
+                          {new Date(i.dueDate).toLocaleDateString()}
                         </span>
-                    ) : (
-                        "—"
-                    )}
-                    </td>
+                      ) : (
+                        <span>—</span>
+                      )}
+                    </div>
+                  </td>
 
-                    <td className="text-center">
-                        <span
-                            className={`px-2 py-1 rounded text-xs font-medium ${
-                            i.paymentType === "INSTALLMENT"
-                                ? "bg-blue-100 text-blue-700"
-                                : "bg-green-100 text-green-700"
-                            }`}
-                        >
-                            {i.paymentType}
-                        </span>
-                    </td>
-                    <td>
-                         <Link
-                            href={`/admin/installments/${i.installmentId}`}
-                            className="text-blue-600"
-                        >
-                            View
-                        </Link>
-                    </td>
+                  {/* Payment Type */}
+                  <td className="block md:table-cell md:p-3 md:text-center">
+                    <div className="flex justify-between md:block">
+                      <span className="md:hidden text-gray-500 font-semibold">
+                        Payment Type
+                      </span>
+                      <span
+                        className={`px-2 py-1 rounded text-xs font-medium ${
+                          i.paymentType === "INSTALLMENT"
+                            ? "bg-blue-100 text-blue-700"
+                            : "bg-green-100 text-green-700"
+                        }`}
+                      >
+                        {i.paymentType}
+                      </span>
+                    </div>
+                  </td>
+
+                  {/* Options */}
+                  <td className="block md:table-cell md:p-3">
+                    <div className="flex justify-between md:block">
+                      <span className="md:hidden text-gray-500 font-semibold">
+                        Options
+                      </span>
+                      <Link
+                        href={`/admin/installments/${i.installmentId}`}
+                        className="text-blue-600 font-medium"
+                      >
+                        View →
+                      </Link>
+                    </div>
+                  </td>
                 </tr>
-                );
+              );
             })}
           </tbody>
-
         </table>
       </div>
     </div>
