@@ -2,6 +2,10 @@
 
 import WaterLoader from "@/components/loaders/WaterLoader";
 import { useEffect, useState } from "react";
+import {
+  ResponsiveTableRow,
+  ResponsiveCell,
+} from "@/components/ui/ResponsiveTable";
 
 export default function AdminFeeAnalytics() {
   const [data, setData] = useState<any>(null);
@@ -12,7 +16,7 @@ export default function AdminFeeAnalytics() {
       .then(setData);
   }, []);
 
-  if (!data) return  <WaterLoader label="Loading Analytics..." />;
+  if (!data) return <WaterLoader label="Loading Analytics..." />;
 
   const { summary, classes } = data;
 
@@ -27,11 +31,14 @@ export default function AdminFeeAnalytics() {
         <StatCard title="Total Billed" value={summary.totalBilled} />
         <StatCard title="Collected" value={summary.totalCollected} />
         <StatCard title="Outstanding" value={summary.outstanding} />
-        <StatCard title="Collection Rate" value={`${summary.collectionRate}%`} />
+        <StatCard
+          title="Collection Rate"
+          value={`${summary.collectionRate}%`}
+        />
       </div>
 
       {/* Per Class Table */}
-      <div className="border rounded overflow-hidden">
+      <div className="border rounded-lg overflow-hidden">
         <table className="w-full text-sm">
           {/* Desktop header */}
           <thead className="hidden md:table-header-group bg-gray-100">
@@ -46,64 +53,31 @@ export default function AdminFeeAnalytics() {
 
           <tbody>
             {classes.map((cls: any) => (
-              <tr
-                key={cls.classId}
-                className="
-                  border-t
-                  md:table-row
-                  block
-                  md:border-0
-                  p-4
-                  md:p-0
-                  space-y-2
-                  md:space-y-0
-                "
-              >
-                {/* Class */}
-                <td className="md:p-3 block md:table-cell">
-                  <span className="font-semibold text-gray-500 md:hidden">
-                    Class
-                  </span>
-                  <p className="md:inline">{cls.className}</p>
-                </td>
+              <ResponsiveTableRow key={cls.classId}>
+                <ResponsiveCell label="Class">
+                  <span className="font-medium">{cls.className}</span>
+                </ResponsiveCell>
 
-                {/* Billed */}
-                <td className="block md:table-cell">
-                  <span className="font-semibold text-gray-500 md:hidden">
-                    Billed
-                  </span>
-                  <p>{cls.billed.toLocaleString()} XAF</p>
-                </td>
+                <ResponsiveCell label="Billed">
+                  {cls.billed.toLocaleString()} XAF
+                </ResponsiveCell>
 
-                {/* Collected */}
-                <td className="block md:table-cell">
-                  <span className="font-semibold text-gray-500 md:hidden">
-                    Collected
-                  </span>
-                  <p>{cls.collected.toLocaleString()} XAF</p>
-                </td>
+                <ResponsiveCell label="Collected">
+                  {cls.collected.toLocaleString()} XAF
+                </ResponsiveCell>
 
-                {/* Outstanding */}
-                <td className="block md:table-cell">
-                  <span className="font-semibold text-gray-500 md:hidden">
-                    Outstanding
-                  </span>
-                  <p>{cls.outstanding.toLocaleString()} XAF</p>
-                </td>
+                <ResponsiveCell label="Outstanding">
+                  {cls.outstanding.toLocaleString()} XAF
+                </ResponsiveCell>
 
-                {/* Rate */}
-                <td className="block md:table-cell">
-                  <span className="font-semibold text-gray-500 md:hidden">
-                    Rate
-                  </span>
-                  <p>{cls.rate}%</p>
-                </td>
-              </tr>
+                <ResponsiveCell label="Rate">
+                  {cls.rate}%
+                </ResponsiveCell>
+              </ResponsiveTableRow>
             ))}
           </tbody>
         </table>
       </div>
-
     </div>
   );
 }

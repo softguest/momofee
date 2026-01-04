@@ -1,69 +1,26 @@
-// "use client";
-
-// import { useEffect, useState } from "react";
-// import Link from "next/link";
-
-// export default async function UnpaidStudentsPage({
-//   params,}: {
-//   params: Promise<{ classId: string }>;
-// }) {
-//     const { classId } =await params
-//   const [data, setData] = useState<any[]>([]);
-
-//   useEffect(() => {
-//     fetch(`/api/admin/classes/${classId}/unpaid-students`)
-//       .then((res) => res.json())
-//       .then(setData);
-//   }, [classId]);
-
-//   return (
-//     <div className="max-w-5xl mx-auto py-8">
-//       <h1 className="text-2xl font-semibold mb-6">
-//         Unpaid Students
-//       </h1>
-
-//       <table className="w-full border">
-//         <thead className="bg-gray-100">
-//           <tr>
-//             <th className="p-2 text-left">Student</th>
-//             <th>Billed</th>
-//             <th>Paid</th>
-//             <th>Balance</th>
-//             <th>Status</th>
-//             <th></th>
-//           </tr>
-//         </thead>
-//         <tbody>
-//           {data.map((s) => (
-//             <tr key={s.studentId} className="border-t">
-//               <td className="p-2">{s.name}</td>
-//               <td>{s.totalBilled.toLocaleString()} XAF</td>
-//               <td>{s.totalPaid.toLocaleString()} XAF</td>
-//               <td>{s.balance.toLocaleString()} XAF</td>
-//               <td>{s.status}</td>
-//               <td>
-//                 <Link
-//                   href={`/admin/students/${s.studentId}/fees`}
-//                   className="text-blue-600"
-//                 >
-//                   View
-//                 </Link>
-//               </td>
-//             </tr>
-//           ))}
-//         </tbody>
-//       </table>
-//     </div>
-//   );
-// }
-
-
+import { FiList } from "react-icons/fi";
 import UnpaidStudentsClient from "./UnpaidStudentsClient";
 
-export default function Page({
+export default async function Page({
   params,
 }: {
-  params: { classId: string };
+  params: Promise<{ classId: string }>;
 }) {
-  return <UnpaidStudentsClient classId={params.classId} />;
+  const {classId} = await params;
+  return (
+    <div className='max-w-5xl mx-auto px-4 py-10'>
+      <h1 className="flex items-center text-2xl font-bold mb-8 gap-x-2">Unpaid List <FiList /></h1>
+      <section className="max-w-5xl mx-auto px-4 py-10 py-12 bg-primary text-white rounded-md">
+        <div className="px-6">
+          <h2 className="text-3xl md:text-4xl font-bold text-center animate-fade-in">
+            Unpaid List Of Students
+          </h2>
+
+          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          </div>
+        </div>
+      </section>
+      <UnpaidStudentsClient classId={classId} />
+    </div>
+  );
 }

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
+import WaterLoader from "@/components/loaders/WaterLoader";
 
 type Payment = {
   id: string;
@@ -37,7 +38,7 @@ export default function PaymentsPage() {
       .finally(() => setLoading(false));
   }, []);
 
-  if (loading) return <p className="p-6">Loading payments...</p>;
+  if (loading) return <WaterLoader label="Loading payments..." />;
 
   return (
     <Card className="max-w-5xl mx-auto p-2 space-y-6">

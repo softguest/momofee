@@ -2,6 +2,11 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import {
+  ResponsiveTableRow,
+  ResponsiveCell,
+} from "@/components/ui/ResponsiveTable";
+import WaterLoader from "@/components/loaders/WaterLoader";
 
 type ClassItem = {
   id: string;
@@ -25,14 +30,8 @@ export default function ClassesClient() {
       .catch(() => setLoading(false));
   }, []);
 
-  if (loading) {
-    return (
-      <div className="max-w-5xl mx-auto py-10">
-        <p className="text-gray-500">Loading classes...</p>
-      </div>
-    );
-  }
-
+  if (loading) return <WaterLoader label="Loading Classes..." />;
+  
   return (
     <div className="max-w-5xl mx-auto py-10">
       {/* Header */}
@@ -56,9 +55,9 @@ export default function ClassesClient() {
 
       {/* Classes Table */}
       {classes.length > 0 && (
-        <div className="overflow-x-auto rounded-lg border">
-          <table className="w-full border-collapse text-sm">
-            {/* Desktop header only */}
+        <div className="border rounded-lg overflow-hidden">
+          <table className="w-full text-sm">
+            {/* Desktop header */}
             <thead className="hidden md:table-header-group bg-gray-100 text-gray-700">
               <tr>
                 <th className="p-3 text-left font-semibold">Name</th>
@@ -68,55 +67,34 @@ export default function ClassesClient() {
               </tr>
             </thead>
 
-            <tbody className="divide-y">
+            <tbody>
               {classes.map((cls) => (
-                <tr
-                  key={cls.id}
-                  className="
-                    block md:table-row
-                    p-3 md:p-0
-                    hover:bg-gray-50 transition
-                  "
-                >
-                  {/* Name */}
-                  <td className="block md:table-cell p-2 md:p-3">
-                    <span className="md:hidden text-xs font-semibold text-gray-500">
-                      Name
-                    </span>
-                    <div className="font-medium">{cls.name}</div>
-                  </td>
+                <ResponsiveTableRow key={cls.id} className="hover:bg-gray-50">
+                  <ResponsiveCell label="Name">
+                    <span className="font-medium">{cls.name}</span>
+                  </ResponsiveCell>
 
-                  {/* Academic Year */}
-                  <td className="block md:table-cell p-2 md:p-3">
-                    <span className="md:hidden text-xs font-semibold text-gray-500">
-                      Academic Year
-                    </span>
-                    <div>{cls.academicYear}</div>
-                  </td>
+                  <ResponsiveCell label="Academic Year">
+                    {cls.academicYear}
+                  </ResponsiveCell>
 
-                  {/* Description */}
-                  <td className="block md:table-cell p-2 md:p-3 text-gray-600">
-                    <span className="md:hidden text-xs font-semibold text-gray-500">
-                      Description
-                    </span>
-                    <div>{cls.description || "—"}</div>
-                  </td>
+                  <ResponsiveCell label="Description">
+                    {cls.description || "—"}
+                  </ResponsiveCell>
 
-                  {/* Action */}
-                  <td className="block md:table-cell p-2 md:p-3 md:text-right">
+                  <ResponsiveCell label="Action" align="right">
                     <Link
                       href={`/admin/classes/${cls.id}`}
-                      className="inline-block text-blue-600 hover:underline font-medium"
+                      className="text-blue-600 font-medium hover:underline"
                     >
-                      View
+                      View →
                     </Link>
-                  </td>
-                </tr>
+                  </ResponsiveCell>
+                </ResponsiveTableRow>
               ))}
             </tbody>
           </table>
-</div>
-
+        </div>
       )}
     </div>
   );

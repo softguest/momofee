@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
+import WaterLoader from "@/components/loaders/WaterLoader";
 
 type StudentStatus = {
   id: string;
@@ -42,7 +43,7 @@ export default function InstallmentsStatusPage({
     load();
   }, [feeId]);
 
-  if (loading) return <p className="p-6">Loading...</p>;
+  if (loading) return <WaterLoader label="Loading Analytics..." />;
 
   return (
     <div className="space-y-6 p-6">

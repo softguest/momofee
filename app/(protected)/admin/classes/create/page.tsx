@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import WaterLoader from "@/components/loaders/WaterLoader";
+import { FiPlus, FiPlusCircle } from "react-icons/fi";
 
 export default function CreateClassPage() {
   const [loading, setLoading] = useState(false);
@@ -39,11 +41,20 @@ export default function CreateClassPage() {
     router.push("/admin/classes");
   }
 
-  return (
-    <div className="max-w-xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-4">Create Class</h1>
+  if (loading) return <WaterLoader label="Loading Class Form..." />;
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+  return (
+    <div className='max-w-5xl mx-auto px-4 py-10'>
+      <h1 className="flex items-center text-2xl font-bold mb-4 gap-x-2">Class Form<FiPlusCircle /></h1>
+      <section className="max-w-5xl mx-auto px-4 py-10 py-12 bg-primary text-white rounded-md">
+        <div className="px-6">
+          <h1 className="flex justify-center text-2xl font-bold mb-4 gap-x-2">Create a new class</h1>
+
+          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          </div>
+        </div>
+      </section>
+      <form onSubmit={handleSubmit} className="space-y-4 mt-8">
         <input
           name="name"
           placeholder="Class name (e.g. Form 3A)"

@@ -2,6 +2,10 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import {
+  ResponsiveTableRow,
+  ResponsiveCell,
+} from "@/components/ui/ResponsiveTable";
 
 type StudentItem = {
   id: string;
@@ -25,8 +29,8 @@ export default function StudentsClient() {
 
   useEffect(() => {
     fetch("/api/admin/students")
-      .then(res => res.json())
-      .then(data => {
+      .then((res) => res.json())
+      .then((data) => {
         setStudents(data);
         setLoading(false);
       })
@@ -64,98 +68,58 @@ export default function StudentsClient() {
 
       {/* Students Table */}
       {students.length > 0 && (
-        <div className="border rounded overflow-hidden">
+        <div className="border rounded-lg overflow-hidden">
           <table className="w-full text-sm">
             {/* Desktop header */}
             <thead className="hidden md:table-header-group bg-gray-100">
               <tr>
-                <th className="p-2 text-left">Student Code</th>
-                <th className="p-2 text-left">Name / User ID</th>
-                <th className="p-2 text-left">Class</th>
-                <th className="p-2 text-left">Academic Year</th>
-                <th className="p-2 text-left">Created At</th>
-                <th className="p-2 text-right">Options</th>
+                <th className="p-3 text-left">Student Code</th>
+                <th className="p-3 text-left">Name</th>
+                <th className="p-3 text-left">Class</th>
+                <th className="p-3 text-left">Academic Year</th>
+                <th className="p-3 text-left">Created At</th>
+                <th className="p-3 text-right">Action</th>
               </tr>
             </thead>
 
             <tbody>
               {students.map((s) => (
-                <tr
-                  key={s.id}
-                  className="
-                    border-t
-                    md:table-row
-                    block
-                    p-4
-                    md:p-0
-                    space-y-2
-                    md:space-y-0
-                  "
-                >
-                  {/* Student Code */}
-                  <td className="block md:table-cell md:p-2">
-                    <span className="md:hidden text-gray-500 font-semibold">
-                      Student Code
-                    </span>
-                    <p className="font-medium">{s.studentCode}</p>
-                  </td>
+                <ResponsiveTableRow key={s.id}>
+                  <ResponsiveCell label="Student Code">
+                    <span className="font-medium">{s.studentCode}</span>
+                  </ResponsiveCell>
 
-                  {/* Name */}
-                  <td className="block md:table-cell md:p-2">
-                    <span className="md:hidden text-gray-500 font-semibold">
-                      Name
-                    </span>
-                    <p className="font-medium">
+                  <ResponsiveCell label="Name">
+                    <span className="font-medium">
                       {s.firstName} {s.middleName} {s.lastName}
-                    </p>
-                  </td>
-
-                  {/* Class */}
-                  <td className="block md:table-cell md:p-2">
-                    <span className="md:hidden text-gray-500 font-semibold">
-                      Class
                     </span>
-                    <p className="font-medium">{s.class?.name || "—"}</p>
-                  </td>
+                  </ResponsiveCell>
 
-                  {/* Academic Year */}
-                  <td className="block md:table-cell md:p-2">
-                    <span className="md:hidden text-gray-500 font-semibold">
-                      Academic Year
-                    </span>
-                    <p className="font-medium">
-                      {s.class?.academicYear || "—"}
-                    </p>
-                  </td>
+                  <ResponsiveCell label="Class">
+                    {s.class?.name || "—"}
+                  </ResponsiveCell>
 
-                  {/* Created At */}
-                  <td className="block md:table-cell md:p-2">
-                    <span className="md:hidden text-gray-500 font-semibold">
-                      Created At
-                    </span>
-                    <p className="font-medium">
-                      {new Date(s.createdAt).toLocaleDateString()}
-                    </p>
-                  </td>
+                  <ResponsiveCell label="Academic Year">
+                    {s.class?.academicYear || "—"}
+                  </ResponsiveCell>
 
-                  {/* Options */}
-                  <td className="block md:table-cell md:p-2 md:text-right">
-                    <span className="md:hidden text-gray-500 font-semibold">
-                      Options
-                    </span>
+                  <ResponsiveCell label="Created At">
+                    {new Date(s.createdAt).toLocaleDateString()}
+                  </ResponsiveCell>
+
+                  <ResponsiveCell label="Action" align="right">
                     <Link
                       href={`/admin/students/${s.id}`}
-                      className="text-blue-600 font-medium inline-block mt-1"
+                      className="text-blue-600 font-medium"
                     >
                       View →
                     </Link>
-                  </td>
-                </tr>
+                  </ResponsiveCell>
+                </ResponsiveTableRow>
               ))}
             </tbody>
           </table>
         </div>
-
       )}
     </div>
   );

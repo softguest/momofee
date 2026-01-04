@@ -1,6 +1,11 @@
 import { NextResponse } from "next/server";
 import { db } from "@/config/db";
-import { classes, users, classFees, classFeeInstallments, classFeesRelations } from "@/config/schema";
+import {
+  users,
+  classFees,
+  classFeeInstallments,
+  classes,
+} from "@/config/schema";
 import { auth } from "@clerk/nextjs/server";
 import { assertAdmin } from "@/lib/auth";
 import { eq, isNull } from "drizzle-orm";
@@ -8,31 +13,39 @@ import { eq, isNull } from "drizzle-orm";
 export async function GET() {
   try {
     const { userId } = await auth();
-    if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    if (!userId) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
 
     const dbUser = await db.query.users.findFirst({
       where: eq(users.id, userId),
     });
-    if (!dbUser) return NextResponse.json({ error: "User not found" }, { status: 404 });
+
+    if (!dbUser) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
 
     assertAdmin(dbUser.role);
 
-    const userClasses = await db.query.classes.findMany({
-      where: eq(classes.createdBy, dbUser.id),
+    const fees = await db.query.classFees.findMany({
+      where: (fees, { and }) =>
+        and(
+          eq(fees.createdByAdminId, dbUser.id),
+          isNull(fees.deletedAt)
+        ),
       with: {
-        fees: {
-          where: isNull(classFees.deletedAt),
-          with: {
-            installments: true, // ✅ use the defined relation
-          },
-        },
+        installments: true, // ✅ classFeeInstallments relation
+        class: true,        // ✅ include class info (optional but useful)
       },
-      orderBy: (c, { desc }) => [c.createdAt],
+      orderBy: (fees, { desc }) => [desc(fees.createdAt)],
     });
 
-    return NextResponse.json(userClasses);
+    return NextResponse.json(fees);
   } catch (err: any) {
-    console.error("GET /api/admin/classes error:", err);
-    return NextResponse.json({ error: err.message ?? "Server error" }, { status: 500 });
+    console.error("GET /api/admin/fees error:", err);
+    return NextResponse.json(
+      { error: err.message ?? "Server error" },
+      { status: 500 }
+    );
   }
 }
