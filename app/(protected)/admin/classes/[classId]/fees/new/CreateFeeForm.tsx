@@ -21,7 +21,10 @@ export default function CreateFeeForm({ classId }: Props) {
     amount: "",
     term: "",
     description: "",
+    academicYear: "",
+    paymentType: "",
   });
+
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -37,6 +40,8 @@ export default function CreateFeeForm({ classId }: Props) {
           amount: Number(form.amount),
           term: form.term,
           description: form.description,
+          academicYear: form.academicYear,
+          paymentType: form.paymentType,
         }),
       }
     );
@@ -65,6 +70,34 @@ export default function CreateFeeForm({ classId }: Props) {
           required
         />
       </div>
+      <div>
+        <Label>Academic Year</Label>
+        <Input
+          placeholder="2024/2025"
+          value={form.academicYear}
+          onChange={(e) =>
+            setForm({ ...form, academicYear: e.target.value })
+          }
+          required
+        />
+      </div>
+      <div>
+        <Label>Payment Type</Label>
+        <Select
+          onValueChange={(value) =>
+            setForm({ ...form, paymentType: value })
+          }
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="Select payment type" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="FULL">Full Payment</SelectItem>
+            <SelectItem value="INSTALLMENT">Installments</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
 
       {/* Term */}
       <div>

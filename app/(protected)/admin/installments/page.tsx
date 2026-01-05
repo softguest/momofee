@@ -1,5 +1,6 @@
 "use client";
 
+import WaterLoader from "@/components/loaders/WaterLoader";
 // import WaterLoader from "@/components/loaders/WaterLoader";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -36,9 +37,9 @@ export default function AdminInstallmentsPage() {
       .catch(() => setLoading(false));
   }, []);
 
-  // if (loading) {
-  //   return <WaterLoader label="Loading Installments..." />;
-  // }
+  if (loading) {
+    return <WaterLoader label="Loading Installments..." />;
+  }
 
   if (installments.length === 0) {
     return <div className="p-6 text-gray-500">No installments found.</div>;

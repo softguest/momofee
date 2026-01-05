@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { db } from "@/config/db";
-import { classFees, classFeeInstallments, users } from "@/config/schema";
+import { classFees, classFeeInstallments, studentInstallmentPayments, users } from "@/config/schema";
 import { auth } from "@clerk/nextjs/server";
-import { eq, sql } from "drizzle-orm";
+import { eq, sql, and  } from "drizzle-orm";
 import { assertAdmin } from "@/lib/auth";
 
 interface InstallmentBody {
@@ -93,4 +93,57 @@ export async function POST(
       { status: 500 }
     );
   }
+}
+
+export async function GET(
+  req: Request,
+  context: { params: Promise<{ feeId: string }> }
+) {
+  const {feeId} = await context.params;
+  const { searchParams } = new URL(req.url);
+  const studentId = searchParams.get("studentId");
+
+  if (!studentId) {
+    return NextResponse.json(
+      { error: "studentId is required" },
+      { status: 400 }
+    );
+  }
+
+  const installments = await db
+    .select({
+      id: classFeeInstallments.id,
+      name: classFeeInstallments.name,
+      amount: classFeeInstallments.amount,
+      dueDate: classFeeInstallments.dueDate,
+
+      amountPaid: studentInstallmentPayments.amountPaid,
+      status: studentInstallmentPayments.status,
+      paidAt: studentInstallmentPayments.paidAt,
+    })
+    .from(classFeeInstallments)
+    .leftJoin(
+      studentInstallmentPayments,
+      and(
+        eq(studentInstallmentPayments.installmentId, classFeeInstallments.id),
+        eq(studentInstallmentPayments.studentId, studentId)
+      )
+    )
+    .where(eq(classFeeInstallments.classFeeId, feeId));
+
+  const today = new Date();
+
+  const formatted = installments.map((i) => {
+    const isOverdue =
+      !i.status &&
+      i.dueDate &&
+      new Date(i.dueDate) < today;
+
+    return {
+      ...i,
+      status: i.status ?? (isOverdue ? "OVERDUE" : "UNPAID"),
+    };
+  });
+
+  return NextResponse.json(formatted);
 }

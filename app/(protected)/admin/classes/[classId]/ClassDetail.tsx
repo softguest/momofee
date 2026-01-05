@@ -3,6 +3,9 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { FiLayers } from "react-icons/fi";
+import WaterLoader from "@/components/loaders/WaterLoader";
+import Link from "next/link";
+import InstallmentModal from "./InstallmentModal"
 
 type ClassType = {
   id: string;
@@ -16,7 +19,9 @@ type FeeType = {
   id: string;
   name: string;
   totalAmount: number;
+  paymentType?: "FULL" | "INSTALLMENT";
 };
+
 
 type StudentType = {
   id: string;
@@ -40,6 +45,8 @@ export default function ClassDetail({ classId }: { classId: string }) {
   const [data, setData] = useState<ClassDetailResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedFeeId, setSelectedFeeId] = useState<string | null>(null);
+
 
   useEffect(() => {
     async function fetchClass() {
@@ -63,7 +70,7 @@ export default function ClassDetail({ classId }: { classId: string }) {
     fetchClass();
   }, [classId]);
 
-  if (loading) return <p>Loading class details...</p>;
+  if (loading) return <WaterLoader label="Loading class details..." />;
   if (error) return <p className="text-red-600">{error}</p>;
   if (!data) return null;
 
@@ -112,12 +119,22 @@ export default function ClassDetail({ classId }: { classId: string }) {
             {fees.map((fee) => (
               <li
                 key={fee.id}
-                className="flex justify-between border p-2 rounded"
+                className="flex justify-between items-center border p-3 rounded"
               >
-                <span>{fee.name}</span>
-                <span className="font-semibold">
-                  {fee.totalAmount?.toLocaleString() ?? "0"} XAF
-                </span>
+                <div>
+                  <p className="font-medium">{fee.name}</p>
+                  <p className="text-sm text-gray-500">
+                    {fee.totalAmount.toLocaleString()} XAF
+                  </p>
+                </div>
+
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => setSelectedFeeId(fee.id)}
+                >
+                  Add Installment
+                </Button>
               </li>
             ))}
           </ul>
@@ -151,9 +168,24 @@ export default function ClassDetail({ classId }: { classId: string }) {
 
       {/* -------- ACTION BUTTONS -------- */}
       <div className="flex space-x-2">
+        <Link href="">
         <Button variant="outline">Edit Class</Button>
+        </Link>
+        <Link href="">
         <Button className="">Manage Students</Button>
+        </Link>
+        <Link href={`/admin/classes/${classId}/fees/new`}>
+        <Button variant="secondary" className="">Create Fee</Button>
+        </Link>
       </div>
+      {selectedFeeId && (
+        <InstallmentModal
+          feeId={selectedFeeId}
+          onClose={() => setSelectedFeeId(null)}
+        />
+      )}
+
     </div>
   );
 }
+

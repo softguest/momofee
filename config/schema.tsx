@@ -142,6 +142,27 @@ export const studentClassHistory = pgTable("student_class_history", {
   deletedAt: timestamp("deleted_at"), // soft delete
 });
 
+export const studentInstallmentPayments = pgTable(
+  "student_installment_payments",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+
+    studentId: uuid("student_id")
+      .notNull()
+      .references(() => students.id),
+
+    installmentId: uuid("installment_id")
+      .notNull()
+      .references(() => classFeeInstallments.id),
+
+    amountPaid: integer("amount_paid").default(0),
+    paidAt: timestamp("paid_at"),
+    status: text("status").$type<"PAID" | "PARTIAL" | "UNPAID">().default("UNPAID"),
+
+    createdAt: timestamp("created_at").defaultNow(),
+  }
+);
+
 
 // Relationships ####
 export const studentsRelations = relations(students, ({ one }) => ({

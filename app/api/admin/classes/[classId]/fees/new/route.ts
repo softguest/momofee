@@ -52,7 +52,7 @@ export async function POST(
 
     if (!name || !term || !amount || !academicYear || !paymentType) {
       return NextResponse.json(
-        { error: "Missing required fields" },
+        { error: "name, term, amount, academicYear and paymentType are required" },
         { status: 400 }
       );
     }

@@ -6,6 +6,7 @@ import {
   ResponsiveTableRow,
   ResponsiveCell,
 } from "@/components/ui/ResponsiveTable";
+import WaterLoader from "@/components/loaders/WaterLoader";
 
 type StudentItem = {
   id: string;
@@ -37,13 +38,7 @@ export default function StudentsClient() {
       .catch(() => setLoading(false));
   }, []);
 
-  if (loading) {
-    return (
-      <div className="max-w-5xl mx-auto py-10 text-gray-500">
-        Loading students...
-      </div>
-    );
-  }
+  if (loading) return <WaterLoader label="Loading Your Class..." />;
 
   return (
     <div className="max-w-5xl mx-auto py-10">

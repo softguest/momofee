@@ -37,6 +37,7 @@ import {
   ResponsiveTableRow,
   ResponsiveCell,
 } from "@/components/ui/ResponsiveTable";
+import WaterLoader from "@/components/loaders/WaterLoader";
 
 /* ---------------- HELPERS ---------------- */
 
@@ -117,7 +118,7 @@ export default function ClassFeesPage() {
 
   /* ---------------- UI STATES ---------------- */
 
-  if (loading) return <p className="p-6 text-gray-500">Loading fees…</p>;
+  if (loading) return <WaterLoader label="Loading fees..." />;
   if (error) return <p className="p-6 text-red-600">{error}</p>;
   if (groupedClasses.length === 0)
     return <p className="p-6 text-gray-500">No fees found.</p>;
