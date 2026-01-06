@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import VideoModalTrigger from "../VideoModalTrigger";
 
 function Countdown24({ targetDate }: { targetDate: string }) {
   const [timeLeft, setTimeLeft] = useState({
@@ -155,16 +156,17 @@ export default function Hero() {
               mt-10 flex flex-col items-center justify-center gap-4
               sm:flex-row
             ">
-              <Link
-                href="/sign-up"
-                className="
-                  w-full sm:w-auto rounded-xl bg-accent px-8 py-3
-                  font-semibold text-primary
-                  transition hover:scale-105
-                "
-              >
-                Watch Demo
-              </Link>
+              <VideoModalTrigger videoUrl="/videos/demo.mp4">
+                <span
+                  className="
+                    w-full sm:w-auto rounded-xl bg-accent px-8 py-3
+                    font-semibold text-primary
+                    transition hover:scale-105 inline-block
+                  "
+                >
+                  Watch Demo
+                </span>
+              </VideoModalTrigger>
 
               <Link
                 href="/dashboard"

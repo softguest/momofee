@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import WaterLoader from "@/components/loaders/WaterLoader";
+import Link from "next/link";
+import { FiArrowLeft, FiPlayCircle } from "react-icons/fi";
 
 type Payment = {
   id: string;
@@ -41,10 +43,18 @@ export default function PaymentsPage() {
   if (loading) return <WaterLoader label="Loading payments..." />;
 
   return (
-    <Card className="max-w-5xl mx-auto p-2 space-y-6">
-      <h1 className="text-xl font-semibold">
-        All Payments
-      </h1>
+    <div className="max-w-5xl mx-auto p-2 space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="flex items-center gap-2 text-2xl font-semibold">Installments <FiPlayCircle/></h1>
+
+        <Link
+          href="/dashboard"
+          className="bg-primary flex items-center gap-2 text-white px-4 py-2 rounded"
+        >
+          <FiArrowLeft /> Back Home
+        </Link>
+      </div>
 
       {/* Hero / Summary Section */}
       <section className="px-4 py-10 bg-primary text-white rounded-md">
@@ -191,7 +201,7 @@ export default function PaymentsPage() {
           </tbody>
         </table>
       </div>
-    </Card>
+    </div>
 
   );
 }

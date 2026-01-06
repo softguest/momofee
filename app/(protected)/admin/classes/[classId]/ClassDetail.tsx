@@ -84,9 +84,9 @@ export default function ClassDetail({ classId }: { classId: string }) {
           </div>
     
           <section className="px-6 py-10 bg-primary text-white rounded-md">
-            <h2 className="text-3xl md:text-4xl font-bold text-center animate-fade-in">
+            <div className="text-3xl md:text-4xl font-bold text-center animate-fade-in">
               <h1 className="text-2xl font-semibold">{cls.name}</h1>
-            </h2>
+            </div>
             <p className="mt-4 text-center">
                Academic Year: <b>{cls.academicYear}</b>
             </p>

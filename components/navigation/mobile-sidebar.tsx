@@ -67,7 +67,7 @@ export default function MobileSidebar({ menu }: MobileSidebarProps) {
       <div className="w-full flex items-center justify-between px-4 py-3 border-b border-border bg-card md:hidden">
         <button
           onClick={() => setOpen(true)}
-          className="flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-gray-900"
+          className="flex bg-accent py-1 px-2 rounded-md  items-center gap-2 text-sm font-medium text-white hover:text-gray-900"
         >
           <FiMenu size={20} />
           Menu

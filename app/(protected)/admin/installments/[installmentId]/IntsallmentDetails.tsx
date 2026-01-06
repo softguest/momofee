@@ -10,33 +10,44 @@ type InstallmentDetail = {
   name: string;
   amount: number;
   dueDate: string | null;
-
   amountPaid: number | null;
   status: "PAID" | "PARTIAL" | "UNPAID" | "OVERDUE";
   paidAt: string | null;
 };
 
-export default function InstallmentDetails({
-  classFeeId,
-  studentId,
-}: {
-  classFeeId: string;
+type InstallmentStudent = {
   studentId: string;
+  name: string;
+  matricule: string;
+  amountDue: number;
+  amountPaid: number;
+  status: "PAID" | "PARTIAL" | "UNPAID" | "OVERDUE";
+  paidAt: string | null;
+};
+
+
+export default function InstallmentDetails({
+  installmentId,
+}: {
+  installmentId: string;
 }) {
-  const [data, setData] = useState<InstallmentDetail[]>([]);
+  const [data, setData] = useState<InstallmentDetail | null>(null);
+  const [students, setStudents] = useState<InstallmentStudent[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    async function fetchInstallments() {
+    if (!installmentId) return;
+
+    async function fetchInstallment() {
       try {
         const res = await fetch(
-          `/api/admin/class-fees/${classFeeId}/installments?studentId=${studentId}`
+          `/api/admin/installments/${installmentId}`
         );
 
         if (!res.ok) {
           const err = await res.json();
-          throw new Error(err.error || "Failed to load installments");
+          throw new Error(err.error || "Failed to load installment");
         }
 
         const result = await res.json();
@@ -47,67 +58,106 @@ export default function InstallmentDetails({
         setLoading(false);
       }
     }
+    async function fetchStudents() {
+    const res = await fetch(
+      `/api/admin/installments/${installmentId}/students`
+    );
+    const data = await res.json();
+    setStudents(data);
+  }
 
-    fetchInstallments();
-  }, [classFeeId, studentId]);
+    fetchStudents();
+    fetchInstallment();
+  }, [installmentId]);
 
-  if (loading) return <WaterLoader label="Loading installment details..." />;
+  if (loading) return <WaterLoader label="Loading installment..." />;
   if (error) return <p className="text-red-600">{error}</p>;
-  if (!data.length)
-    return <p className="text-gray-500">No installments found.</p>;
+  if (!data) return null;
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-10 space-y-6">
-      {/* -------- HEADER -------- */}
+      {/* Header */}
       <div className="flex items-center space-x-2 text-2xl font-semibold">
         <div>Installment Details</div> <FiLayers />
       </div>
 
-      {/* -------- INSTALLMENTS -------- */}
-      <div className="border rounded-lg shadow-sm overflow-x-auto">
-        <table className="w-full text-sm">
-          <thead className="bg-gray-100 text-gray-700">
-            <tr>
-              <th className="p-3 text-left">Installment</th>
-              <th className="p-3">Amount</th>
-              <th className="p-3">Paid</th>
-              <th className="p-3">Due Date</th>
-              <th className="p-3">Status</th>
-            </tr>
-          </thead>
+      {/* Details Card */}
+      <div className="border rounded-lg p-6 space-y-4 bg-white">
+        <div>
+          <p className="text-gray-500 text-sm">Installment</p>
+          <p className="font-semibold">{data.name}</p>
+        </div>
 
-          <tbody>
-            {data.map((i) => (
-              <tr key={i.id} className="border-t">
-                <td className="p-3 font-medium">{i.name}</td>
+        <div className="grid grid-cols-2 gap-4 text-sm">
+          <div>
+            <p className="text-gray-500">Amount</p>
+            <p className="font-medium">
+              {data.amount.toLocaleString()} XAF
+            </p>
+          </div>
 
-                <td className="p-3">
-                  {i.amount.toLocaleString()} XAF
-                </td>
+          <div>
+            <p className="text-gray-500">Amount Paid</p>
+            <p className="font-medium">
+              {(data.amountPaid ?? 0).toLocaleString()} XAF
+            </p>
+          </div>
 
-                <td className="p-3">
-                  {(i.amountPaid ?? 0).toLocaleString()} XAF
-                </td>
+          <div>
+            <p className="text-gray-500">Due Date</p>
+            <p className="font-medium">
+              {data.dueDate
+                ? new Date(data.dueDate).toLocaleDateString()
+                : "—"}
+            </p>
+          </div>
 
-                <td className="p-3">
-                  {i.dueDate
-                    ? new Date(i.dueDate).toLocaleDateString()
-                    : "—"}
-                </td>
-
-                <td className="p-3">
-                  <StatusBadge status={i.status} />
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+          <div>
+            <p className="text-gray-500">Status</p>
+            <StatusBadge status={data.status} />
+          </div>
+        </div>
       </div>
+      {/* Students to pay this installments  */}
+      <div className="border rounded-lg bg-white p-6">
+        <h2 className="text-lg font-semibold mb-4">
+          Students for this Installment
+        </h2>
+
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead className="border-b">
+              <tr className="text-left">
+                <th>Student</th>
+                <th>Matricule</th>
+                <th>Due</th>
+                <th>Paid</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {students.map((s) => (
+                <tr key={s.studentId} className="border-b">
+                  <td className="py-2">{s.name}</td>
+                  <td>{s.matricule}</td>
+                  <td>{s.amountDue.toLocaleString()} XAF</td>
+                  <td>{s.amountPaid.toLocaleString()} XAF</td>
+                  <td>
+                    <StatusBadge status={s.status} />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
     </div>
   );
 }
 
-/* ---------------- STATUS BADGE ---------------- */
+/* -------- STATUS BADGE -------- */
 
 function StatusBadge({ status }: { status: string }) {
   const styles: Record<string, string> = {
@@ -117,9 +167,5 @@ function StatusBadge({ status }: { status: string }) {
     OVERDUE: "bg-red-100 text-red-700",
   };
 
-  return (
-    <Badge className={styles[status] ?? ""}>
-      {status}
-    </Badge>
-  );
+  return <Badge className={styles[status] ?? ""}>{status}</Badge>;
 }

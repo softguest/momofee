@@ -1,18 +1,17 @@
-"use client";
+// import InstallmentDetails from "./InstallmentDetails";
 
-import { useParams } from "next/navigation";
 import InstallmentDetails from "./IntsallmentDetails";
 
-export default function InstallmentDetailsPage() {
-  const params = useParams<{
-    classFeeId: string;
-    studentId: string;
-  }>();
+export default async function InstallmentDetailsPage({
+  params,
+}: {
+  params: Promise<{ installmentId: string }>;
+}) {
+  const { installmentId } = await params;
 
-  return (
-    <InstallmentDetails
-      classFeeId={params.classFeeId}
-      studentId={params.studentId}
-    />
-  );
+  if (!installmentId) {
+    return <p className="text-red-600">Invalid installment ID</p>;
+  }
+
+  return <InstallmentDetails installmentId={installmentId} />;
 }

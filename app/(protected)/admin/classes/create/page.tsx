@@ -48,7 +48,7 @@ export default function CreateClassPage() {
       <h1 className="flex items-center text-2xl font-bold mb-4 gap-x-2">Class Form<FiPlusCircle /></h1>
       <section className="max-w-5xl mx-auto px-4 py-10 py-12 bg-primary text-white rounded-md">
         <div className="px-6">
-          <h1 className="flex justify-center text-2xl font-bold mb-4 gap-x-2">Create a new class</h1>
+          <h2 className="text-3xl md:text-4xl font-bold text-center animate-fade-in">Create a new class</h2>
 
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           </div>

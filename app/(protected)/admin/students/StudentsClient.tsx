@@ -7,6 +7,7 @@ import {
   ResponsiveCell,
 } from "@/components/ui/ResponsiveTable";
 import WaterLoader from "@/components/loaders/WaterLoader";
+import { FiArrowLeft, FiPlayCircle } from "react-icons/fi";
 
 type StudentItem = {
   id: string;
@@ -43,7 +44,7 @@ export default function StudentsClient() {
   return (
     <div className="max-w-5xl mx-auto py-10">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+      {/* <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-semibold">Students</h1>
 
         <Link
@@ -52,7 +53,28 @@ export default function StudentsClient() {
         >
           + New Student
         </Link>
+      </div> */}
+      {/* Header */}
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="flex items-center gap-2 text-2xl font-semibold">Students <FiPlayCircle/></h1>
+
+        <Link
+          href="/dashboard"
+          className="bg-primary flex items-center gap-2 text-white px-4 py-2 rounded"
+        >
+          <FiArrowLeft /> Back Home
+        </Link>
       </div>
+      <section className="max-w-5xl mx-auto px-4 py-10 py-12 bg-primary text-white rounded-md mb-8">
+        <div className="px-6">
+          <h2 className="text-3xl md:text-4xl font-bold text-center animate-fade-in">
+            List Of Created Classes
+          </h2>
+
+          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          </div>
+        </div>
+      </section>
 
       {/* Empty State */}
       {students.length === 0 && (

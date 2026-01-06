@@ -1,3 +1,5 @@
+import VideoModalTrigger from "../VideoModalTrigger";
+
 export default function FundingCTA() {
   return (
     <section
@@ -14,9 +16,17 @@ export default function FundingCTA() {
       </p>
 
       <div className="mt-8 flex justify-center gap-4">
-        <a className="rounded-xl bg-accent px-6 py-3 font-semibold text-primary">
-          Watch Demo
-        </a>
+        <VideoModalTrigger videoUrl="/videos/demo.mp4">
+          <span
+            className="
+              w-full sm:w-auto rounded-xl bg-accent px-8 py-3
+              font-semibold text-primary
+              transition hover:scale-105 inline-block
+            "
+          >
+            Watch Demo
+          </span>
+        </VideoModalTrigger>
         <a className="rounded-xl border px-6 py-3 font-semibold">
           Contact Us
         </a>

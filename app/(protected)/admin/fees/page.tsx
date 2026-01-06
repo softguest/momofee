@@ -38,6 +38,8 @@ import {
   ResponsiveCell,
 } from "@/components/ui/ResponsiveTable";
 import WaterLoader from "@/components/loaders/WaterLoader";
+import Link from "next/link";
+import { FiPlayCircle } from "react-icons/fi";
 
 /* ---------------- HELPERS ---------------- */
 
@@ -74,6 +76,7 @@ export default function ClassFeesPage() {
   const [fees, setFees] = useState<Fee[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedFee, setSelectedFee] = useState<Fee | null>(null);
 
   useEffect(() => {
     async function fetchFees() {
@@ -126,125 +129,198 @@ export default function ClassFeesPage() {
   /* ---------------- RENDER ---------------- */
 
   return (
-   <div className="max-w-7xl mx-auto py-8 space-y-10">
-    <h1 className="text-2xl font-semibold">Classes & Fees</h1>
+   <div className="max-w-5xl mx-auto py-8 space-y-6">
+  {/* Header */}
+  <div className="flex items-center justify-between mb-6">
+    <h1 className="flex items-center gap-2 text-2xl font-semibold">
+      Fees <FiPlayCircle />
+    </h1>
 
-    {groupedClasses.map((cls) => (
-      <div key={cls.id} className="border rounded-lg p-5 space-y-4">
-        <h2 className="text-xl font-medium">{cls.name}</h2>
+    <Link
+      href="/admin/classes/create"
+      className="bg-primary text-white px-4 py-2 rounded"
+    >
+      + New Class
+    </Link>
+  </div>
+   <section className="mpy-10 py-12 bg-primary text-white rounded-md mb-8">
+      <div className="px-6">
+        <h2 className="text-3xl md:text-4xl font-bold text-center animate-fade-in">
+          List Of Created Fees
+        </h2>
 
-        <div className="overflow-x-auto rounded-lg border">
-          <table className="w-full border-collapse text-sm">
-            {/* -------- TABLE HEADER (desktop only) -------- */}
-            <thead className="hidden md:table-header-group bg-gray-100 text-gray-700">
-              <tr>
-                <th className="p-3 text-left font-semibold">Fee</th>
-                <th className="p-3 text-left font-semibold">Term</th>
-                <th className="p-3 text-left font-semibold">Year</th>
-                <th className="p-3 text-right font-semibold">Total</th>
-                <th className="p-3 text-right font-semibold">Paid</th>
-                <th className="p-3 text-right font-semibold">Unpaid</th>
-                <th className="p-3 text-center font-semibold">Overdue</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {cls.fees.map((fee) => {
-                const stats = calculatePaidStats(fee);
-
-                return (
-                  <React.Fragment key={fee.id}>
-                    {/* -------- FEE ROW -------- */}
-                    <ResponsiveTableRow>
-                      <ResponsiveCell label="Fee">
-                        <span className="font-medium">{fee.name}</span>
-                      </ResponsiveCell>
-
-                      <ResponsiveCell label="Term">
-                        {fee.term}
-                      </ResponsiveCell>
-
-                      <ResponsiveCell label="Year">
-                        {fee.academicYear}
-                      </ResponsiveCell>
-
-                      <ResponsiveCell label="Total" align="right">
-                        {fee.totalAmount.toLocaleString()} XAF
-                      </ResponsiveCell>
-
-                      <ResponsiveCell label="Paid" align="right">
-                        <span className="text-green-700">
-                          {stats.paid.toLocaleString()} XAF
-                        </span>
-                      </ResponsiveCell>
-
-                      <ResponsiveCell label="Unpaid" align="right">
-                        <span className="text-red-600">
-                          {stats.unpaid.toLocaleString()} XAF
-                        </span>
-                      </ResponsiveCell>
-
-                      <ResponsiveCell label="Overdue" align="center">
-                        {stats.overdueCount > 0 ? (
-                          <span className="text-red-600 font-semibold">
-                            {stats.overdueCount}
-                          </span>
-                        ) : (
-                          "—"
-                        )}
-                      </ResponsiveCell>
-                    </ResponsiveTableRow>
-
-                    {/* -------- INSTALLMENTS -------- */}
-                    {fee.paymentType === "INSTALLMENT" &&
-                      fee.installments.length > 0 && (
-                        <ResponsiveTableRow className="bg-gray-50">
-                          <td colSpan={7} className="md:p-3">
-                            <div className="space-y-2 text-xs md:ml-4">
-                              {fee.installments.map((inst) => (
-                                <div
-                                  key={inst.id}
-                                  className="flex flex-col md:flex-row md:justify-between gap-1"
-                                >
-                                  <span className="font-medium">
-                                    {inst.name}
-                                  </span>
-                                  <span>
-                                    {inst.amount.toLocaleString()} XAF
-                                  </span>
-                                  <span>
-                                    Due:{" "}
-                                    {inst.dueDate
-                                      ? new Date(
-                                          inst.dueDate
-                                        ).toLocaleDateString()
-                                      : "-"}
-                                  </span>
-                                  <span
-                                    className={
-                                      inst.status === "PAID"
-                                        ? "text-green-600"
-                                        : isOverdue(inst.dueDate)
-                                        ? "text-red-600"
-                                        : "text-gray-600"
-                                    }
-                                  >
-                                    {inst.status ?? "UNPAID"}
-                                  </span>
-                                </div>
-                              ))}
-                            </div>
-                          </td>
-                        </ResponsiveTableRow>
-                      )}
-                  </React.Fragment>
-                );
-              })}
-            </tbody>
-          </table>
+        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         </div>
       </div>
-    ))}
+    </section>
+
+    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      {groupedClasses.map((cls) =>
+        cls.fees.map((fee) => {
+          const stats = calculatePaidStats(fee);
+
+          return (
+            <div
+              key={fee.id}
+              className="flex flex-col justify-between rounded-xl border bg-white p-5 shadow-sm hover:shadow-md transition"
+            >
+              {/* ---- TOP INFO ---- */}
+              <div className="space-y-3">
+                <div>
+                  <p className="text-xs text-gray-500">Class</p>
+                  <p className="font-semibold text-gray-900">
+                    {cls.name}
+                  </p>
+                </div>
+
+                <div>
+                  <p className="text-xs text-gray-500">Fee</p>
+                  <p className="font-medium">{fee.name}</p>
+                </div>
+
+                <div className="flex justify-between text-sm">
+                  <div>
+                    <p className="text-gray-500">Term</p>
+                    <p>{fee.term}</p>
+                  </div>
+
+                  <div>
+                    <p className="text-gray-500">Year</p>
+                    <p>{fee.academicYear}</p>
+                  </div>
+                </div>
+
+                <div className="border-t pt-3 space-y-1 text-sm">
+                  <div className="flex justify-between">
+                    <span>Total</span>
+                    <span className="font-medium">
+                      {fee.totalAmount.toLocaleString()} XAF
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between text-green-700">
+                    <span>Paid</span>
+                    <span>
+                      {stats.paid.toLocaleString()} XAF
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between text-red-600">
+                    <span>Unpaid</span>
+                    <span>
+                      {stats.unpaid.toLocaleString()} XAF
+                    </span>
+                  </div>
+
+                  {stats.overdueCount > 0 && (
+                    <div className="flex justify-between text-red-700 font-semibold">
+                      <span>Overdue</span>
+                      <span>{stats.overdueCount}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* ---- ACTION ---- */}
+              <div className="mt-5">
+                {fee.paymentType === "INSTALLMENT" ? (
+                  <button
+                    onClick={() => setSelectedFee(fee)}
+                    className="w-full rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary/90"
+                  >
+                    View Installments
+                  </button>
+                ) : (
+                  <span className="block text-center text-xs text-gray-400">
+                    Full payment fee
+                  </span>
+                )}
+              </div>
+            </div>
+          );
+        })
+      )}
+    </div>
+    {selectedFee && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
+    <div className="w-full max-w-lg rounded-xl bg-white shadow-lg animate-in fade-in zoom-in">
+      
+      {/* Header */}
+      <div className="flex items-center justify-between border-b px-6 py-4">
+        <div>
+          <h2 className="text-lg font-semibold">
+            {selectedFee.name}
+          </h2>
+          <p className="text-xs text-gray-500">
+            {selectedFee.term} • {selectedFee.academicYear}
+          </p>
+        </div>
+
+        <button
+          onClick={() => setSelectedFee(null)}
+          className="text-gray-400 hover:text-gray-600 text-xl"
+        >
+          ✕
+        </button>
+      </div>
+
+      {/* Body */}
+      <div className="px-6 py-4 space-y-3 max-h-[60vh] overflow-y-auto">
+        {selectedFee.installments.length === 0 ? (
+          <p className="text-sm text-gray-500">
+            No installments defined for this fee.
+          </p>
+        ) : (
+          selectedFee.installments.map((inst) => (
+            <div
+              key={inst.id}
+              className="flex justify-between items-center rounded-lg border p-3 text-sm"
+            >
+              <div>
+                <p className="font-medium">{inst.name}</p>
+                <p className="text-xs text-gray-500">
+                  Due:{" "}
+                  {inst.dueDate
+                    ? new Date(inst.dueDate).toLocaleDateString()
+                    : "—"}
+                </p>
+              </div>
+
+              <div className="text-right">
+                <p className="font-semibold">
+                  {inst.amount.toLocaleString()} XAF
+                </p>
+                <span
+                  className={
+                    inst.status === "PAID"
+                      ? "text-green-600 text-xs font-medium"
+                      : isOverdue(inst.dueDate)
+                      ? "text-red-600 text-xs font-medium"
+                      : "text-gray-600 text-xs"
+                  }
+                >
+                  {inst.status ?? "UNPAID"}
+                </span>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+
+      {/* Footer */}
+      <div className="border-t px-6 py-3 flex justify-end">
+        <button
+          onClick={() => setSelectedFee(null)}
+          className="rounded-md bg-gray-100 px-4 py-2 text-sm hover:bg-gray-200"
+        >
+          Close
+        </button>
+      </div>
+    </div>
   </div>
+)}
+
+</div>
+
   );
 }

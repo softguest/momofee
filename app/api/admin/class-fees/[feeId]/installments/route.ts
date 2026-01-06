@@ -95,55 +95,39 @@ export async function POST(
   }
 }
 
+
 export async function GET(
   req: Request,
   context: { params: Promise<{ feeId: string }> }
 ) {
-  const {feeId} = await context.params;
-  const { searchParams } = new URL(req.url);
-  const studentId = searchParams.get("studentId");
+  const { feeId } = await context.params;
+  try {
+    const fee = await db.query.classFees.findFirst({
+      where: eq(classFees.id, feeId),
+      columns: {
+        id: true,
+        name: true,
+        description: true,
+        academicYear: true,
+        term: true,
+        totalAmount: true,
+        paymentType: true,
+        createdAt: true,
+      },
+    });
 
-  if (!studentId) {
+    if (!fee) {
+      return NextResponse.json(
+        { error: "Fee not found" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json(fee);
+  } catch (error) {
     return NextResponse.json(
-      { error: "studentId is required" },
-      { status: 400 }
+      { error: "Failed to fetch fee" },
+      { status: 500 }
     );
   }
-
-  const installments = await db
-    .select({
-      id: classFeeInstallments.id,
-      name: classFeeInstallments.name,
-      amount: classFeeInstallments.amount,
-      dueDate: classFeeInstallments.dueDate,
-
-      amountPaid: studentInstallmentPayments.amountPaid,
-      status: studentInstallmentPayments.status,
-      paidAt: studentInstallmentPayments.paidAt,
-    })
-    .from(classFeeInstallments)
-    .leftJoin(
-      studentInstallmentPayments,
-      and(
-        eq(studentInstallmentPayments.installmentId, classFeeInstallments.id),
-        eq(studentInstallmentPayments.studentId, studentId)
-      )
-    )
-    .where(eq(classFeeInstallments.classFeeId, feeId));
-
-  const today = new Date();
-
-  const formatted = installments.map((i) => {
-    const isOverdue =
-      !i.status &&
-      i.dueDate &&
-      new Date(i.dueDate) < today;
-
-    return {
-      ...i,
-      status: i.status ?? (isOverdue ? "OVERDUE" : "UNPAID"),
-    };
-  });
-
-  return NextResponse.json(formatted);
 }
