@@ -28,7 +28,7 @@ export const users = pgTable("users", {
   clerkId: text("clerk_id").notNull().unique(),
   role: userRoleEnum("role").default("student").notNull(),
   userName: varchar({ length: 256 }),
-  email: text("email"),
+  email: varchar("email", { length: 255 }).unique(),
   phone: text("phone"),
   createdAt: timestamp("created_at").defaultNow(),
   deletedAt: timestamp("deleted_at"), // soft delete

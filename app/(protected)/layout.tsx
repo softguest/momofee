@@ -1,78 +1,3 @@
-// import { currentUser } from "@clerk/nextjs/server";
-// import { db } from "@/config/db";
-// import { users } from "@/config/schema";
-// import { eq } from "drizzle-orm";
-// import MobileSidebar from "@/components/navigation/mobile-sidebar";
-// import Sidebar from "@/components/navigation/sidebar";
-// import {
-//   adminMenu,
-//   parentMenu,
-//   studentMenu,
-// } from "@/components/navigation/sidebar-config";
-
-// export default async function ProtectedLayout({
-//   children,
-// }: {
-//   children: React.ReactNode;
-// }) {
-//   let clerkUser;
-
-//   /* -------- SAFE CLERK RESOLUTION -------- */
-//   try {
-//     clerkUser = await currentUser();
-//   } catch (err) {
-//     console.error("Clerk error in ProtectedLayout:", err);
-//     return null; // or redirect("/sign-in")
-//   }
-
-//   if (!clerkUser) return null;
-
-//   /* -------- LOAD OR CREATE USER -------- */
-//   let [user] = await db
-//     .select()
-//     .from(users)
-//     .where(eq(users.clerkId, clerkUser.id))
-//     .limit(1);
-
-//   if (!user) {
-//     await db.insert(users).values({
-//       id: clerkUser.id,
-//       clerkId: clerkUser.id,
-//       email: clerkUser.emailAddresses[0]?.emailAddress ?? null,
-//       phone: clerkUser.phoneNumbers[0]?.phoneNumber ?? null,
-//       role: "student",
-//     });
-
-//     // 🔁 re-fetch user after insert
-//     [user] = await db
-//       .select()
-//       .from(users)
-//       .where(eq(users.clerkId, clerkUser.id))
-//       .limit(1);
-//   }
-
-//   if (!user) return null; // extreme edge case
-
-//   /* -------- MENU RESOLUTION -------- */
-//   const menu =
-//     user.role === "admin"
-//       ? adminMenu
-//       : user.role === "parent"
-//       ? parentMenu
-//       : studentMenu;
-
-//   /* -------- RENDER -------- */
-//   return (
-//     <div className="min-h-screen flex flex-col">
-//       <MobileSidebar menu={menu} />
-//       <div className="flex">
-//         <Sidebar menu={menu} />
-//         <div className="flex-1 p-4">{children}</div>
-//       </div>
-//     </div>
-//   );
-// }
-
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
@@ -137,7 +62,14 @@ export default async function ProtectedLayout({
 
   /* -------- RENDER -------- */
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col" 
+    style={{
+      backgroundImage:
+        "linear-gradient(rgba(255,255,255,0.8), rgba(255,255,255,0.8)), url('/bgmain.svg')",
+      backgroundSize: "cover",
+      backgroundPosition: "center",
+    }}
+    >
       <MobileSidebar menu={menu} />
       <div className="flex">
         <Sidebar menu={menu} />

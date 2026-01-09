@@ -143,7 +143,7 @@ export default function ClassFeesPage() {
       + New Class
     </Link>
   </div>
-   <section className="mpy-10 py-12 bg-primary text-white rounded-md mb-8">
+    <section className="mpy-10 py-12 bg-primary text-white rounded-md mb-8">
       <div className="px-6">
         <h2 className="text-3xl md:text-4xl font-bold text-center animate-fade-in">
           List Of Created Fees
@@ -226,7 +226,7 @@ export default function ClassFeesPage() {
                 {fee.paymentType === "INSTALLMENT" ? (
                   <button
                     onClick={() => setSelectedFee(fee)}
-                    className="w-full rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary/90"
+                    className="cursor-pointer w-full rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary/90"
                   >
                     View Installments
                   </button>
@@ -274,34 +274,36 @@ export default function ClassFeesPage() {
           selectedFee.installments.map((inst) => (
             <div
               key={inst.id}
-              className="flex justify-between items-center rounded-lg border p-3 text-sm"
+              className="bg-accent/10 "
             >
-              <div>
-                <p className="font-medium">{inst.name}</p>
-                <p className="text-xs text-gray-500">
-                  Due:{" "}
-                  {inst.dueDate
-                    ? new Date(inst.dueDate).toLocaleDateString()
-                    : "—"}
-                </p>
-              </div>
+              <Link href={`/admin/installments/${inst.id}`} className="flex justify-between items-center rounded-lg border p-3 text-sm">
+                <div>
+                  <p className="font-medium">{inst.name}</p>
+                  <p className="text-xs text-gray-500">
+                    Due:{" "}
+                    {inst.dueDate
+                      ? new Date(inst.dueDate).toLocaleDateString()
+                      : "—"}
+                  </p>
+                </div>
 
-              <div className="text-right">
-                <p className="font-semibold">
-                  {inst.amount.toLocaleString()} XAF
-                </p>
-                <span
-                  className={
-                    inst.status === "PAID"
-                      ? "text-green-600 text-xs font-medium"
-                      : isOverdue(inst.dueDate)
-                      ? "text-red-600 text-xs font-medium"
-                      : "text-gray-600 text-xs"
-                  }
-                >
-                  {inst.status ?? "UNPAID"}
-                </span>
-              </div>
+                <div className="text-right">
+                  <p className="font-semibold">
+                    {inst.amount.toLocaleString()} XAF
+                  </p>
+                  <span
+                    className={
+                      inst.status === "PAID"
+                        ? "text-green-600 text-xs font-medium"
+                        : isOverdue(inst.dueDate)
+                        ? "text-red-600 text-xs font-medium"
+                        : "text-gray-600 text-xs"
+                    }
+                  >
+                    {inst.status ?? "UNPAID"}
+                  </span>
+                </div>
+              </Link>
             </div>
           ))
         )}

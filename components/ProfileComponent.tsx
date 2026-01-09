@@ -1,7 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { FiUser } from "react-icons/fi";
+import { toast } from "sonner";
+import WaterLoader from "./loaders/WaterLoader";
 
 type Class = {
   id: string;
@@ -17,7 +20,9 @@ type StudentProfile = {
   classId: string;
 };
 
-export default function StudentProfilePage() {
+export default function ProfileComponent() {
+  const router = useRouter();
+
   const [loading, setLoading] = useState(false);
 
   const [classes, setClasses] = useState<Class[]>([]);
@@ -26,7 +31,6 @@ export default function StudentProfilePage() {
   const [profileExists, setProfileExists] = useState(false);
   const [profile, setProfile] = useState<StudentProfile | null>(null);
 
-  // ✅ Controlled select state
   const [gender, setGender] = useState("");
   const [classId, setClassId] = useState("");
 
@@ -45,7 +49,7 @@ export default function StudentProfilePage() {
     checkProfile();
   }, []);
 
-  // 🔹 Sync select values when profile loads
+  // 🔹 Sync controlled selects
   useEffect(() => {
     if (profile) {
       setGender(profile.gender ?? "");
@@ -60,8 +64,8 @@ export default function StudentProfilePage() {
         const res = await fetch("/api/student/class/all");
         const data = await res.json();
         setClasses(data);
-      } catch (err) {
-        console.error(err);
+      } catch (error) {
+        console.error(error);
       } finally {
         setClassesLoading(false);
       }
@@ -75,20 +79,39 @@ export default function StudentProfilePage() {
 
     setLoading(true);
 
-    await fetch("/api/student/profile", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        firstName: formData.get("firstName"),
-        middleName: formData.get("middleName"),
-        lastName: formData.get("lastName"),
-        age: Number(formData.get("age")),
-        gender,
-        classId,
-      }),
-    });
+    try {
+      const res = await fetch("/api/student/profile", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          firstName: formData.get("firstName"),
+          middleName: formData.get("middleName"),
+          lastName: formData.get("lastName"),
+          age: Number(formData.get("age")),
+          gender,
+          classId,
+        }),
+      });
 
-    setLoading(false);
+      if (!res.ok) {
+        throw new Error("Failed to create student profile");
+      }
+
+      toast.success("Student profile created successfully 🎉");
+
+      // 🔁 Re-run Dashboard server component
+      router.refresh();
+    } catch (error) {
+      console.error("Profile creation failed:", error);
+      toast.error("Failed to create student profile");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  // 🌊 SHOW WATER LOADER WHILE CREATING PROFILE
+  if (loading) {
+    return <WaterLoader label="Creating student profile..." />;
   }
 
   return (
@@ -98,15 +121,13 @@ export default function StudentProfilePage() {
         <FiUser />
       </div>
 
-      <section className="max-w-5xl mx-auto px-4 py-12 bg-primary text-white rounded-md">
-        <div className="px-6">
-          <h1 className="text-3xl md:text-4xl font-bold text-center">
-            {profileExists ? "Student Profile" : "Complete Student Profile"}
-          </h1>
-        </div>
+      <section className="bg-primary text-white rounded-md py-12 mb-8">
+        <h1 className="text-3xl md:text-4xl font-bold text-center">
+          {profileExists ? "Student Profile" : "Complete Student Profile"}
+        </h1>
       </section>
 
-      <form action={submit} className="space-y-4 mt-8">
+      <form action={submit} className="space-y-4">
         <input
           name="firstName"
           placeholder="First Name"
@@ -142,9 +163,7 @@ export default function StudentProfilePage() {
           className="w-full border px-3 py-2 rounded disabled:bg-gray-100"
         />
 
-        {/* ✅ Gender (controlled) */}
         <select
-          name="gender"
           value={gender}
           onChange={(e) => setGender(e.target.value)}
           disabled={profileExists}
@@ -156,9 +175,7 @@ export default function StudentProfilePage() {
           <option value="Female">Female</option>
         </select>
 
-        {/* ✅ Class (controlled) */}
         <select
-          name="classId"
           value={classId}
           onChange={(e) => setClassId(e.target.value)}
           disabled={profileExists || classesLoading}
@@ -168,7 +185,6 @@ export default function StudentProfilePage() {
           <option value="">
             {classesLoading ? "Loading classes..." : "Select Class"}
           </option>
-
           {classes.map((cls) => (
             <option key={cls.id} value={cls.id}>
               {cls.name}
@@ -177,15 +193,10 @@ export default function StudentProfilePage() {
         </select>
 
         <button
-          disabled={profileExists || loading || classesLoading}
-          className="w-full bg-primary text-white px-4 py-2 rounded disabled:bg-gray-400"
+          disabled={profileExists || classesLoading}
+          className="w-full bg-primary cursor-pointer text-white px-4 py-2 rounded disabled:bg-gray-400"
         >
-          {/* {loading ? "Creating..." : "Create Student Profile"} */}
-          {profileExists
-            ? "Profile Already Created"
-            : loading
-            ? "Saving..."
-            : "Create Profile"}
+          {profileExists ? "Profile Already Created" : "Create Profile"}
         </button>
       </form>
     </div>

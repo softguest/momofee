@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Dialog, Transition } from "@headlessui/react";
 import WaterLoader from "@/components/loaders/WaterLoader";
 
-export default function StudentFees() {
+export default function StudentFeeLoop() {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
@@ -54,18 +54,6 @@ export default function StudentFees() {
 
   return (
     <div className="space-y-8">
-      <div className="flex items-center space-x-2 text-2xl font-semibold mb-6"><div>My School Fees</div> <div><FiDollarSign  /></div></div>
-      <section className="max-w-5xl mx-auto px-4 py-10 bg-primary text-white rounded-md">
-        <div className="px-6">
-          <h2 className="text-3xl md:text-4xl font-bold text-center animate-fade-in">
-            Student Class Fees
-          </h2>
-          <p className="text-lg text-center font-semibold mt-2">
-            Student: {student.firstName} {student.lastName}
-          </p>
-        </div>
-      </section>
-
       {/* Fees Grid */}
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {fees.map((item: any, idx: number) => {

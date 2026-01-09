@@ -3,7 +3,7 @@ import { db } from "@/config/db";
 import { students, payments, classFeeInstallments, studentFees, users } from "@/config/schema";
 import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
-import { assertAdmin } from "@/lib/auth";
+// import { assertAdmin } from "@/lib/auth";
 
 export async function POST(req: Request) {
   try {
@@ -20,7 +20,7 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: "User not found" }, { status: 401 });
         }
     
-        assertAdmin(dbUser.role); // ✅ check DB role
+        // assertAdmin(dbUser.role); // ✅ check DB role
 
     const body = await req.json();
     const { installmentId, studentFeeId, amount, momoTransactionId } = body;

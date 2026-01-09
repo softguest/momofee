@@ -63,7 +63,7 @@ export default clerkMiddleware(async (auth, req) => {
 
   if (!student) {
     return NextResponse.redirect(
-      new URL("/student/profile", req.url)
+      new URL("/dashboard", req.url)
     );
   }
 });

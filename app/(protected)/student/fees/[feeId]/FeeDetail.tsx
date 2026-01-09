@@ -87,6 +87,14 @@ export default function FeeDetail({ feeId }: { feeId: string }) {
     );
   }
 
+  const isInstallmentPending = (installmentId: string) => {
+  return payments.some(
+    (p: any) =>
+      p.installmentId === installmentId && p.status === "pending"
+  );
+};
+
+
   return (
     <div className="space-y-6">
 
@@ -123,55 +131,66 @@ export default function FeeDetail({ feeId }: { feeId: string }) {
 
       {/* -------- INSTALLMENTS -------- */}
       {installments.length > 0 && (
-        <div className="border rounded p-4">
-          <h2 className="font-semibold mb-3">Installments</h2>
+          <div className="border rounded p-4">
+            <h2 className="font-semibold mb-3">Installments</h2>
 
-          <ul className="space-y-3">
-            {installments.map((inst: any) => {
-              const paid = isInstallmentPaid(inst.id);
+            <ul className="space-y-3">
+              {installments.map((inst: any) => {
+                const paid = isInstallmentPaid(inst.id);
+                const pending = isInstallmentPending(inst.id);
 
-              return (
-                <li
-                  key={inst.id}
-                  className="flex justify-between items-center border p-3 rounded"
-                >
-                  <div>
-                    <p className="font-medium">{inst.name}</p>
-                    <p className="text-sm text-gray-500">
-                      {inst.amount.toLocaleString()} XAF
-                    </p>
-                  </div>
+                return (
+                  <li
+                    key={inst.id}
+                    className="flex justify-between items-center border p-3 rounded"
+                  >
+                    <div>
+                      <p className="font-medium">{inst.name}</p>
+                      <p className="text-sm text-gray-500">
+                        {inst.amount.toLocaleString()} XAF
+                      </p>
+                    </div>
 
-                  {paid ? (
-                    <span className="text-green-600 font-semibold">
-                      PAID
-                    </span>
-                  ) : (
-                    <Button
-                      size="sm"
-                      disabled={paying === inst.id}
-                      onClick={() => handlePayInstallment(inst.id)}
-                    >
-                      {paying === inst.id ? "Processing..." : "Pay"}
-                    </Button>
-                  )}
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      )}
+                    {/* ✅ PAID */}
+                    {paid ? (
+                      <span className="text-green-600 font-semibold">
+                        PAID
+                      </span>
 
-      {/* -------- FULL PAYMENT -------- */}
-      {status !== "PAID" && (
-        <Button
-          className="w-full bg-assent bg-accent"
-          disabled={paying === "FULL"}
-          onClick={handlePayFull}
-        >
-          {paying === "FULL" ? "Processing..." : "Pay Full Balance"}
-        </Button>
-      )}
-    </div>
-  );
-}
+                    /* 🟡 IN REVIEW */
+                    ) : pending ? (
+                      <span className="text-yellow-600 font-semibold border border-yellow-600/50 p-2">
+                        In Review
+                      </span>
+
+                    /* 💳 PAY */
+                    ) : (
+                      <Button
+                        size="sm"
+                        disabled={paying === inst.id}
+                        onClick={() => handlePayInstallment(inst.id)}
+                      >
+                        {paying === inst.id ? "Processing..." : "Pay"}
+                      </Button>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        )}
+
+
+        {/* -------- FULL PAYMENT -------- */}
+        {/* {status !== "PAID" && (
+          <Button
+            className="w-full bg-assent bg-accent"
+            disabled={paying === "FULL"}
+            onClick={handlePayFull}
+          >
+            {paying === "FULL" ? "Processing..." : "Pay Full Balance"}
+          </Button>
+        )} */}
+      </div>
+    );
+  }
