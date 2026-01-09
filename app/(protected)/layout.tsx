@@ -65,7 +65,7 @@ export default async function ProtectedLayout({
     <div className="min-h-screen flex flex-col" 
     style={{
       backgroundImage:
-        "linear-gradient(rgba(255,255,255,0.8), rgba(255,255,255,0.8)), url('/bgmain.svg')",
+        "linear-gradient(rgba(228, 227, 235, 0.9), rgba(255, 255, 255, 0.9)), url('/bgmain.svg')",
       backgroundSize: "cover",
       backgroundPosition: "center",
     }}
