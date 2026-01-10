@@ -157,7 +157,7 @@ export default function Hero() {
               sm:flex-row
             ">
               <VideoModalTrigger videoUrl="/videos/demo.mp4">
-                <span
+                <div
                   className="
                     w-full sm:w-auto rounded-xl bg-accent px-8 py-3
                     font-semibold text-primary
@@ -165,11 +165,11 @@ export default function Hero() {
                   "
                 >
                   Watch Demo
-                </span>
+                </div>
               </VideoModalTrigger>
 
               <Link
-                href="/dashboard"
+                href="/sign-in"
                 className="
                   w-full sm:w-auto rounded-xl border border-white px-8 py-3
                   font-semibold text-white

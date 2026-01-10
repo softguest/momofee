@@ -3,6 +3,8 @@ import { currentUser } from "@clerk/nextjs/server";
 import { db } from "@/config/db";
 import { users, students } from "@/config/schema";
 import { eq } from "drizzle-orm";
+import { redirect } from "next/navigation";
+
 import {
   FiBook,
   FiCreditCard,
@@ -20,7 +22,9 @@ import StudentFeeLoop from "@/components/StudentFeeLoop";
 
 const DashboardPage = async () => {
   const clerkUser = await currentUser();
-  if (!clerkUser) return null;
+  if (!clerkUser) {
+    redirect("/sign-in");
+  }
 
   const [user] = await db
     .select()
@@ -28,7 +32,9 @@ const DashboardPage = async () => {
     .where(eq(users.clerkId, clerkUser.id))
     .limit(1);
 
-  if (!user) return null;
+    if (!user) {
+      redirect("/sign-in");
+    }
 
   // 🔍 Check if student profile exists
   let studentRecord = null;
