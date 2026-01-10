@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'momo fee - School Fees Management',
+  title: 'Subject Spot - School Fees Management',
   description: 'Manage school fees efficiently with momo fee, the ultimate school fees management system designed for administrators, teachers, parents, and students.',
 }
 

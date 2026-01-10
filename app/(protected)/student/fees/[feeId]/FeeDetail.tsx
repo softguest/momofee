@@ -104,7 +104,7 @@ export default function FeeDetail({ feeId }: { feeId: string }) {
         <hr className="my-2"/>
         <p className="text-gray-600">{fee.term}</p>
 
-        <div className="mt-4 p-2 bg-primary/10 space-y-1">
+        <div className="text-white mt-4 p-2 bg-primary/70 space-y-1 rounded-md">
           <p>
             Total Fee: <b>{fee.totalAmount.toLocaleString()} XAF</b>
           </p>
@@ -142,7 +142,7 @@ export default function FeeDetail({ feeId }: { feeId: string }) {
                 return (
                   <li
                     key={inst.id}
-                    className="flex justify-between items-center border p-3 rounded"
+                    className="flex bg-white  justify-between items-center border p-3 rounded"
                   >
                     <div>
                       <p className="font-medium">{inst.name}</p>
