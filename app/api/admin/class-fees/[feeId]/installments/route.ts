@@ -66,13 +66,37 @@ export async function POST(
       .where(eq(classFeeInstallments.classFeeId, feeId))
 
     const totalInstalled = sumRow?.total ?? 0;
+    // console.log("Total installed so far:", totalInstalled);
+    console.log("Attempting to add installment of amount:",totalInstalled + amount);
 
-    if (totalInstalled + amount > fee.totalAmount) {
+    // if (totalInstalled + amount > fee.totalAmount) {
+    //   return NextResponse.json(
+    //     { error: "Installments cannot exceed total fee amount" },
+    //     { status: 400 }
+    //   );
+    // }
+    const safeTotalInstalled = Number(totalInstalled);
+    const safeAmount = Number(amount);
+    const safeTotalFee = Number(fee.totalAmount);
+
+    if (
+      Number.isNaN(safeTotalInstalled) ||
+      Number.isNaN(safeAmount) ||
+      Number.isNaN(safeTotalFee)
+    ) {
+      return NextResponse.json(
+        { error: "Invalid numeric values" },
+        { status: 400 }
+      );
+    }
+
+    if (safeTotalInstalled + safeAmount > safeTotalFee) {
       return NextResponse.json(
         { error: "Installments cannot exceed total fee amount" },
         { status: 400 }
       );
     }
+
 
     // --- Create new installment ---
     const [newInstallment] = await db

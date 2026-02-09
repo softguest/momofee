@@ -1,5 +1,6 @@
 "use client";
 
+import WaterLoader from "@/components/loaders/WaterLoader";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -38,14 +39,7 @@ export default function StudentClassClient() {
       });
   }, []);
 
-  // if (loading) {
-  //   return (
-  //     <div className="max-w-3xl mx-auto py-10 text-center text-gray-500">
-  //       Loading your class...
-  //     </div>
-  //   );
-  // }
-  // if (loading) return <WaterLoader label="Loading Your Class..." />;
+  if (loading) return <WaterLoader label="Loading Your Class..." />;
 
   if (error) {
     return (
@@ -80,7 +74,7 @@ export default function StudentClassClient() {
 
         <div className="mt-6 text-right">
           <Link href="/student/fees">
-            <Button className="px-4 py-2 bg-primary hover:bg-blue-700 text-white text-sm rounded-md transition">
+            <Button className="px-4 py-2 bg-primary cursor-pointer hover:bg-blue-700 text-white text-sm rounded-md transition">
               View Fees
             </Button>
           </Link>

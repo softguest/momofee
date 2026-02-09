@@ -125,7 +125,7 @@ export default function StudentFees() {
                 </span>
                 <div className="flex gap-2">
                   <Link href={`/student/fees/${item.fee.id}`}>
-                    <button className="px-4 py-2 bg-primary hover:bg-blue-700 text-white text-sm rounded-md transition">
+                    <button className="px-4 py-2 bg-primary cursor-pointer hover:bg-blue-700 text-white text-sm rounded-md transition">
                       View
                     </button>
                   </Link>
@@ -173,13 +173,13 @@ export default function StudentFees() {
                 </Dialog.Description>
                 <div className="flex justify-end gap-3">
                   <button
-                    className="px-4 py-2 rounded-md bg-gray-200 hover:bg-gray-300 text-gray-800"
+                    className="px-4 py-2 rounded-md bg-gray-200 cursor-pointer hover:bg-gray-300 text-gray-800"
                     onClick={() => setModalOpen(false)}
                   >
                     Cancel
                   </button>
                   <button
-                    className="px-4 py-2 rounded-md bg-green-500 hover:bg-green-600 text-white"
+                    className="px-4 py-2 rounded-md bg-green-500 cursor-pointer hover:bg-green-600 text-white"
                     onClick={confirmPayment}
                     disabled={processingPayment}
                   >

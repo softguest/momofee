@@ -151,7 +151,6 @@ export const studentNotes = pgTable("student_notes", {
   deletedAt: timestamp("deleted_at"), // soft delete
 });
 
-
 // ================= STUDENT CLASS HISTORY =================
 export const studentClassHistory = pgTable("student_class_history", {
   id: uuid("id").defaultRandom().primaryKey(),

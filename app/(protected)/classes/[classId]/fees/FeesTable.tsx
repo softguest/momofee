@@ -66,7 +66,7 @@ export default function FeesTable({
                 ) : (
                   <a
                     href={`/student/fees/${fee.id}`}
-                    className="text-green-600 underline"
+                    className="text-green-600 cursor-pointer underline"
                   >
                     View & Pay
                   </a>

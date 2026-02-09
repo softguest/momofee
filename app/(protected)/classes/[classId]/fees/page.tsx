@@ -39,7 +39,7 @@ export default async function ClassFeesPage({
         {user.role === "admin" && (
           <a
             href={`/admin/classes/${classId}/fees/new`}
-            className="text-sm bg-black text-white px-4 py-2 rounded"
+            className="text-sm bg-black cursor-pointer text-white px-4 py-2 rounded"
           >
             + Create Fee
           </a>

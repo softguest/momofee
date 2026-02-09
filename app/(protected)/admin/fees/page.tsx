@@ -313,7 +313,7 @@ export default function ClassFeesPage() {
       <div className="border-t px-6 py-3 flex justify-end">
         <button
           onClick={() => setSelectedFee(null)}
-          className="rounded-md bg-gray-100 px-4 py-2 text-sm hover:bg-gray-200"
+          className="rounded-md bg-gray-100 cursor-pointer px-4 py-2 text-sm hover:bg-gray-200"
         >
           Close
         </button>

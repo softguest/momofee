@@ -70,26 +70,51 @@ export default function StudentProfilePage() {
     fetchClasses();
   }, []);
 
+  // async function submit(formData: FormData) {
+  //   if (profileExists) return;
+
+  //   setLoading(true);
+
+  //   await fetch("/api/student/profile", {
+  //     method: "POST",
+  //     headers: { "Content-Type": "application/json" },
+  //     body: JSON.stringify({
+  //       firstName: formData.get("firstName"),
+  //       middleName: formData.get("middleName"),
+  //       lastName: formData.get("lastName"),
+  //       age: Number(formData.get("age")),
+  //       gender,
+  //       classId,
+  //     }),
+  //   });
+
+  //   setLoading(false);
+  // }
+
   async function submit(formData: FormData) {
-    if (profileExists) return;
+  setLoading(true);
 
-    setLoading(true);
+  const payload = {
+    firstName: formData.get("firstName"),
+    middleName: formData.get("middleName"),
+    lastName: formData.get("lastName"),
+    age: Number(formData.get("age")),
+    gender,
+    classId: hasClassSelected ? profile?.classId : classId,
+  };
 
-    await fetch("/api/student/profile", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        firstName: formData.get("firstName"),
-        middleName: formData.get("middleName"),
-        lastName: formData.get("lastName"),
-        age: Number(formData.get("age")),
-        gender,
-        classId,
-      }),
-    });
+  await fetch("/api/student/profile", {
+    method: profileExists ? "PUT" : "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
 
-    setLoading(false);
-  }
+  setLoading(false);
+}
+
+
+  const hasClassSelected = Boolean(profile?.classId);
+
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-10">
@@ -111,35 +136,31 @@ export default function StudentProfilePage() {
           name="firstName"
           placeholder="First Name"
           defaultValue={profile?.firstName ?? ""}
-          disabled={profileExists}
           required
-          className="w-full border px-3 py-2 rounded disabled:bg-gray-100"
+          className="w-full border px-3 py-2 rounded"
         />
 
         <input
           name="middleName"
           placeholder="Middle Name"
           defaultValue={profile?.middleName ?? ""}
-          disabled={profileExists}
-          className="w-full border px-3 py-2 rounded disabled:bg-gray-100"
+          className="w-full border px-3 py-2 rounded"
         />
 
         <input
           name="lastName"
           placeholder="Last Name"
           defaultValue={profile?.lastName ?? ""}
-          disabled={profileExists}
           required
-          className="w-full border px-3 py-2 rounded disabled:bg-gray-100"
+          className="w-full border px-3 py-2 rounded"
         />
 
         <input
           name="age"
           type="number"
           defaultValue={profile?.age ?? ""}
-          disabled={profileExists}
           required
-          className="w-full border px-3 py-2 rounded disabled:bg-gray-100"
+          className="w-full border px-3 py-2 rounded"
         />
 
         {/* ✅ Gender (controlled) */}
@@ -147,9 +168,8 @@ export default function StudentProfilePage() {
           name="gender"
           value={gender}
           onChange={(e) => setGender(e.target.value)}
-          disabled={profileExists}
           required
-          className="w-full border px-3 py-2 rounded disabled:bg-gray-100"
+          className="w-full border px-3 py-2 rounded"
         >
           <option value="">Select Gender</option>
           <option value="Male">Male</option>
@@ -161,7 +181,7 @@ export default function StudentProfilePage() {
           name="classId"
           value={classId}
           onChange={(e) => setClassId(e.target.value)}
-          disabled={profileExists || classesLoading}
+          disabled={hasClassSelected || classesLoading}
           required
           className="w-full border px-3 py-2 rounded disabled:bg-gray-100"
         >
@@ -176,17 +196,24 @@ export default function StudentProfilePage() {
           ))}
         </select>
 
+        {hasClassSelected && (
+          <p className="text-sm text-gray-500">
+            Class cannot be changed once selected.
+          </p>
+        )}
+
+
         <button
-          disabled={profileExists || loading || classesLoading}
+          disabled={loading || classesLoading}
           className="w-full bg-primary text-white px-4 py-2 rounded disabled:bg-gray-400"
         >
-          {/* {loading ? "Creating..." : "Create Student Profile"} */}
-          {profileExists
-            ? "Profile Already Created"
-            : loading
+          {loading
             ? "Saving..."
+            : profileExists
+            ? "Update Profile"
             : "Create Profile"}
         </button>
+
       </form>
     </div>
   );

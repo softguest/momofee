@@ -39,7 +39,7 @@ export default function StudentFees({
           <Link
             href={`/${role}/fees/${item.fee.id}?studentId=${data.student.id}`}
           >
-            <button className="bg-assent text-white px-4 py-2 rounded">
+            <button className="bg-assent cursor-pointer text-white px-4 py-2 rounded">
               View
             </button>
           </Link>

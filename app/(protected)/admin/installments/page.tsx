@@ -211,7 +211,7 @@ export default function AdminInstallmentsPage() {
                       </span>
                       <Link
                         href={`/admin/installments/${i.installmentId}`}
-                        className="text-blue-600 font-medium"
+                        className="text-blue-600 cursor-pointer font-medium"
                       >
                         View →
                       </Link>

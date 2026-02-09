@@ -96,7 +96,7 @@ export default function ClassesClient() {
                   <ResponsiveCell label="Action" align="right">
                     <Link
                       href={`/admin/classes/${cls.id}`}
-                      className="text-blue-600 font-medium hover:underline"
+                      className="text-blue-600 cursor-pointer font-medium hover:underline"
                     >
                       View →
                     </Link>

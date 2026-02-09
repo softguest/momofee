@@ -68,7 +68,7 @@ export default function StudentsClient() {
       <section className="max-w-5xl mx-auto px-4 py-10 py-12 bg-primary text-white rounded-md mb-8">
         <div className="px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-center animate-fade-in">
-            List Of Created Classes
+            List Of Students
           </h2>
 
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -127,7 +127,7 @@ export default function StudentsClient() {
                   <ResponsiveCell label="Action" align="right">
                     <Link
                       href={`/admin/students/${s.id}`}
-                      className="text-blue-600 font-medium"
+                      className="text-blue-600 cursor-pointer font-medium"
                     >
                       View →
                     </Link>

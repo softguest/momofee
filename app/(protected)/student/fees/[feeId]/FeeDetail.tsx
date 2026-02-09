@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import WaterLoader from "@/components/loaders/WaterLoader";
 
 export default function FeeDetail({ feeId }: { feeId: string }) {
   const [data, setData] = useState<any>(null);
@@ -15,7 +16,7 @@ export default function FeeDetail({ feeId }: { feeId: string }) {
       .finally(() => setLoading(false));
   }, [feeId]);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <WaterLoader label="Loading Fee Details..." />;
   if (data.error) return <p>{data.error}</p>;
 
   const { fee, installments, payments, totalPaid, balance, status } = data;

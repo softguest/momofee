@@ -222,7 +222,7 @@ export default function UnpaidStudentsClient({
               <ResponsiveCell label="Action">
                 <Link
                   href={`/admin/students/${s.studentId}`}
-                  className="text-blue-600 font-medium"
+                  className="text-blue-600 cursor-pointer font-medium"
                 >
                   View →
                 </Link>
