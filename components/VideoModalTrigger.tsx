@@ -50,7 +50,7 @@ export default function VideoModalTrigger({
             </button>
 
             {/* Video */}
-            <div className="aspect-video w-full">
+            {/* <div className="aspect-video w-full">
               {videoUrl.includes("youtube") || videoUrl.includes("vimeo") ? (
                 <iframe
                   src={videoUrl}
@@ -66,6 +66,16 @@ export default function VideoModalTrigger({
                   className="h-full w-full"
                 />
               )}
+            </div> */}
+             <div className="aspect-video w-full overflow-hidden rounded-lg">
+              <video
+                src="/videos/demo.mp4"
+                controls
+                autoPlay
+                muted
+                playsInline
+                className="h-full w-full object-cover"
+              />
             </div>
           </div>
         </div>
