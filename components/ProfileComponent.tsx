@@ -127,78 +127,122 @@ export default function ProfileComponent() {
         </h1>
       </section>
 
-      <form action={submit} className="space-y-4">
-        <input
-          name="firstName"
-          placeholder="First Name"
-          defaultValue={profile?.firstName ?? ""}
-          disabled={profileExists}
-          required
-          className="w-full border px-3 py-2 rounded disabled:bg-gray-100"
-        />
+      <form action={submit} className="space-y-6 my-16">
+        {/* Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* LEFT COLUMN */}
+          <div className="space-y-4">
+            {/* First Name */}
+            <div className="flex flex-col gap-1">
+              <label className="text-sm font-medium text-gray-700">
+                First Name
+              </label>
+              <input
+                name="firstName"
+                defaultValue={profile?.firstName ?? ""}
+                disabled={profileExists}
+                required
+                className="w-full bg-white border px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-primary disabled:bg-gray-100"
+              />
+            </div>
 
-        <input
-          name="middleName"
-          placeholder="Middle Name"
-          defaultValue={profile?.middleName ?? ""}
-          disabled={profileExists}
-          className="w-full border px-3 py-2 rounded disabled:bg-gray-100"
-        />
+            {/* Middle Name */}
+            <div className="flex flex-col gap-1">
+              <label className="text-sm font-medium text-gray-700">
+                Middle Name
+              </label>
+              <input
+                name="middleName"
+                defaultValue={profile?.middleName ?? ""}
+                disabled={profileExists}
+                className="w-full border bg-white px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-primary disabled:bg-gray-100"
+              />
+            </div>
 
-        <input
-          name="lastName"
-          placeholder="Last Name"
-          defaultValue={profile?.lastName ?? ""}
-          disabled={profileExists}
-          required
-          className="w-full border px-3 py-2 rounded disabled:bg-gray-100"
-        />
+            {/* Age */}
+            <div className="flex flex-col gap-1">
+              <label className="text-sm font-medium text-gray-700">
+                Age
+              </label>
+              <input
+                name="age"
+                type="number"
+                defaultValue={profile?.age ?? ""}
+                disabled={profileExists}
+                required
+                className="w-full border bg-white px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-primary disabled:bg-gray-100"
+              />
+            </div>
+          </div>
 
-        <input
-          name="age"
-          type="number"
-          defaultValue={profile?.age ?? ""}
-          disabled={profileExists}
-          required
-          className="w-full border px-3 py-2 rounded disabled:bg-gray-100"
-        />
+          {/* RIGHT COLUMN */}
+          <div className="space-y-4">
+            {/* Last Name */}
+            <div className="flex flex-col gap-1">
+              <label className="text-sm font-medium text-gray-700">
+                Last Name
+              </label>
+              <input
+                name="lastName"
+                defaultValue={profile?.lastName ?? ""}
+                disabled={profileExists}
+                required
+                className="w-full border bg-white px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-primary disabled:bg-gray-100"
+              />
+            </div>
 
-        <select
-          value={gender}
-          onChange={(e) => setGender(e.target.value)}
-          disabled={profileExists}
-          required
-          className="w-full border px-3 py-2 rounded disabled:bg-gray-100"
-        >
-          <option value="">Select Gender</option>
-          <option value="Male">Male</option>
-          <option value="Female">Female</option>
-        </select>
+            {/* Gender */}
+            <div className="flex flex-col gap-1">
+              <label className="text-sm font-medium text-gray-700">
+                Gender
+              </label>
+              <select
+                value={gender}
+                onChange={(e) => setGender(e.target.value)}
+                disabled={profileExists}
+                required
+                className="w-full border bg-white px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-primary disabled:bg-gray-100"
+              >
+                <option value="">Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+              </select>
+            </div>
 
-        <select
-          value={classId}
-          onChange={(e) => setClassId(e.target.value)}
-          disabled={profileExists || classesLoading}
-          required
-          className="w-full border px-3 py-2 rounded disabled:bg-gray-100"
-        >
-          <option value="">
-            {classesLoading ? "Loading classes..." : "Select Class"}
-          </option>
-          {classes.map((cls) => (
-            <option key={cls.id} value={cls.id}>
-              {cls.name}
-            </option>
-          ))}
-        </select>
+            {/* Class */}
+            <div className="flex flex-col gap-1">
+              <label className="text-sm font-medium text-gray-700">
+                Class
+              </label>
+              <select
+                value={classId}
+                onChange={(e) => setClassId(e.target.value)}
+                disabled={profileExists || classesLoading}
+                required
+                className="w-full border bg-white px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-primary disabled:bg-gray-100"
+              >
+                <option value="">
+                  {classesLoading ? "Loading classes..." : "Select Class"}
+                </option>
+                {classes.map((cls) => (
+                  <option key={cls.id} value={cls.id}>
+                    {cls.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+        </div>
 
+        {/* Submit Button */}
         <button
           disabled={profileExists || classesLoading}
-          className="w-full bg-primary cursor-pointer text-white px-4 py-2 rounded disabled:bg-gray-400"
+          className="w-full bg-primary text-white px-4 py-3 rounded-md font-medium hover:opacity-90 transition disabled:bg-gray-400"
         >
           {profileExists ? "Profile Already Created" : "Create Profile"}
         </button>
       </form>
+
     </div>
   );
 }

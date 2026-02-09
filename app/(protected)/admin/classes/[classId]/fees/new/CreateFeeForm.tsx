@@ -87,6 +87,7 @@ export default function CreateFeeForm({ classId }: Props) {
           onValueChange={(value) =>
             setForm({ ...form, paymentType: value })
           }
+          
         >
           <SelectTrigger>
             <SelectValue placeholder="Select payment type" />

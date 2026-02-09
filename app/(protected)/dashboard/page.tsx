@@ -17,7 +17,6 @@ import {
 } from "react-icons/fi";
 import Link from "next/link";
 import ProfileComponent from "@/components/ProfileComponent";
-import StudentFees from "../student/fees/StudentFees";
 import StudentFeeLoop from "@/components/StudentFeeLoop";
 
 const DashboardPage = async () => {
@@ -56,7 +55,7 @@ const DashboardPage = async () => {
   ];
 
   const studentSteps = [
-    { link: "/student/classes", label: "Student's Class", icon: FiUser },
+    { link: "/student/classes", label: "My Class", icon: FiUser },
     { link: "/student/fees", label: "Fees to Pay", icon: FiDollarSign },
     { link: "/student/profile", label: "Student Profile", icon: FiBook },
     { link: "/student/payments", label: "Payment History", icon: FiClock },
